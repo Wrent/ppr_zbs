@@ -1,4 +1,5 @@
-# ppr_zbs
+# ZBS: zobecněná bisekční šířka
+
 VSTUPNÍ DATA:
 
 a = přirozené číslo
