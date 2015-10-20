@@ -9,7 +9,7 @@ k = přirozené číslo řádu jednotek představující průměrný stupeň uzl
 G(V,E) = jednoduchý souvislý neorientovaný neohodnocený graf o n uzlech a m hranách
 Doporučení pro algoritmus generování G:
 
-Použijte generátor grafu s volbou typu grafu „-t AD“, který vygeneruje souvislý neorientovaný neohodnocený graf.
+Použijte generátor grafu s volbou typu grafu „**-t AD“**, který vygeneruje souvislý neorientovaný neohodnocený graf.
 
 ##ÚKOL:##
 
