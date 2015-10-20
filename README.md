@@ -7,7 +7,8 @@ n = přirozené číslo představující počet uzlů grafu G, n≥5
 m = přirozené číslo představující počet hran grafu G, m≥n  
 k = přirozené číslo řádu jednotek představující průměrný stupeň uzlu grafu G, n≥k≥3  
 G(V,E) = jednoduchý souvislý neorientovaný neohodnocený graf o n uzlech a m hranách  
-Doporučení pro algoritmus generování G:  
+
+##Doporučení pro algoritmus generování G:##
 
 Použijte generátor grafu s volbou typu grafu „**-t AD“**, který vygeneruje souvislý neorientovaný neohodnocený graf.
 
