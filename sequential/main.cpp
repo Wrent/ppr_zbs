@@ -14,11 +14,11 @@ using namespace std;
 
 //#define _DEBUG
 
-const char* helptext = "a n m k infile\n"
+const char* helptext = "a n m k infile\n\n"
 	"a = natural number\n"
-	"n = natural number representing #nodes of graph G, n≥5\n"
-	"m = natural number representing #edges graph G, m≥n\n"
-	"k = natural number řádu jednotek representing average node degree of graph G, n≥k≥3\n"
+	"n = natural number representing #nodes of graph G, n>=5\n"
+	"m = natural number representing #edges graph G, m>=n\n"
+	"k = natural number representing average node degree of graph G, n>=k>=3\n"
 	"infile = optional parametr -- path to file containing graph\n";
 
 
