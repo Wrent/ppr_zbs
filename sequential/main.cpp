@@ -5,19 +5,49 @@
 #include <set>
 #include <cstdint>
 #include <string>
-
-#define DEBUG
+#include <limits>
+#include <stdexcept>
+#include <iterator>
 
 using namespace std;
+ 
 
+//#define _DEBUG
 
 const char* helptext = "a n m k infile\n"
-	"a = přirozené číslo\n"
-	"n = přirozené číslo představující počet uzlů grafu G, n≥5\n"
-	"m = přirozené číslo představující počet hran grafu G, m≥n\n"
-	"k = přirozené číslo řádu jednotek představující průměrný stupeň uzlu grafu G, n≥k≥3\n"
-	"infile = volitelný parametr pro cestu k souboru s grafem\n";
+	"a = natural number\n"
+	"n = natural number representing #nodes of graph G, n≥5\n"
+	"m = natural number representing #edges graph G, m≥n\n"
+	"k = natural number řádu jednotek representing average node degree of graph G, n≥k≥3\n"
+	"infile = optional parametr -- path to file containing graph\n";
 
+
+uint64_t gcd(uint64_t x, uint64_t y)
+{
+    while (y != 0){
+        uint64_t t = x % y;
+        x = y;
+        y = t;
+    }
+    return x;
+}
+
+uint64_t comb(uint64_t n, uint64_t k)
+{
+    if (k > n)
+        throw invalid_argument("k > n");
+
+    uint64_t r = 1;
+    for (uint64_t d = 1; d <= k; ++d, --n){
+        uint64_t g = gcd(r, d);
+        r /= g;
+        uint64_t t = n / (d / g);
+        if (r > numeric_limits<uint64_t>::max() / t)
+           throw overflow_error("overflow in comb()");
+        r *= t;
+    }
+    return r;
+}
 
 void printUsage(const char* name)
 {
@@ -25,7 +55,7 @@ void printUsage(const char* name)
 
 }
 
-void readGraph(ifstream &infile, vector<vector<bool> > &mgraph)
+void readGraph(ifstream& infile, vector<vector<bool> >& mgraph)
 {
 	uint64_t nodes;
 	infile >> dec >> nodes; //Read num of graph nodes
@@ -47,26 +77,35 @@ void readGraph(ifstream &infile, vector<vector<bool> > &mgraph)
 	}
 }
 
-void printGraph(vector<vector<bool> > &mgraph, ostream &oss)
+void printGraph(vector<vector<bool> >& mgraph, ostream& oss)
 {
 	for (auto row : mgraph){
 		for (auto elm : row){
-			oss << elm << " ";
+			oss << elm << "|";
 		}
 		printf("\n");
 	}
 }
 
-uint64_t priceOfX(vector<vector<bool> > &mgraph, set<uint64_t> &xnodes)
+void printArray(const uint64_t * array, uint64_t len)
+{
+	for (uint64_t i = 0; i < len; ++i){
+		cout << array[i];
+	}
+	cout << endl;
+}
+
+uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 {
 	uint64_t price = 0;
 	
 	//Go trough nodes above diagonal
 	for (uint64_t mrow = 0; mrow < mgraph.size(); ++mrow){
 		for (uint64_t i = mrow + 1; i < mgraph[mrow].size(); ++i){
-			if (mgraph[mrow][i] && xnodes.count(mrow) && !xnodes.count(i)){
-				//When node mrow neighbours with node i and node i 
-				//is not in same set (X) as node mrow increase the price
+			if (mgraph[mrow][i] && 
+				(xnodes.count(mrow) != xnodes.count(i))){
+				//When node mrow neighbours with node i and both nodes 
+				//are not in the same set increase the price
 				price++;
 			}
 		}
@@ -74,6 +113,54 @@ uint64_t priceOfX(vector<vector<bool> > &mgraph, set<uint64_t> &xnodes)
 	return price;
 }
 
+uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
+{
+	uint64_t* nodesx = new uint64_t[k];
+	uint64_t maxVal, m, price; 
+	set<uint64_t>* setx;
+	//create first kombination
+	for (uint64_t i = 0; i < k; ++i){
+		nodesx[i] = i;
+	}
+	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
+	uint64_t minPrice = priceOfX(mgraph, *minSetx);
+	
+	//go trough the rest of combinations 
+	for (uint64_t i = 1; i < comb(n, k); ++i){		
+		m = k - 1; 
+		maxVal = n - 1;
+		//search for first element from right which is not already maxed
+		while (nodesx[m] == maxVal){
+			m = m - 1; 
+			maxVal = maxVal - 1;
+		}
+		nodesx[m] += 1;
+		//elements after m
+		for (uint64_t j = m + 1; j < k; ++j){
+			nodesx[j] = nodesx[j - 1] + 1;
+		}
+		//calculate price for new combination
+		setx = new set<uint64_t>(nodesx, nodesx+k);
+		price = priceOfX(mgraph, *setx);
+		
+		#ifdef _DEBUG
+		cout << price << ":";
+		printArray(nodesx, k);
+		#endif
+
+		//compare price and keep the smaller one
+		if (price < minPrice){
+			delete minSetx;
+			minSetx = setx;
+			minPrice = price;
+		}else{
+			delete setx;
+		}
+		
+	}
+	delete [] nodesx;
+	return minPrice;
+}
 
 int main(int argc, char const* argv[])
 {
@@ -113,18 +200,17 @@ int main(int argc, char const* argv[])
 		readGraph(graphfile, mgraph);
 		graphfile.close();
 	}else{
-		printf("error opening file\n");
+		throw ifstream::failure("unable to open file");
 		return 1;
 	}
 
-	#ifdef DEBUG
+	#ifdef _DEBUG
 	printGraph(mgraph, cout);
 	#endif
 
 
-	//todo
+	cout << "#edges: " << BBDFS(parA, parN, mgraph) << endl;
 
-	
 
 	return 0;
 }
