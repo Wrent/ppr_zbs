@@ -12,7 +12,7 @@
 using namespace std;
  
 
-//#define _DEBUG
+#define _DEBUG
 
 const char* helptext = "a n m k infile\n\n"
 	"a = natural number\n"
@@ -124,6 +124,11 @@ uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 	}
 	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
 	uint64_t minPrice = priceOfX(mgraph, *minSetx);
+	
+	#ifdef _DEBUG
+	cout << minPrice << ":";
+	printArray(nodesx, k);
+	#endif
 	
 	//go trough the rest of combinations 
 	for (uint64_t i = 1; i < comb(n, k); ++i){		
