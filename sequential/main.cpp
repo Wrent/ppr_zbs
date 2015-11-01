@@ -113,6 +113,30 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 	return price;
 }
 
+uint64_t countEdgesIntoSet(uint64_t node,vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
+{	
+	uint64_t edges = 0;
+	for (uint64_t i = 0; i < mgraph[node].size(); ++i)
+	{
+		if (mgraph[node][i] && xnodes.count(i)) {
+			edges++;
+		}
+	}
+	return edges;
+}
+
+uint64_t countEdgesOutOfSet(uint64_t node, vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
+{	
+	uint64_t edges = 0;
+	for (uint64_t i = 0; i < mgraph[node].size(); ++i)
+	{
+		if (mgraph[node][i] && !xnodes.count(i)) {
+			edges++;
+		}
+	}
+	return edges;
+}
+
 uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 {
 	uint64_t* nodesx = new uint64_t[k];
@@ -124,7 +148,7 @@ uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 	}
 	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
 	uint64_t minPrice = priceOfX(mgraph, *minSetx);
-	
+
 	#ifdef _DEBUG
 	cout << minPrice << ":";
 	printArray(nodesx, k);
@@ -144,6 +168,7 @@ uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 		for (uint64_t j = m + 1; j < k; ++j){
 			nodesx[j] = nodesx[j - 1] + 1;
 		}
+
 		//calculate price for new combination
 		setx = new set<uint64_t>(nodesx, nodesx+k);
 		price = priceOfX(mgraph, *setx);
@@ -161,7 +186,6 @@ uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 		}else{
 			delete setx;
 		}
-		
 	}
 	delete [] nodesx;
 	return minPrice;
