@@ -14,13 +14,17 @@ using namespace std;
 
 //#define _DEBUG
 
-const char* helptext = "a n m k infile\n\n"
+void printUsage(const char* name)
+{
+	const char* helptext = "a n m k infile\n\n"
 	"a = natural number\n"
 	"n = natural number representing #nodes of graph G, n>=5\n"
 	"m = natural number representing #edges graph G, m>=n\n"
 	"k = natural number representing average node degree of graph G, n>=k>=3\n"
 	"infile = optional parametr -- path to file containing graph\n";
 
+	printf("Usage: %s %s", name, helptext);
+}
 
 uint64_t gcd(uint64_t x, uint64_t y)
 {
@@ -49,13 +53,7 @@ uint64_t comb(uint64_t n, uint64_t k)
     return r;
 }
 
-void printUsage(const char* name)
-{
-	printf("Usage: %s %s", name, helptext);
-
-}
-
-void readGraph(ifstream& infile, vector<vector<bool> >& mgraph)
+ifstream& operator>>(ifstream& infile, vector<vector<bool> >& mgraph)
 {
 	uint64_t nodes;
 	infile >> dec >> nodes; //Read num of graph nodes
@@ -75,24 +73,27 @@ void readGraph(ifstream& infile, vector<vector<bool> >& mgraph)
 		mgraph.push_back(vec); //Add the row to the main vector
 		vec.clear(); //Clear vector vec
 	}
+	return infile;
 }
 
-void printGraph(vector<vector<bool> >& mgraph, ostream& oss)
+ostream& operator<<(ostream& os, vector<vector<bool> >& mgraph)
 {
 	for (auto row : mgraph){
 		for (auto elm : row){
-			oss << elm << "|";
+			os << elm << "|";
 		}
-		printf("\n");
+		os << "\n";
 	}
+	return os;
 }
 
-void printArray(const uint64_t * array, uint64_t len)
+ostream& operator<<(ostream& os, const set<uint64_t>* mset)
 {
-	for (uint64_t i = 0; i < len; ++i){
-		cout << array[i];
+	os << '{';
+	for (auto a : *mset){
+		os << a << (*(++mset->rend()) != a ? ',' : '}');
 	}
-	cout << endl;
+	return os;
 }
 
 uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
@@ -149,7 +150,7 @@ uint64_t countEdgesOutOfSet(uint64_t node,uint64_t node2, vector<vector<bool> >&
 	return edges;
 }
 
-uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
+pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 {
 	uint64_t* nodesx = new uint64_t[k];
 	uint64_t maxVal, m, price, original, changed, lastPrice, changes, lastVal; 
@@ -202,8 +203,7 @@ uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 
 
 		#ifdef _DEBUG
-		cout << price << ":";
-		printArray(nodesx, k);
+		cout << price << ":" << setx << "\n";
 		#endif
 
 		//compare price and keep the smaller one
@@ -217,7 +217,7 @@ uint64_t BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 		lastPrice = price;
 	}
 	delete [] nodesx;
-	return minPrice;
+	return pair<uint64_t, set<uint64_t>*>(minPrice, minSetx);
 }
 
 int main(int argc, char const* argv[])
@@ -255,7 +255,7 @@ int main(int argc, char const* argv[])
 	vector<vector<bool> > mgraph; //variable to store graph
 
 	if (graphfile.is_open()){
-		readGraph(graphfile, mgraph);
+		graphfile >> mgraph;
 		graphfile.close();
 	}else{
 		throw ifstream::failure("unable to open file");
@@ -263,12 +263,14 @@ int main(int argc, char const* argv[])
 	}
 
 	#ifdef _DEBUG
-	printGraph(mgraph, cout);
+	cout << mgraph << "\n";
 	#endif
 
 
-	cout << "#edges: " << BBDFS(parA, parN, mgraph) << endl;
+	auto&& result = BBDFS(parA, parN, mgraph);
+	cout << "\n" << "#edges: " << result.first << "\n"
+		 << result.second << "\n";
 
-
+	delete result.second;
 	return 0;
 }
