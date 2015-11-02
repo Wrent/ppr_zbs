@@ -14,6 +14,7 @@ using namespace std;
 
 //#define _DEBUG
 
+
 void printUsage(const char* name)
 {
 	const char* helptext = "a n m k infile\n\n"
@@ -163,8 +164,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	uint64_t minPrice = priceOfX(mgraph, *minSetx);
 	lastPrice = minPrice;
 	#ifdef _DEBUG
-	cout << minPrice << ":";
-	printArray(nodesx, k);
+	cout << minPrice << ":" << minSetx << "\n";
 	#endif
 
 	setx = minSetx;
@@ -270,6 +270,7 @@ int main(int argc, char const* argv[])
 	auto&& result = BBDFS(parA, parN, mgraph);
 	cout << "\n" << "#edges: " << result.first << "\n"
 		 << result.second << "\n";
+
 
 	delete result.second;
 	return 0;
