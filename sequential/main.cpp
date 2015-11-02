@@ -12,8 +12,9 @@
 using namespace std;
  
 
-//#define _DEBUG
+#define _DEBUG
 
+uint64_t skip;
 
 void printUsage(const char* name)
 {
@@ -163,6 +164,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
 	uint64_t minPrice = priceOfX(mgraph, *minSetx);
 	lastPrice = minPrice;
+
 	#ifdef _DEBUG
 	cout << minPrice << ":" << minSetx << "\n";
 	#endif
@@ -195,12 +197,18 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		if (changes > 1) {
 			setx = new set<uint64_t>(nodesx, nodesx+k);
 			price = priceOfX(mgraph, *setx);
-		} else {
-			price = lastPrice + countEdgesIntoSet(original, changed, mgraph, *setx) - countEdgesOutOfSet(original, changed, mgraph, *setx)
-		- countEdgesIntoSet(changed, original, mgraph, *setx) + countEdgesOutOfSet(changed, original, mgraph, *setx);
-			setx = new set<uint64_t>(nodesx, nodesx+k);
-		}
 
+		} else {
+			price = lastPrice + countEdgesIntoSet(original, changed, mgraph, *setx) 
+			- countEdgesOutOfSet(original, changed, mgraph, *setx)
+			- countEdgesIntoSet(changed, original, mgraph, *setx) 
+			+ countEdgesOutOfSet(changed, original, mgraph, *setx);
+			setx = new set<uint64_t>(nodesx, nodesx+k);
+			
+			#ifdef _DEBUG
+			skip++;
+			#endif
+		}
 
 		#ifdef _DEBUG
 		cout << price << ":" << setx << "\n";
@@ -268,9 +276,11 @@ int main(int argc, char const* argv[])
 
 
 	auto&& result = BBDFS(parA, parN, mgraph);
-	cout << "\n" << "#edges: " << result.first << "\n"
-		 << result.second << "\n";
+	cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
+	#ifdef _DEBUG
+	cout << "skipped: " << skip << "/" << comb(parN,parA) << "\n";
+	#endif
 
 	delete result.second;
 	return 0;
