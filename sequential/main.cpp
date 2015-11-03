@@ -128,8 +128,8 @@ uint64_t countEdgesIntoSet(uint64_t node,uint64_t node2, vector<vector<bool> >& 
 		}
 	}
 	#ifdef _DEBUG
-	cout << "node " << node << " ";
-	cout << "edgesIn " << edges << endl; 
+	//cout << "node " << node << " ";
+	//cout << "edgesIn " << edges << endl; 
 	#endif
 	return edges;
 }
@@ -146,8 +146,8 @@ uint64_t countEdgesOutOfSet(uint64_t node,uint64_t node2, vector<vector<bool> >&
 		}
 	}
 	#ifdef _DEBUG
-	cout << "node " << node << " ";
-	cout << "edgesOut " << edges << endl; 
+	//cout << "node " << node << " ";
+	//cout << "edgesOut " << edges << endl; 
 	#endif
 	return edges;
 }
@@ -155,7 +155,7 @@ uint64_t countEdgesOutOfSet(uint64_t node,uint64_t node2, vector<vector<bool> >&
 pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 {
 	uint64_t* nodesx = new uint64_t[k];
-	uint64_t maxVal, m, price, original, changed, lastPrice, changes, lastVal; 
+	uint64_t maxVal, m, price, original, changed, lastPrice, changes, lastVal, lastM = 0, prefixPrice; 
 	set<uint64_t>* setx;
 	//create first kombination
 	for (uint64_t i = 0; i < k; ++i){
@@ -173,6 +173,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	
 	//go trough the rest of combinations 
 	for (uint64_t i = 1; i < comb(n, k); ++i){		
+		
 		m = k - 1; 
 		maxVal = n - 1;
 		//search for first element from right which is not already maxed
@@ -182,6 +183,24 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		}
 		original = nodesx[m];
 		nodesx[m] += 1;
+
+		if (m > 0 && m < k) {
+			setx = new set<uint64_t>(nodesx, nodesx+m);
+
+			if (m != lastM) {
+				prefixPrice = priceOfX(mgraph, *setx);
+				cout << "prefix " << prefixPrice << ":" << setx << endl;
+			}	
+			
+			delete setx;
+			if (prefixPrice >= minPrice) {
+				lastM = m;
+				skip++;
+				continue;
+			}
+		}
+		lastM = m;
+
 		changes = 1;
 		changed = nodesx[m];
 		//elements after m
@@ -194,11 +213,11 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		}
 
 		//calculate price for new combination
-		if (changes > 1) {
+		//if (changes > 1) {
 			setx = new set<uint64_t>(nodesx, nodesx+k);
 			price = priceOfX(mgraph, *setx);
 
-		} else {
+		/*} else {
 			price = lastPrice + countEdgesIntoSet(original, changed, mgraph, *setx) 
 			- countEdgesOutOfSet(original, changed, mgraph, *setx)
 			- countEdgesIntoSet(changed, original, mgraph, *setx) 
@@ -208,7 +227,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 			#ifdef _DEBUG
 			skip++;
 			#endif
-		}
+		}*/
 
 		#ifdef _DEBUG
 		cout << price << ":" << setx << "\n";
@@ -223,8 +242,11 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 			delete setx;
 		}
 		lastPrice = price;
+		if (nodesx[0] >= n - k) {
+			break;
+		}
 	}
-	delete [] nodesx;
+	//delete [] nodesx;
 	return pair<uint64_t, set<uint64_t>*>(minPrice, minSetx);
 }
 
