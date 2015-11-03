@@ -93,7 +93,7 @@ ostream& operator<<(ostream& os, const set<uint64_t>* mset)
 {
 	os << '{';
 	for (auto a : *mset){
-		os << a << (*(++mset->rend()) != a ? ',' : '}');
+		os << a << (*(--mset->end()) != a ? ',' : '}');
 	}
 	return os;
 }

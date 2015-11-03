@@ -7,7 +7,7 @@
 #include <string>
 #include <limits>
 #include <stdexcept>
-#include <iterator>
+#include <cstring>
 
 using namespace std;
  
@@ -65,7 +65,7 @@ ostream& operator<<(ostream& os, const set<uint64_t>* mset)
 {
 	os << '{';
 	for (auto a : *mset){
-		os << a << (*(++mset->rend()) != a ? ',' : '}');
+		os << a << (*(--mset->end()) != a ? ',' : '}');
 	}
 	return os;
 }
@@ -74,7 +74,7 @@ ostream& operator<<(ostream& os, const set<uint64_t>&& mset)
 {
 	os << '{';
 	for (auto a : mset){
-		os << a << (*(++mset.rend()) != a ? ',' : '}');
+		os << a << (*(--mset.end()) != a ? ',' : '}');
 	}
 	return os;
 }
@@ -94,9 +94,10 @@ public:
 	pair<uint64_t, set<uint64_t>*> getMinWidth(uint64_t k)
 	{
 		CA = new uint64_t[k+2];
+		memset(CA, 0, k+2);
 		CAsize = k + 1;
+
 		CA[k+1] = nodes + 1;
-		
 		recursionC(k);
 
 		return pair<uint64_t, set<uint64_t>*>(minW, minSet);
@@ -129,21 +130,26 @@ private:
 
 	void recursionC(uint64_t i)
 	{
-		#ifdef _DEBUG
-		cout << i << "|";
-		#endif
-
+		//if i is odd
 		if (i % 2) {
 			for (uint64_t j = CA[i+1] - 1; j >= i; --j){
 				CA[i] = j;
+				//Create a set from array.
 				mset = new set<uint64_t>(CA+1, CA+CAsize);
 				uint64_t price = priceOfSet(mset);
+				#ifdef _DEBUG
+				cout << price << ":" <<  mset << "\n";
+				#endif
+				//Got a complete combination (set), compute its price
+				//and compare the price/width with current minimum.
 				if (i == 1){
 					if (price < minW){
 						minW = price;
 						minSet = mset;
 					}else 
 						delete mset;
+				//Not a complete set, check if this branch is viable and continue
+				//otherwise return.
 				}else{
 					if (price <= minW) recursionC(i-1);
 				}
@@ -151,9 +157,14 @@ private:
 		}else{
 			for (uint64_t j = i; j <= CA[i+1] - 1; ++j){
 				CA[i] = j;
+				//Create set from array, get its price and delete it.
 				mset = new set<uint64_t>(CA+1, CA+CAsize);
 				uint64_t price = priceOfSet(mset);
+				#ifdef _DEBUG
+				cout << price << ":" <<  mset << "\n";
+				#endif
 				delete mset;
+				//Check if this branch is viable and continue otherwise return.
 				if (price <= minW) recursionC(i-1);
 			}
 		}	

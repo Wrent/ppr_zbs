@@ -8,7 +8,7 @@ CFLAGS = -g -Wall -pedantic -std=c++11
 default: $(TARGET)
 all: default
 run: $(TARGET)
-	-$(TARGET) 5 10 20 3 graf.txt
+	-$(TARGET) 9 10 20 3 graf.txt
 
 OBJECTS = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 HEADERS = $(wildcard *.h)
