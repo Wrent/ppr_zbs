@@ -86,6 +86,10 @@ bool localWorkExists() {
     return false;
 }
 
+void doLocalWorkStep() {
+
+}
+
 int main(int argc, char * argv[])
 {
 	int p; int my_rank, i = 0, flag;
@@ -127,7 +131,7 @@ int main(int argc, char * argv[])
 	}
 
 	//hlavni pracovni smycka
-    while (localWorkExists()) {
+    while (true) {
         i++;
         if ((i % CHECK_MSG_AMOUNT)==0) {
             MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
@@ -145,7 +149,7 @@ int main(int argc, char * argv[])
                     case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
                                             // zkusit jiny proces
                                             // a nebo se prepnout do pasivniho stavu a cekat na token
-                                            break
+                                            break;
                     case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
                                             // - bily nebo cerny v zavislosti na stavu procesu
                                             break;
@@ -160,9 +164,18 @@ int main(int argc, char * argv[])
                     default : chyba("neznamy typ zpravy"); break;
                 }
             }
+
+            if (!localWorkExists()) {
+                //kontaktuj jiny proces s zadosti o praci
+            }
+
+            //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
+            if (my_rank == 0) {
+                //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
+            }
         }
         //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-        //expanduj_dalsi_stavy ();
+        doLocalWorkStep();
     }
 
 	/* shut down MPI */
