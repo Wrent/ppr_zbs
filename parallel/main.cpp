@@ -102,7 +102,7 @@ int main(int argc, char * argv[])
 			return 1;
 		}
 
-		auto&& result = BBDFS(parA, parN, mgraph);
+		auto&& result = BBDFS(parA, parN, *mgraph);
 		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 		delete result.second;
