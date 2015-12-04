@@ -28,7 +28,7 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-int main(int argc, char const* argv[])
+int main(int argc, char * argv[])
 {
 	int p; int my_rank;
 	/* start up MPI */
