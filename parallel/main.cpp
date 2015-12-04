@@ -59,7 +59,7 @@ vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 		graphfile.open(argv[5]);
 	}
 		
-	vector<vector<bool> > mgraph = new vector<vector<bool> >; //variable to store graph
+	vector<vector<bool> > *mgraph = new vector<vector<bool> >; //variable to store graph
 
 	if (graphfile.is_open()){
 		graphfile >> mgraph;
