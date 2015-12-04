@@ -22,5 +22,5 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) $(CFLAGS) $(LIBS) -o $@
 
 clean:
-	-rm -f *.o
-	-rm -f $(TARGET)
+	rem -f *.o
+	rem -f $(TARGET)
