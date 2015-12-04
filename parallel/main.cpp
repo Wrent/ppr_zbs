@@ -28,21 +28,7 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-int main(int argc, char * argv[])
-{
-	int p; int my_rank;
-	/* start up MPI */
-  	MPI_Init( &argc, &argv );
-
-	/* find out process rank */
-	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-
-	/* find out number of processes */
-	MPI_Comm_size(MPI_COMM_WORLD, &p);
-
-	cout << "processes " << p << endl;
-	cout << "my process id " << my_rank << endl; 
-
+vector<vector<bool> > prepareGraph(int argc, char * argv[]) {
 	if (argc < 5){
 		printUsage(argv[0]);
 		return 1;
@@ -72,7 +58,7 @@ int main(int argc, char * argv[])
 	}else{
 		graphfile.open(argv[5]);
 	}
-	
+		
 	vector<vector<bool> > mgraph; //variable to store graph
 
 	if (graphfile.is_open()){
@@ -87,11 +73,35 @@ int main(int argc, char * argv[])
 	cout << mgraph << "\n";
 	#endif
 
+	return mgraph;
+}
 
-	auto&& result = BBDFS(parA, parN, mgraph);
-	cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
+int main(int argc, char * argv[])
+{
+	int p; int my_rank;
+	/* start up MPI */
+  	MPI_Init( &argc, &argv );
 
-	delete result.second;
+	/* find out process rank */
+	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+	/* find out number of processes */
+	MPI_Comm_size(MPI_COMM_WORLD, &p);
+
+	cout << "processes " << p << endl;
+	cout << "my process id " << my_rank << endl; 
+
+	//nachazime se v ridicim procesu
+	if (my_rank == 0) {
+		vector<vector<bool> > mgraph = prepareGraph(argc, argv);
+
+		auto&& result = BBDFS(parA, parN, mgraph);
+		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
+
+		delete result.second;
+	} else {
+		//nachazime se v ostatnich procesech
+	}
 
 	/* shut down MPI */
   	MPI_Finalize();
