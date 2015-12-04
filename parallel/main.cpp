@@ -15,6 +15,13 @@
 using namespace std;
 
 #define _DEBUG
+#define CHECK_MSG_AMOUNT  100
+
+#define MSG_WORK_REQUEST 1000
+#define MSG_WORK_SENT    1001
+#define MSG_WORK_NOWORK  1002
+#define MSG_TOKEN        1003
+#define MSG_FINISH       1004
 
 void printUsage(const char* name)
 {
@@ -35,7 +42,6 @@ vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 	}
 
 	//read args
-	uint64_t parA = strtoull(argv[1], NULL, 10);
 	uint64_t parN = strtoull(argv[2], NULL, 10);
 	uint64_t parM = strtoull(argv[3], NULL, 10);
 	uint64_t parK = strtoull(argv[4], NULL, 10);
@@ -76,9 +82,14 @@ vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 	return mgraph;
 }
 
+bool localWorkExists() {
+    return false;
+}
+
 int main(int argc, char * argv[])
 {
-	int p; int my_rank;
+	int p; int my_rank, i = 0, flag;
+	MPI_Status status;
 	/* start up MPI */
   	MPI_Init( &argc, &argv );
 
@@ -98,17 +109,61 @@ int main(int argc, char * argv[])
 
 		vector<vector<bool> > *mgraph = prepareGraph(argc, argv);
 
+        //pokud nastala nejaka chyba
 		if (mgraph == NULL) {
 			return 1;
 		}
+
+		//tady by mel proces nagenerovat praci pro ostatni procesory a rozeslat je
+
 
 		auto&& result = BBDFS(parA, parN, *mgraph);
 		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 		delete result.second;
 	} else {
-		//nachazime se v ostatnich procesech
+	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
+	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
 	}
+
+	//hlavni pracovni smycka
+    while (localWorkExists()) {
+        i++;
+        if ((i % CHECK_MSG_AMOUNT)==0) {
+            MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
+            if (flag) {
+                //prisla zprava, je treba ji obslouzit
+                //v promenne status je tag (status.MPI_TAG), cislo odesilatele (status.MPI_SOURCE)
+                //a pripadne cislo chyby (status.MPI_ERROR)
+                switch (status.MPI_TAG) {
+                    case MSG_WORK_REQUEST : // zadost o praci, prijmout a dopovedet
+                                            // zaslat rozdeleny zasobnik a nebo odmitnuti MSG_WORK_NOWORK
+                                            break;
+                    case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
+                                            // deserializovat a spustit vypocet
+                                            break;
+                    case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
+                                            // zkusit jiny proces
+                                            // a nebo se prepnout do pasivniho stavu a cekat na token
+                                            break
+                    case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
+                                            // - bily nebo cerny v zavislosti na stavu procesu
+                                            break;
+                    case MSG_FINISH :       //konec vypoctu - proces 0 pomoci tokenu zjistil, ze jiz nikdo nema praci
+                                            //a rozeslal zpravu ukoncujici vypocet
+                                            //mam-li reseni, odeslu procesu 0
+                                            //nasledne ukoncim spoji cinnost
+                                            //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
+                                            MPI_Finalize();
+                                            exit (0);
+                                            break;
+                    default : chyba("neznamy typ zpravy"); break;
+                }
+            }
+        }
+        //zde se vola funkce, ktera provede jeden vypocetni krok procesu
+        //expanduj_dalsi_stavy ();
+    }
 
 	/* shut down MPI */
   	MPI_Finalize();
