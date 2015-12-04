@@ -31,7 +31,7 @@ void printUsage(const char* name)
 vector<vector<bool> > prepareGraph(int argc, char * argv[]) {
 	if (argc < 5){
 		printUsage(argv[0]);
-		return 1;
+		return NULL;
 	}
 
 	//read args
@@ -42,7 +42,7 @@ vector<vector<bool> > prepareGraph(int argc, char * argv[]) {
 
 	if (parN < 5 || parM < parN || parK > parN || parK < 3){
 		printUsage(argv[0]);
-		return 1;
+		return NULL;
 	}
 
 	ifstream graphfile;
@@ -66,7 +66,7 @@ vector<vector<bool> > prepareGraph(int argc, char * argv[]) {
 		graphfile.close();
 	}else{
 		throw ifstream::failure("unable to open file");
-		return 1;
+		return NULL;
 	}
 
 	#ifdef _DEBUG
@@ -93,7 +93,12 @@ int main(int argc, char * argv[])
 
 	//nachazime se v ridicim procesu
 	if (my_rank == 0) {
+		uint64_t parA = strtoull(argv[1], NULL, 10);
+		uint64_t parN = strtoull(argv[2], NULL, 10);
 		vector<vector<bool> > mgraph = prepareGraph(argc, argv);
+		if (mgraph == NULL) {
+			return 1;
+		}
 
 		auto&& result = BBDFS(parA, parN, mgraph);
 		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
