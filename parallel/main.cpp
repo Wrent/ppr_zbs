@@ -121,13 +121,9 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	//array containing combination
 	uint64_t* nodesx = new uint64_t[k];
 	//variables 
-<<<<<<< HEAD
-	uint64_t maxVal, m, price, lastM = 0, prefixPrice; 
-=======
-	uint64_t maxVal, m, price, lastVal, lastM = 0, prefixPrice; 
->>>>>>> origin/master
+	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
 	//set of nodes in combination
-	set<uint64_t>* setx;
+	set<uint64_t> *setx, *minSetx;
 
 	//create first kombination
 	for (uint64_t i = 0; i < k; ++i){
@@ -135,25 +131,24 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	}
 
 	//init first set 
-	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
+	minSetx = new set<uint64_t>(nodesx, nodesx+k);
+	setx = minSetx;
 	//init minimal price of set
-	uint64_t minPrice = priceOfX(mgraph, *minSetx);
+	minPriceSet = priceOfX(mgraph, *minSetx);
 
 	#ifdef _DEBUG
-	cout << minPrice << ":" << minSetx << "\n";
+	cout << minPriceSet << ":" << minSetx << "\n";
 	#endif
-
-	setx = minSetx;
 	
 	//go trough the rest of combinations 
 	for (uint64_t i = 1; i < comb(n, k); ++i){		
 		
 		m = k - 1; 
-		maxVal = n - 1;
+		maxValAtPos = n - 1;
 		//search for first element from right which is not already maxed
-		while (nodesx[m] == maxVal){
+		while (nodesx[m] == maxValAtPos){
 			m = m - 1; 
-			maxVal = maxVal - 1;
+			maxValAtPos = maxValAtPos - 1;
 		}
 		nodesx[m] += 1;
 
@@ -166,7 +161,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 			}	
 			
 			delete setx;
-			if (prefixPrice >= minPrice) {
+			if (prefixPrice >= minPriceSet) {
 				lastM = m;
 				skip++;
 				continue;
@@ -181,17 +176,17 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 
 		//calculate price for new combination
 		setx = new set<uint64_t>(nodesx, nodesx+k);
-		price = priceOfX(mgraph, *setx);
+		priceSet = priceOfX(mgraph, *setx);
 
 		#ifdef _DEBUG
-		cout << price << ":" << setx << "\n";
+		cout << priceSet << ":" << setx << "\n";
 		#endif
 
 		//compare price and keep the smaller one
-		if (price < minPrice){
+		if (priceSet < minPriceSet){
 			delete minSetx;
 			minSetx = setx;
-			minPrice = price;
+			minPriceSet = priceSet;
 		}else{
 			delete setx;
 		}
@@ -200,7 +195,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		}
 	}
 	//delete [] nodesx;
-	return pair<uint64_t, set<uint64_t>*>(minPrice, minSetx);
+	return pair<uint64_t, set<uint64_t>*>(minPriceSet, minSetx);
 }
 
 int main(int argc, char const* argv[])
