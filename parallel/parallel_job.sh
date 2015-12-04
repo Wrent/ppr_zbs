@@ -63,7 +63,7 @@ INFINIBAND="false"
 # | Parallel program with arguments.                                          |
 # |                                                                           |
 #  ===========================================================================
-MY_PARALLEL_PROGRAM="./my_parallel_program arg1 arg2 ..."
+MY_PARALLEL_PROGRAM="./main 9 10 11 3 graf.txt"
 
 
 
