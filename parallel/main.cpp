@@ -28,7 +28,7 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-vector<vector<bool> > prepareGraph(int argc, char * argv[]) {
+vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 	if (argc < 5){
 		printUsage(argv[0]);
 		return NULL;
@@ -59,7 +59,7 @@ vector<vector<bool> > prepareGraph(int argc, char * argv[]) {
 		graphfile.open(argv[5]);
 	}
 		
-	vector<vector<bool> > mgraph; //variable to store graph
+	vector<vector<bool> > mgraph = new vector<vector<bool> >; //variable to store graph
 
 	if (graphfile.is_open()){
 		graphfile >> mgraph;
@@ -95,7 +95,9 @@ int main(int argc, char * argv[])
 	if (my_rank == 0) {
 		uint64_t parA = strtoull(argv[1], NULL, 10);
 		uint64_t parN = strtoull(argv[2], NULL, 10);
-		vector<vector<bool> > mgraph = prepareGraph(argc, argv);
+
+		vector<vector<bool> > *mgraph = prepareGraph(argc, argv);
+
 		if (mgraph == NULL) {
 			return 1;
 		}
