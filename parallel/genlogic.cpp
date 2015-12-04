@@ -121,8 +121,7 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 
 pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<bool> > &mgraph)
 {
-	uint64_t minPriceSet, priceSet;
-	//array containing combination
+	//array containing prefix
 	uint64_t *prefix = new uint64_t[k];
 	uint64_t *prefixEnd = new uint64_t[k];
 

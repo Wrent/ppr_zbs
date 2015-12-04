@@ -1,0 +1,7 @@
+genlogic.cpp: In function 'std::pair<long long unsigned int, std::set<long long unsigned int>*> divideWork(uint64_t, uint64_t, std::vector<std::vector<bool> >&)':
+genlogic.cpp:124:11: warning: unused variable 'minPriceSet' [-Wunused-variable]
+  uint64_t minPriceSet, priceSet;
+           ^
+genlogic.cpp:124:24: warning: unused variable 'priceSet' [-Wunused-variable]
+  uint64_t minPriceSet, priceSet;
+                        ^
