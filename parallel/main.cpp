@@ -74,7 +74,7 @@ int main(int argc, char const* argv[])
 	#endif
 
 
-	auto&& result = BBDFS(parA, parN, mgraph);
+	auto&& result = divideWork(parA, parN, mgraph);
 	cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 	delete result.second;

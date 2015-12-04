@@ -2,6 +2,13 @@
 
 using namespace std;
 
+int comparePrefix(uint64_t *a, uint64_t *b, uint64_t size){
+	for (uint64_t i = 0; i < size; ++i){
+		if (a[i] > b[i]) return 0;
+	}
+	return 1;
+}
+
 uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 {
 	uint64_t price = 0;
@@ -20,23 +27,22 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 	return price;
 }
 
-pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool> > &mgraph)
+pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
+										uint64_t *endPrefix, vector<vector<bool> > &mgraph)
 {
-	//array containing combination
-	uint64_t *nodesx = new uint64_t[k];
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
 
-	//set of nodes in combination
+	//set of nodes belonging to combination
 	set<uint64_t> *setx, *minSetx;
 
-	//create first kombination
-	for (uint64_t i = 0; i < k; ++i){
-		nodesx[i] = i;
+	//expand startPrefix to combination of length k
+	for (uint64_t i = startPrefixSize; i < k; ++i){
+		startPrefix[i] = startPrefix[i-1] + 1;
 	}
 
-	//init first set 
-	minSetx = new set<uint64_t>(nodesx, nodesx+k);
+	//init first set
+	minSetx = new set<uint64_t>(startPrefix, startPrefix+k);
 	setx = minSetx;
 	//init minimal price of set
 	minPriceSet = priceOfX(mgraph, *minSetx);
@@ -45,41 +51,51 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	cout << minPriceSet << ":" << minSetx << "\n";
 	#endif
 	
-	//go trough the rest of combinations 
-	for (uint64_t i = 1; i < comb(n, k); ++i){		
-		
+	//go trough the combinations from startPrefix to endPrefix
+	while (1){		
+		//index m
 		m = k - 1; 
 		maxValAtPos = n - 1;
 		//search for first element from right which is not already maxed
-		while (nodesx[m] == maxValAtPos){
+		while (startPrefix[m] == maxValAtPos){
 			m = m - 1; 
 			maxValAtPos = maxValAtPos - 1;
 		}
-		nodesx[m] += 1;
+		//increment found element
+		startPrefix[m] += 1;
+		//break if done endPrefix
+		if (comparePrefix(startPrefix, endPrefix, startPrefixSize)) break;
 
+		//check if prefix price is not more or equal then current minimum
+		//and if prefix is
 		if (m > 0 && m < k) {
-			setx = new set<uint64_t>(nodesx, nodesx+m);
+			setx = new set<uint64_t>(startPrefix, startPrefix+m+1);
 
 			if (m != lastM) {
 				prefixPrice = priceOfX(mgraph, *setx);
-				cout << "prefix " << prefixPrice << ":" << setx << endl;
 			}	
-			
+			cout << "prefix " << prefixPrice << ":" << setx << endl;
+
 			delete setx;
+			//save m
+			lastM = (m < lastM ? m : lastM);
+			//save valid prefix size
+			startPrefixSize = lastM;
+			
 			if (prefixPrice >= minPriceSet) {
-				lastM = m;
+				lastM = (m < lastM ? m : lastM);
+				startPrefixSize = lastM;
 				continue;
 			}
 		}
-		lastM = m;
 
-		//elements after m
+		//expand combination from m
 		for (uint64_t j = m + 1; j < k; ++j){
-			nodesx[j] = nodesx[j - 1] + 1;
+			startPrefix[j] = startPrefix[j - 1] + 1;
 		}
 
 		//calculate price for new combination
-		setx = new set<uint64_t>(nodesx, nodesx+k);
+		setx = new set<uint64_t>(startPrefix, startPrefix+k);
 		priceSet = priceOfX(mgraph, *setx);
 
 		#ifdef _DEBUG
@@ -94,10 +110,26 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		}else{
 			delete setx;
 		}
-		if (nodesx[0] >= n - k) {
+		if (startPrefix[0] >= n - k) {
 			break;
 		}
 	}
-	delete [] nodesx;
+	delete [] startPrefix;
 	return pair<uint64_t, set<uint64_t>*>(minPriceSet, minSetx);
+}
+
+pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<bool> > &mgraph)
+{
+	uint64_t minPriceSet, priceSet;
+	//array containing combination
+	uint64_t *prefix = new uint64_t[k];
+	uint64_t *prefixEnd = new uint64_t[k];
+
+	for (int i = 0; i < 1; ++i){
+		prefix[i] = i;
+	}	
+	for (int i = 0; i < 3; ++i){
+		prefixEnd[i] = i;
+	}	
+	return workUnit(k, n, prefix, 1, prefixEnd, mgraph);
 }
