@@ -27,4 +27,4 @@
 # Do not change.
 #$ -pe ompi 1
 
-./my_sequential_application arg1 arg2 ...
+./main 9 10 11 3 graf.txt
