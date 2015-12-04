@@ -27,7 +27,7 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-int main(int argc, char * argv[])
+int main(int argc, char const* argv[])
 {
 	if (argc < 5){
 		printUsage(argv[0]);
