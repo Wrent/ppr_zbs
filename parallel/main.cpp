@@ -119,8 +119,9 @@ int main(int argc, char * argv[])
 		}
 
 		//tady by mel proces nagenerovat praci pro ostatni procesory a rozeslat je
+		//rozeslat take samotny nacteny graf vsem procesorum
 
-
+        //vypocet se bude startovat jinak nez tadytim
 		auto&& result = BBDFS(parA, parN, *mgraph);
 		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
