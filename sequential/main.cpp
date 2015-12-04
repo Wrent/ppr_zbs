@@ -119,7 +119,7 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 {
 	uint64_t* nodesx = new uint64_t[k];
-	uint64_t maxVal, m, price, original, changed, lastPrice, changes, lastVal, lastM = 0, prefixPrice; 
+	uint64_t maxVal, m, price, changes, lastVal, lastM = 0, prefixPrice; 
 	set<uint64_t>* setx;
 	//create first kombination
 	for (uint64_t i = 0; i < k; ++i){
@@ -127,7 +127,6 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	}
 	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
 	uint64_t minPrice = priceOfX(mgraph, *minSetx);
-	lastPrice = minPrice;
 
 	#ifdef _DEBUG
 	cout << minPrice << ":" << minSetx << "\n";
@@ -145,7 +144,6 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 			m = m - 1; 
 			maxVal = maxVal - 1;
 		}
-		original = nodesx[m];
 		nodesx[m] += 1;
 
 		if (m > 0 && m < k) {
@@ -166,7 +164,6 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		lastM = m;
 
 		changes = 1;
-		changed = nodesx[m];
 		//elements after m
 		for (uint64_t j = m + 1; j < k; ++j){
 			lastVal = nodesx[j];
@@ -192,7 +189,6 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		}else{
 			delete setx;
 		}
-		lastPrice = price;
 		if (nodesx[0] >= n - k) {
 			break;
 		}
