@@ -161,7 +161,8 @@ int main(int argc, char * argv[])
                                             MPI_Finalize();
                                             exit (0);
                                             break;
-                    default : chyba("neznamy typ zpravy"); break;
+                    default :               //error;
+                                            break;
                 }
             }
 
