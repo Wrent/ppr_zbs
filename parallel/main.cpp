@@ -62,7 +62,7 @@ vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 	vector<vector<bool> > *mgraph = new vector<vector<bool> >; //variable to store graph
 
 	if (graphfile.is_open()){
-		graphfile >> mgraph;
+		graphfile >> *mgraph;
 		graphfile.close();
 	}else{
 		throw ifstream::failure("unable to open file");
@@ -70,7 +70,7 @@ vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 	}
 
 	#ifdef _DEBUG
-	cout << mgraph << "\n";
+	cout << *mgraph << "\n";
 	#endif
 
 	return mgraph;
