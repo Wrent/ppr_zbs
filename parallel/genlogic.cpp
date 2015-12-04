@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int comparePrefix(uint64_t *a, uint64_t *b, uint64_t size){
+int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	for (uint64_t i = 0; i < size; ++i){
 		if (a[i] > b[i]) return 0;
 	}
@@ -28,7 +28,7 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 }
 
 pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
-										uint64_t *endPrefix, vector<vector<bool> > &mgraph)
+										uint64_t *endPrefix, uint64_t endPrefixSize, vector<vector<bool> > &mgraph)
 {
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
@@ -56,6 +56,7 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 		//index m
 		m = k - 1; 
 		maxValAtPos = n - 1;
+		
 		//search for first element from right which is not already maxed
 		while (startPrefix[m] == maxValAtPos){
 			m = m - 1; 
@@ -63,8 +64,9 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 		}
 		//increment found element
 		startPrefix[m] += 1;
-		//break if done endPrefix
-		if (comparePrefix(startPrefix, endPrefix, startPrefixSize)) break;
+		
+		//break if done everything to endPrefix
+		if (!prefixLessEqual(startPrefix, endPrefix, endPrefixSize)) break;
 
 		//check if prefix price is not more or equal then current minimum
 		//and if prefix is
@@ -76,16 +78,15 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 			}	
 			cout << "prefix " << prefixPrice << ":" << setx << endl;
 
+			//delete tmp set
 			delete setx;
 			//save m
 			lastM = (m < lastM ? m : lastM);
-			//save valid prefix size
-			startPrefixSize = lastM;
 			
 			if (prefixPrice >= minPriceSet) {
 				lastM = (m < lastM ? m : lastM);
 				startPrefixSize = lastM;
-				continue;
+				//continue;
 			}
 		}
 
@@ -130,6 +131,6 @@ pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<
 	}	
 	for (int i = 0; i < 3; ++i){
 		prefixEnd[i] = i;
-	}	
-	return workUnit(k, n, prefix, 1, prefixEnd, mgraph);
+	}
+	return workUnit(k, n, prefix, 1, prefixEnd, 3, mgraph);
 }
