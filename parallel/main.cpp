@@ -1,3 +1,4 @@
+#include "mpi.h"
 #include "genlogic.h"
 #include "assistfunc.h"
 #include <iostream>
@@ -29,6 +30,19 @@ void printUsage(const char* name)
 
 int main(int argc, char const* argv[])
 {
+	int p; int my_rank;
+	/* start up MPI */
+  	MPI_Init( &argc, &argv );
+
+	/* find out process rank */
+	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+	/* find out number of processes */
+	MPI_Comm_size(MPI_COMM_WORLD, &p);
+
+	cout << "processes " << p << endl;
+	cout << "my process id " << my_rank << endl; 
+
 	if (argc < 5){
 		printUsage(argv[0]);
 		return 1;
@@ -78,5 +92,8 @@ int main(int argc, char const* argv[])
 	cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 	delete result.second;
+
+	/* shut down MPI */
+  	MPI_Finalize();
 	return 0;
 }
