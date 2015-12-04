@@ -121,7 +121,12 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 	//array containing combination
 	uint64_t* nodesx = new uint64_t[k];
 	//variables 
+<<<<<<< HEAD
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
+=======
+	uint64_t maxVal, m, price, lastM = 0, prefixPrice; 
+
+>>>>>>> origin/master
 	//set of nodes in combination
 	set<uint64_t> *setx, *minSetx;
 
