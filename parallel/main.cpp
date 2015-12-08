@@ -152,6 +152,7 @@ int main(int argc, char * argv[])
 	    cout << p << " received graph." << endl;
 	    cout << "graph " << *mgraph << endl;
 	}
+	MPI_Finalize();
 	return 0;
 
 	//hlavni pracovni smycka
