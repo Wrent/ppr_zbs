@@ -127,7 +127,7 @@ int main(int argc, char * argv[])
 
 		//odeslat graf
 		for (int i = 1; i < p; i++) {
-			MPI_Send(mgraph.front(), mgraph.size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
+			MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
 
         //vypocet se bude startovat jinak nez tadytim
