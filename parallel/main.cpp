@@ -24,6 +24,7 @@ using namespace std;
 #define MSG_TOKEN        1003
 #define MSG_FINISH       1004
 #define MSG_GRAPH		 1005
+#define MSG_GRAPH_SIZE	 1006
 
 void printUsage(const char* name)
 {
@@ -127,6 +128,9 @@ int main(int argc, char * argv[])
 
 		//odeslat graf
 		for (int i = 1; i < p; i++) {
+			//posleme velikost grafu
+			MPI_Send(mgraph->size(), 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
+			//posleme samotny graf
 			MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
 
@@ -138,10 +142,14 @@ int main(int argc, char * argv[])
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
-
+        int graphSize = 0;
+        //prijmout velikost grafu
+        MPI_Recv ( &graphSize, 1, MPI_CHAR, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
+        cout << p << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
-	    MPI_Recv ( &mgraph, INT_MAX, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
-	    cout << p << mgraph << endl;
+	    MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
+	    cout << p << " received graph." << endl;
+	    cout << "graph " << mgraph << endl;
 	}
 	return 0;
 
