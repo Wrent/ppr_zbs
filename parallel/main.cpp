@@ -129,7 +129,7 @@ int main(int argc, char * argv[])
 		//odeslat graf
 		for (int i = 1; i < p; i++) {
 			//posleme velikost grafu
-			MPI_Send(mgraph->size(), 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
+			MPI_Send(&mgraph->size(), 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
 			//posleme samotny graf
 			MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
