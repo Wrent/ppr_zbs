@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
 	    //prijmout graf
 	    MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
 	    cout << p << " received graph." << endl;
-	    cout << "graph " << mgraph << endl;
+	    cout << "graph " << *mgraph << endl;
 	}
 	return 0;
 
