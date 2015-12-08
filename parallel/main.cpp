@@ -95,15 +95,17 @@ void doLocalWorkStep() {
 
 int main(int argc, char * argv[])
 {
-	int p; int my_rank, i = 0, flag;
+	int p, my_rank, i = 0, flag, askForWorkFrom;
 	vector<vector<bool> > *mgraph = NULL;
 
 	MPI_Status status;
+	MPI_Status recv_status;
 	/* start up MPI */
   	MPI_Init( &argc, &argv );
 
 	/* find out process rank */
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+	askForWorkFrom = my_rank + 1;
 
 	/* find out number of processes */
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
@@ -148,7 +150,6 @@ int main(int argc, char * argv[])
         MPI_Recv ( &graphSize, 1, MPI_INT, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
         cout << p << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
-	    mgraph->resize(10);
 	    MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
 	    cout << p << " received graph." << endl;
 	    cout << "graph " << *mgraph << endl;
@@ -156,50 +157,103 @@ int main(int argc, char * argv[])
 	MPI_Finalize();
 	return 0;
 
+    int recv;
+    bool done = false;
 	//hlavni pracovni smycka
     while (true) {
         i++;
-        if ((i % CHECK_MSG_AMOUNT)==0) {
+        if ((i % CHECK_MSG_AMOUNT)==0 || done}}) {
             MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
             if (flag) {
                 //prisla zprava, je treba ji obslouzit
                 //v promenne status je tag (status.MPI_TAG), cislo odesilatele (status.MPI_SOURCE)
                 //a pripadne cislo chyby (status.MPI_ERROR)
                 switch (status.MPI_TAG) {
-                    case MSG_WORK_REQUEST : // zadost o praci, prijmout a dopovedet
-                                            // zaslat rozdeleny zasobnik a nebo odmitnuti MSG_WORK_NOWORK
+                    case MSG_WORK_REQUEST :
+                                            //prijmeme zpravu
+                                            MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD. &recv_status);
+                                            if (localWorkExists()) {
+                                                //rozdelime si svou praci a pulku posleme procesoru
+                                                //rozdelPraci()
+                                                //MPI_Send(prace, velikost prace, MPI_CHAR, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
+                                            } else {
+                                                //zadnou praci nemam
+                                                MPI_Send(0, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD);
+                                            }
                                             break;
                     case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
                                             // deserializovat a spustit vypocet
+                                            //MPI_Recv(&prace, velikost prace, MPI_CHAR, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
+                                            //zpracuj a pokracuj v pocitani
+                                            done = false;
                                             break;
                     case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
+                                            MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
                                             // zkusit jiny proces
-                                            // a nebo se prepnout do pasivniho stavu a cekat na token
+                                            askForWorkFrom = (askForWorkFrom) % p;
+                                            if (askForWorkFrom == my_rank) {
+                                                done = true;
+                                            } else {
+                                                MPI_Send(0, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                                            }
                                             break;
                     case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
-                                            // - bily nebo cerny v zavislosti na stavu procesu
+                                            MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_TOKEN, MPI_COMM_WORLD, &recv_status);
+                                            recv = recv && done;
+                                            if (my_rank == 0) {
+                                                if (recv == 1) {
+                                                    //vsichni jsou hotovy
+                                                    //odesli finish token
+                                                    for (int i = 1; i < p; i++) {
+                                                        MPI_Send(0, 1, MPI_INT, i, MSG_FINISH, MPI_COMM_WORLD);
+                                                    }
+                                                    //min = reseni nalezene procesem 0;
+
+                                                    //a prijmi vysledek
+                                                    for (int i = 1; i < p; i++) {
+                                                        //MPI_Recv(recvMin, velikost reseni, MPI_CHAR, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                        // if (recvMin < min) {
+                                                        //      min = recvMin;
+                                                        // }
+
+                                                    }
+                                                    //vypis vysledek a ukonci se
+                                                    // vypis()
+                                                    MPI_Finalize();
+                                                    exit (0);
+                                                }
+                                            } else {
+                                                MPI_Send(recv, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                                            }
                                             break;
-                    case MSG_FINISH :       //konec vypoctu - proces 0 pomoci tokenu zjistil, ze jiz nikdo nema praci
-                                            //a rozeslal zpravu ukoncujici vypocet
-                                            //mam-li reseni, odeslu procesu 0
-                                            //nasledne ukoncim spoji cinnost
-                                            //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
+                    case MSG_FINISH :
+                                            if (my_rank != 0) {
+                                                MPI_Recv($recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                //MPI_Send(mojeReseni, velikost reseni, MPI_CHAR, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
+                                            }
                                             MPI_Finalize();
                                             exit (0);
                                             break;
+
                     default :               //error;
                                             break;
                 }
             }
 
             if (!localWorkExists()) {
-                //kontaktuj jiny proces s zadosti o praci
+                MPI_Send(0, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                done = true;
+
+                //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
+                //rozesle to jen pokud sam nic nema
+                if (my_rank == 0) {
+                //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
+                    MPI_Send(1, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                }
             }
 
-            //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
-            if (my_rank == 0) {
-                //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
-            }
+
         }
         //zde se vola funkce, ktera provede jeden vypocetni krok procesu
         doLocalWorkStep();
