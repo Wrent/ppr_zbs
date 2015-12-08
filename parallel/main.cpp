@@ -140,7 +140,7 @@ int main(int argc, char * argv[])
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
 
 	    //prijmout graf
-	    MPI_Recv ( mgraph, ULONG_MAX, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
+	    MPI_Recv ( mgraph, INT_MAX, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
 	    cout << p << mgraph << endl;
 	}
 	return 0;
