@@ -11,6 +11,7 @@
 #include <limits>
 #include <stdexcept>
 #include <iterator>
+#include <climits>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ using namespace std;
 #define MSG_WORK_NOWORK  1002
 #define MSG_TOKEN        1003
 #define MSG_FINISH       1004
+#define MSG_GRAPH		 1005
 
 void printUsage(const char* name)
 {
@@ -93,6 +95,8 @@ void doLocalWorkStep() {
 int main(int argc, char * argv[])
 {
 	int p; int my_rank, i = 0, flag;
+	vector<vector<bool> > *mgraph = NULL;
+
 	MPI_Status status;
 	/* start up MPI */
   	MPI_Init( &argc, &argv );
@@ -111,7 +115,7 @@ int main(int argc, char * argv[])
 		uint64_t parA = strtoull(argv[1], NULL, 10);
 		uint64_t parN = strtoull(argv[2], NULL, 10);
 
-		vector<vector<bool> > *mgraph = prepareGraph(argc, argv);
+		mgraph = prepareGraph(argc, argv);
 
         //pokud nastala nejaka chyba
 		if (mgraph == NULL) {
@@ -121,6 +125,11 @@ int main(int argc, char * argv[])
 		//tady by mel proces nagenerovat praci pro ostatni procesory a rozeslat je
 		//rozeslat take samotny nacteny graf vsem procesorum
 
+		//odeslat graf
+		for (int i = 1; i < p; i++) {
+			MPI_Send(mgraph.front(), mgraph.size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
+		}
+
         //vypocet se bude startovat jinak nez tadytim
 		auto&& result = BBDFS(parA, parN, *mgraph);
 		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
@@ -129,7 +138,12 @@ int main(int argc, char * argv[])
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
+
+	    //prijmout graf
+	    MPI_Recv ( mgraph, ULONG_MAX, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, status);
+	    cout << p << mgraph << endl;
 	}
+	return 0;
 
 	//hlavni pracovni smycka
     while (true) {
