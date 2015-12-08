@@ -145,7 +145,7 @@ int main(int argc, char * argv[])
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
         int graphSize = 0;
         //prijmout velikost grafu
-        MPI_Recv ( &graphSize, 1, MPI_CHAR, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
+        MPI_Recv ( &graphSize, 1, MPI_INT, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
         cout << p << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
 	    //MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
