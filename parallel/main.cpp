@@ -171,7 +171,7 @@ int main(int argc, char * argv[])
                 switch (status.MPI_TAG) {
                     case MSG_WORK_REQUEST :
                                             //prijmeme zpravu
-                                            MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD. &recv_status);
+                                            MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
                                             if (localWorkExists()) {
                                                 //rozdelime si svou praci a pulku posleme procesoru
                                                 //rozdelPraci()
@@ -223,12 +223,12 @@ int main(int argc, char * argv[])
                                                     exit (0);
                                                 }
                                             } else {
-                                                MPI_Send(recv, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                                                MPI_Send(&recv, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                                             }
                                             break;
                     case MSG_FINISH :
                                             if (my_rank != 0) {
-                                                MPI_Recv($recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                 //MPI_Send(mojeReseni, velikost reseni, MPI_CHAR, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                 //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                             }
@@ -249,7 +249,8 @@ int main(int argc, char * argv[])
                 //rozesle to jen pokud sam nic nema
                 if (my_rank == 0) {
                 //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
-                    MPI_Send(1, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                    int val = 1;
+                    MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                 }
             }
 
