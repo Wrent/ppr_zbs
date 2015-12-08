@@ -132,7 +132,7 @@ int main(int argc, char * argv[])
 			int graphSize = mgraph->size();
 			MPI_Send(&graphSize, 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
 			//posleme samotny graf
-			MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
+			//MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
 
         //vypocet se bude startovat jinak nez tadytim
@@ -148,9 +148,9 @@ int main(int argc, char * argv[])
         MPI_Recv ( &graphSize, 1, MPI_CHAR, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
         cout << p << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
-	    MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
-	    cout << p << " received graph." << endl;
-	    cout << "graph " << mgraph << endl;
+	    //MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
+	    //cout << p << " received graph." << endl;
+	    //cout << "graph " << mgraph << endl;
 	}
 	return 0;
 
