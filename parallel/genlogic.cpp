@@ -127,9 +127,13 @@ pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<
 
 	for (int i = 0; i < 1; ++i){
 		prefix[i] = i;
-	}	
+		cout << i;
+	}
+	cout << endl;
 	for (int i = 0; i < 3; ++i){
 		prefixEnd[i] = i;
+		cout << i;
 	}
+	cout << endl;
 	return workUnit(k, n, prefix, 1, prefixEnd, 3, mgraph);
 }
