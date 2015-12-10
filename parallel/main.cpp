@@ -93,18 +93,34 @@ bool localWorkExists() {
 void doLocalWorkStep() {
 
 }
-uint64_t** getPrefixes(uint64_t k, uint64_t n, uint64_t p)
-{
-    uint64_t size = 2*p;
-    uint64_t **prefixes = new uint64_t*[size];
-    for (uint64_t i = 1; i < size; i++) {
-        prefixes[i] = new uint64_t[k];
-    }
 
-    float oneStep = (n-k)/p;
-    float current = oneStep;
 
-	return prefixes;
+uint64_t* getMiddlePrefix(uint64_t* start, uint64_t startSize, uint64_t* end, uint64_t endSize, uint64_t k, uint64_t n) {
+	uint64_t diffPos = 0;
+	uint64_t val;
+	while (start[diffPos] == end[diffPos]) {
+		diffPos++;
+	}
+
+	if (diffPos >= startSize || end[diffPos] - start[diffPos] == 1) {
+		//prodlouzime endVektor a dame polovicni hodnotu
+		diffPos = endSize;
+		val = (n + diffPos + 1 + end[diffPos - 1] - k) / 2;
+	} else {
+		//vratime polovicni hodnotu na diff pozici
+		val = (start[diffPos] + end[diffPos]) / 2;
+	}
+
+	uint64_t * middle = new uint64_t[k];
+	for (uint64_t i = 0; i < diffPos; i++) {
+		middle[i] = end[i];
+	}
+	middle[diffPos] = val;
+
+	for (uint64_t i = 0; i < k; i++) {
+    		cout << middle[i] << " ";
+    	}
+    	cout << endl;
 }
 
 
