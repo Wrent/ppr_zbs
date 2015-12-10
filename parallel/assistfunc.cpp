@@ -55,7 +55,7 @@ ifstream& operator>>(ifstream& infile, vector<vector<char> >& mgraph)
 ostream& operator<<(ostream& os, vector<vector<char> >& mgraph)
 {
 	for (auto row : mgraph){
-		for (auto elm : row){
+		for (int elm : row){
 			os << elm << "|";
 		}
 		os << "\n";
