@@ -71,7 +71,7 @@ vector<vector<char> >* prepareGraph(int argc, char * argv[]) {
 	vector<vector<char> > *mgraph = new vector<vector<char> >; //variable to store graph
 
 	if (graphfile.is_open()){
-		graphfile >> *mgraph;
+		graphfile >> mgraph;
 		graphfile.close();
 	}else{
 		throw ifstream::failure("unable to open file");
