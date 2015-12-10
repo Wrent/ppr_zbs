@@ -29,13 +29,13 @@ uint64_t comb(uint64_t n, uint64_t k)
     return r;
 }
 
-ifstream& operator>>(ifstream& infile, vector<vector<bool> >& mgraph)
+ifstream& operator>>(ifstream& infile, vector<vector<char> >& mgraph)
 {
 	uint64_t nodes;
 	infile >> dec >> nodes; //Read num of graph nodes
 	while (infile.get() != '\n'); //Eat ws
 
-	vector<bool> vec;
+	vector<char> vec;
 
 	for (uint64_t i = 0; i < nodes; ++i){	
 		for (uint64_t i = 0; i < nodes; ++i){
@@ -52,7 +52,7 @@ ifstream& operator>>(ifstream& infile, vector<vector<bool> >& mgraph)
 	return infile;
 }
 
-ostream& operator<<(ostream& os, vector<vector<bool> >& mgraph)
+ostream& operator<<(ostream& os, vector<vector<char> >& mgraph)
 {
 	for (auto row : mgraph){
 		for (auto elm : row){

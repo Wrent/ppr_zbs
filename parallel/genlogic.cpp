@@ -9,7 +9,7 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	return 1;
 }
 
-uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
+uint64_t priceOfX(vector<vector<char> >& mgraph, set<uint64_t>& xnodes)
 {
 	uint64_t price = 0;
 	
@@ -28,7 +28,7 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 }
 
 pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
-										uint64_t *endPrefix, uint64_t endPrefixSize, vector<vector<bool> > &mgraph)
+										uint64_t *endPrefix, uint64_t endPrefixSize, vector<vector<char> > &mgraph)
 {
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
@@ -119,7 +119,7 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 	return pair<uint64_t, set<uint64_t>*>(minPriceSet, minSetx);
 }
 
-pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<bool> > &mgraph)
+pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<char> > &mgraph)
 {
 	//array containing prefix
 	uint64_t *prefix = new uint64_t[k];

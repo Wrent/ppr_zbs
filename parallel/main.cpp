@@ -38,7 +38,7 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
+vector<vector<char> >* prepareGraph(int argc, char * argv[]) {
 	if (argc < 5){
 		printUsage(argv[0]);
 		return NULL;
@@ -68,7 +68,7 @@ vector<vector<bool> >* prepareGraph(int argc, char * argv[]) {
 		graphfile.open(argv[5]);
 	}
 		
-	vector<vector<bool> > *mgraph = new vector<vector<bool> >; //variable to store graph
+	vector<vector<char> > *mgraph = new vector<vector<char> >; //variable to store graph
 
 	if (graphfile.is_open()){
 		graphfile >> *mgraph;
@@ -96,7 +96,7 @@ void doLocalWorkStep() {
 int main(int argc, char * argv[])
 {
 	int p, my_rank, i = 0, flag, askForWorkFrom;
-	vector<vector<bool> > *mgraph = NULL;
+	vector<vector<char> > *mgraph = NULL;
 
 	MPI_Status status;
 	MPI_Status recv_status;
@@ -132,7 +132,7 @@ int main(int argc, char * argv[])
 		//odeslat graf
 		for (int i = 1; i < p; i++) {
 			//posleme velikost grafu
-			int graphSize = mgraph->size() * mgraph[0].size() * sizeof(bool);
+			int graphSize = mgraph->size() * mgraph[0].size() * sizeof(char);
 			MPI_Send(&graphSize, 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
 			//posleme samotny graf
 			MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
