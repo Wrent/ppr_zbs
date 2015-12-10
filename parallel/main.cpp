@@ -138,8 +138,8 @@ int main(int argc, char * argv[])
 		}
 
         //vypocet se bude startovat jinak nez tadytim
-		auto&& result = BBDFS(parA, parN, *mgraph);
-		cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
+		auto&& result = divideWork(parA, parN, mgraph);
+        cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 		delete result.second;
 	} else {
@@ -253,8 +253,6 @@ int main(int argc, char * argv[])
                     MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                 }
             }
-
-
         }
         //zde se vola funkce, ktera provede jeden vypocetni krok procesu
         doLocalWorkStep();
