@@ -72,7 +72,7 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 		//and if prefix is
 		if (m > 0 && m < k) {
 			setx = new set<uint64_t>(startPrefix, startPrefix+m+1);
-
+			cout << "setx "<< setx <<endl;
 			if (m != lastM) {
 				prefixPrice = priceOfX(mgraph, *setx);
 			}	
