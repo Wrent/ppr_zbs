@@ -95,21 +95,15 @@ void doLocalWorkStep() {
 }
 uint64_t** getPrefixes(uint64_t k, uint64_t n, uint64_t p)
 {
-    uint64_t **prefixes = new *uint64_t[2*p];
-    for (uint64_t i = 1; i < 2*p; i++) {
+    uint64_t size = 2*p;
+    uint64_t **prefixes = new *uint64_t[size];
+    for (uint64_t i = 1; i < size; i++) {
         prefixes[i] = new uint64_t[k];
     }
 
     float oneStep = (n-k)/p;
     float current = oneStep;
 
-
-	for (int i = 0; i < 1; ++i){
-		prefix[i] = i;
-	}
-	for (int i = 0; i < 3; ++i){
-		prefixEnd[i] = i;
-	}
 	return prefixes;
 }
 
