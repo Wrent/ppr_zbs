@@ -135,7 +135,7 @@ int main(int argc, char * argv[])
 			int graphSize = mgraph->size() * mgraph[0].size() * sizeof(char);
 			MPI_Send(&graphSize, 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
 			//posleme samotny graf
-			MPI_Send(&mgraph->front(), mgraph->size(), MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
+			MPI_Send(&mgraph->front(), graphSize, MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
 
         //vypocet se bude startovat jinak nez tadytim
