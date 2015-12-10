@@ -122,6 +122,7 @@ int main(int argc, char * argv[])
 
         //pokud nastala nejaka chyba
 		if (mgraph == NULL) {
+		    cout << "error while reading graph";
 			return 1;
 		}
 
