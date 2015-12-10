@@ -25,6 +25,7 @@ using namespace std;
 #define MSG_FINISH       1004
 #define MSG_GRAPH		 1005
 #define MSG_GRAPH_SIZE	 1006
+#define MSG_PAR_A        1007
 
 void printUsage(const char* name)
 {
@@ -98,6 +99,9 @@ int main(int argc, char * argv[])
 	int p, my_rank, i = 0, flag, askForWorkFrom;
 	vector<vector<char> > *mgraph = NULL;
 
+    uint64_t *prefix, *prefixEnd;
+    uint64_t parA;
+
 	MPI_Status status;
 	MPI_Status recv_status;
 	/* start up MPI */
@@ -115,8 +119,11 @@ int main(int argc, char * argv[])
 
 	//nachazime se v ridicim procesu
 	if (my_rank == 0) {
-		uint64_t parA = strtoull(argv[1], NULL, 10);
+		parA = strtoull(argv[1], NULL, 10);
 		uint64_t parN = strtoull(argv[2], NULL, 10);
+
+        prefix = new uint64_t[parA];
+        prefixEnd = new uint64_t[parA];
 
 		mgraph = prepareGraph(argc, argv);
 
@@ -131,11 +138,18 @@ int main(int argc, char * argv[])
 
 		//odeslat graf
 		for (int i = 1; i < p; i++) {
+		    //posleme parA
+		    MPI_Send(&parA, 1, MPI_INT, i, MSG_PAR_A, MPI_COMM_WORLD);
+
 			//posleme velikost grafu
 			int graphSize = mgraph->size() * mgraph[0].size() * sizeof(char);
 			MPI_Send(&graphSize, 1, MPI_INT, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
 			//posleme samotny graf
 			MPI_Send(&mgraph->front(), graphSize, MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
+
+
+
+			//posleme praci
 		}
 
         //vypocet se bude startovat jinak nez tadytim
@@ -146,6 +160,13 @@ int main(int argc, char * argv[])
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
+        //prijmout parA
+        MPI_Recv ( &parA, 1, MPI_INT, 0, MSG_PAR_A, MPI_COMM_WORLD, &status);
+
+        prefix = new uint64_t[parA];
+        prefixEnd = new uint64_t[parA];
+
+        cout << p << " received parA " << parA << endl;
         int graphSize = 0;
         //prijmout velikost grafu
         MPI_Recv ( &graphSize, 1, MPI_INT, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
