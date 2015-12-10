@@ -138,7 +138,7 @@ int main(int argc, char * argv[])
 		}
 
         //vypocet se bude startovat jinak nez tadytim
-		auto&& result = divideWork(parA, parN, mgraph);
+		auto&& result = divideWork(parA, parN, *mgraph);
         cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 		delete result.second;
