@@ -59,7 +59,7 @@ int main(int argc, char const* argv[])
 		graphfile.open(argv[5]);
 	}
 	
-	vector<vector<bool> > mgraph; //variable to store graph
+	Array2D<char> mgraph; //variable to store graph
 
 	if (graphfile.is_open()){
 		graphfile >> mgraph;

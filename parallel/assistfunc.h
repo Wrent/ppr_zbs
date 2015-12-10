@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdlib>
 #include <fstream>
 #include <vector>
@@ -6,10 +8,43 @@
 #include <limits>
 #include <stdexcept>
 
-using namespace std;
+//declare Array2D
+template <class Type> class Array2D;
 
+//declare tempates
+template <class Type>
+std::ostream & operator<< (std::ostream & os, Array2D<Type> & obj);
+template <class Type>
+std::ifstream & operator>> (std::ifstream & infile, Array2D<Type> & obj);
+
+//define class Array2D
+template <class Type>
+class Array2D
+{
+public:
+	~Array2D();
+	uint64_t rowSize();
+	uint64_t size();
+	void setData(Type * data, uint64_t rowSize);
+	void setSize(uint64_t rowSize);
+	Type * getData();
+	Type * operator[](uint64_t x);
+	friend std::ostream & operator<< <Type> (std::ostream& os, Array2D<Type> & obj);
+	friend std::ifstream & operator>> <Type> (std::ifstream& infile, Array2D<Type> & obj);
+private:
+	Type *_mdata;
+	uint64_t mrowSize;
+	uint64_t msize;
+	Type * mdata();
+};
+
+
+//functions
 uint64_t gcd(uint64_t x, uint64_t y);
 uint64_t comb(uint64_t n, uint64_t k);
-ifstream& operator>>(ifstream& infile, vector<vector<bool> >& mgraph);
-ostream& operator<<(ostream& os, vector<vector<bool> >& mgraph);
-ostream& operator<<(ostream& os, const set<uint64_t> *mset);
+//vector bool
+std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph);
+std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgraph);
+//set
+std::ostream& operator<<(std::ostream& os, const std::set<uint64_t> *mset);
+

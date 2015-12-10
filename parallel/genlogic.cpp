@@ -1,7 +1,5 @@
 #include "genlogic.h"
 
-using namespace std;
-
 int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	for (uint64_t i = 0; i < size; ++i){
 		if (a[i] > b[i]) return 0;
@@ -9,13 +7,13 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	return 1;
 }
 
-uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
+uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
 {
 	uint64_t price = 0;
 	
 	//Go trough nodes above diagonal
-	for (uint64_t mrow = 0; mrow < mgraph.size(); ++mrow){
-		for (uint64_t i = mrow + 1; i < mgraph[mrow].size(); ++i){
+	for (uint64_t mrow = 0; mrow < mgraph.rowSize(); ++mrow){
+		for (uint64_t i = mrow + 1; i < mgraph.rowSize(); ++i){
 			if (mgraph[mrow][i] && 
 				(xnodes.count(mrow) != xnodes.count(i))){
 				//When node mrow neighbours with node i and both nodes 
@@ -27,14 +25,14 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 	return price;
 }
 
-pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
-										uint64_t *endPrefix, uint64_t endPrefixSize, vector<vector<bool> > &mgraph)
+std::pair<uint64_t, std::set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
+										uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char> &mgraph)
 {
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
 
 	//set of nodes belonging to combination
-	set<uint64_t> *setx, *minSetx;
+	std::set<uint64_t> *setx, *minSetx;
 
 	//expand startPrefix to combination of length k
 	for (uint64_t i = startPrefixSize; i < k; ++i){
@@ -42,13 +40,13 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 	}
 
 	//init first set
-	minSetx = new set<uint64_t>(startPrefix, startPrefix+k);
+	minSetx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 	setx = minSetx;
 	//init minimal price of set
 	minPriceSet = priceOfX(mgraph, *minSetx);
 
 	#ifdef _DEBUG
-	cout << minPriceSet << ":" << minSetx << "\n";
+	std::cout << minPriceSet << ":" << minSetx << "\n";
 	#endif
 	
 	//go trough the combinations from startPrefix to endPrefix
@@ -71,12 +69,12 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 		//check if prefix price is not more or equal then current minimum
 		//and if prefix is
 		if (m > 0 && m < k) {
-			setx = new set<uint64_t>(startPrefix, startPrefix+m+1);
+			setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
 
 			if (m != lastM) {
 				prefixPrice = priceOfX(mgraph, *setx);
 			}	
-			cout << "prefix " << prefixPrice << ":" << setx << endl;
+			std::cout << "prefix " << prefixPrice << ":" << setx << '\n';
 
 			//delete tmp set
 			delete setx;
@@ -96,11 +94,11 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 		}
 
 		//calculate price for new combination
-		setx = new set<uint64_t>(startPrefix, startPrefix+k);
+		setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 		priceSet = priceOfX(mgraph, *setx);
 
 		#ifdef _DEBUG
-		cout << priceSet << ":" << setx << "\n";
+		std::cout << priceSet << ":" << setx << "\n";
 		#endif
 
 		//compare price and keep the smaller one
@@ -116,10 +114,10 @@ pair<uint64_t, set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startP
 		}
 	}
 	delete [] startPrefix;
-	return pair<uint64_t, set<uint64_t>*>(minPriceSet, minSetx);
+	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
 }
 
-pair<uint64_t, set<uint64_t>*> divideWork(uint64_t k, uint64_t n, vector<vector<bool> > &mgraph)
+std::pair<uint64_t, std::set<uint64_t>*> divideWork(uint64_t k, uint64_t n, Array2D<char> &mgraph)
 {
 	//array containing prefix
 	uint64_t *prefix = new uint64_t[k];
