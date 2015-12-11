@@ -222,15 +222,15 @@ int main(int argc, char * argv[])
         prefixSize = 0;
         prefixEndSize = 0;
 
-        cout << p << " received parA " << parA << endl;
-        cout << p << " received parN " << parN << endl;
+        cout << my_rank << " received parA " << parA << endl;
+        cout << my_rank << " received parN " << parN << endl;
         uint64_t graphSize = 0;
         //prijmout velikost grafu
         MPI_Recv ( &graphSize, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
-        cout << p << " is receiving graph of size " << graphSize << endl;
+        cout << my_rank << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
 	    MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
-	    cout << p << " received graph." << endl;
+	    cout << my_rank << " received graph." << endl;
 	    //cout << "graph " << *mgraph << endl;
 	}
 
