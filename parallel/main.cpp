@@ -157,10 +157,11 @@ int main(int argc, char * argv[])
 
 	/* find out process rank */
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-	askForWorkFrom = (my_rank + 1) % p;
+
 
 	/* find out number of processes */
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
+	askForWorkFrom = (my_rank + 1) % p;
 
 	cout << "processes " << p << endl;
 	cout << "my process id " << my_rank << endl; 
