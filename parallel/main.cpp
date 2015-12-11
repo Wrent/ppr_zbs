@@ -339,7 +339,7 @@ int main(int argc, char * argv[])
                 }
             }
 
-            if (!localWorkExists() && !done) {
+            if (!localWorkExists() || done) {
                 recv = 0;
                 MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                 done = true;
