@@ -10,6 +10,9 @@ all: default
 run: $(TARGET)
 	-$(TARGET) 9 10 20 3 graf.txt
 
+debug: $(TARGET)
+	-gdb --args $(TARGET) 9 10 20 3 graf.txt
+
 OBJECTS = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 HEADERS = $(wildcard *.h)
 

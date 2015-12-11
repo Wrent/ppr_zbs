@@ -7,7 +7,9 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	return 1;
 }
 
+
 uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
+
 
 {
 	uint64_t price = 0;
