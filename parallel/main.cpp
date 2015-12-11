@@ -233,9 +233,10 @@ int main(int argc, char * argv[])
 	}
 
     int recv;
+
+    cout << p << " entering loop" << endl;
 	//hlavni pracovni smycka
     while (true) {
-        cout << p << " entering loop" << endl;
         i++;
         if ((i % CHECK_MSG_AMOUNT)==0 || done) {
             MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
