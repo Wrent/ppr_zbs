@@ -235,7 +235,7 @@ int main(int argc, char * argv[])
 	}
 
     int recv;
-
+    bool requestSent = false;
     cout << my_rank << " entering loop" << endl;
 	//hlavni pracovni smycka
     while (true) {
@@ -285,6 +285,7 @@ int main(int argc, char * argv[])
 
                                                     printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
                                                     done = false;
+                                                    requestSent = false;
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
@@ -296,6 +297,7 @@ int main(int argc, char * argv[])
                                                         recv = 0;
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                                                     }
+                                                    requestSent = false;
                                                     break;
                             case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_TOKEN, MPI_COMM_WORLD, &recv_status);
@@ -341,10 +343,11 @@ int main(int argc, char * argv[])
                 }
             }
 
-            if (!localWorkExists(my_rank) || done) {
+            if ((!localWorkExists(my_rank) || done) && !requestSent) {
                 recv = 0;
                 cout << my_rank << " sending work request to " << askForWorkFrom << endl;
                 MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                requestSent = true;
                 done = true;
 
                 //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
