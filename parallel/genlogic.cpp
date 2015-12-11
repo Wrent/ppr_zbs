@@ -9,8 +9,6 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 
 
 uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
-
-
 {
 	uint64_t price = 0;
 	
@@ -28,16 +26,11 @@ uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
 	return price;
 }
 
-std::pair<uint64_t, std::set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
-										uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char> &mgraph)
-
+CLocalWorker::Genlogic(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
+			 		   uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char> & mgraph) 
+						: k(k), n(n), startPrefix(startPrefix), startPrefixSize(startPrefixSize), 
+						endPrefix(endPrefix), endPrefixSize(endPrefixSize), mgraph(mgraph)
 {
-	//variables 
-	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
-
-	//set of nodes belonging to combination
-	std::set<uint64_t> *setx, *minSetx;
-
 	//expand startPrefix to combination of length k
 	for (uint64_t i = startPrefixSize; i < k; ++i){
 		startPrefix[i] = startPrefix[i-1] + 1;
@@ -52,90 +45,89 @@ std::pair<uint64_t, std::set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64
 	#ifdef _DEBUG
 	std::cout << minPriceSet << ":" << minSetx << "\n";
 	#endif
-	
-	//go trough the combinations from startPrefix to endPrefix
-	while (1){		
-		//index m
-		m = k - 1; 
-		maxValAtPos = n - 1;
-		
-		//search for first element from right which is not already maxed
-		while (startPrefix[m] == maxValAtPos){
-			m = m - 1; 
-			maxValAtPos = maxValAtPos - 1;
-		}
-		//increment found element
-		startPrefix[m] += 1;
-		
-		//break if done everything to endPrefix
-		if (!prefixLessEqual(startPrefix, endPrefix, endPrefixSize)) break;
 
-		//check if prefix price is not more or equal then current minimum
-		//and if prefix is
-		if (m > 0 && m < k) {
-
-			setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
-
-
-			if (m != lastM) {
-				prefixPrice = priceOfX(mgraph, *setx);
-			}	
-			std::cout << "prefix " << prefixPrice << ":" << setx << '\n';
-
-			//delete tmp set
-			delete setx;
-			//save m
-			lastM = (m < lastM ? m : lastM);
-			
-			if (prefixPrice >= minPriceSet) {
-				lastM = (m < lastM ? m : lastM);
-				startPrefixSize = lastM;
-				//continue;
-			}
-		}
-
-		//expand combination from m
-		for (uint64_t j = m + 1; j < k; ++j){
-			startPrefix[j] = startPrefix[j - 1] + 1;
-		}
-
-		//calculate price for new combination
-		setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
-		priceSet = priceOfX(mgraph, *setx);
-
-		#ifdef _DEBUG
-		std::cout << priceSet << ":" << setx << "\n";
-		#endif
-
-		//compare price and keep the smaller one
-		if (priceSet < minPriceSet){
-			delete minSetx;
-			minSetx = setx;
-			minPriceSet = priceSet;
-		}else{
-			delete setx;
-		}
-		if (startPrefix[0] >= n - k) {
-			break;
-		}
-	}
-	delete [] startPrefix;
-	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
+	prepareForLocalWorkStep();
 }
 
-
-std::pair<uint64_t, std::set<uint64_t>*> divideWork(uint64_t k, uint64_t n, Array2D<char> &mgraph)
-
+bool CLocalWorker::localWorkExists()
 {
-	//array containing prefix
-	uint64_t *prefix = new uint64_t[k];
-	uint64_t *prefixEnd = new uint64_t[k];
+	//break if done everything to endPrefix
+	if (!prefixLessEqual(startPrefix, endPrefix, endPrefixSize)) return false;
 
-	for (int i = 0; i < 1; ++i){
-		prefix[i] = i;
+	//yes it does
+	return true;
+}
+
+void CLocalWorker::prepareForLocalWorkStep()
+{
+	//index m
+	m = k - 1; 
+	maxValAtPos = n - 1;
+	
+	//search for first element from right which is not already maxed
+	while (startPrefix[m] == maxValAtPos){
+		//check prefix bound
+		if (startPrefix[m] > maxValAtPos) {
+			std:cout << "prefix overflow" << '\n';
+			return;
+		}
+		m = m - 1; 
+		maxValAtPos = maxValAtPos - 1;
 	}
-	for (int i = 0; i < 3; ++i){
-		prefixEnd[i] = i;
+	//increment found element
+	startPrefix[m] += 1;
+}
+
+void CLocalWorker::doLocalWorkStep()
+{
+	//check if prefix price is not more or equal then current minimum
+	//and if prefix is
+	if (m > 0 && m < k) {
+
+		setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
+
+
+		if (m != lastM) {
+			prefixPrice = priceOfX(mgraph, *setx);
+		}	
+		std::cout << "prefix " << prefixPrice << ":" << setx << '\n';
+
+		//delete tmp set
+		delete setx;
+		//save m
+		lastM = (m < lastM ? m : lastM);
+		
+		if (prefixPrice >= minPriceSet) {
+			lastM = (m < lastM ? m : lastM);
+			startPrefixSize = lastM;
+			return;
+		}
 	}
-	return workUnit(k, n, prefix, 1, prefixEnd, 3, mgraph);
+
+	//expand combination from m
+	for (uint64_t j = m + 1; j < k; ++j){
+		startPrefix[j] = startPrefix[j - 1] + 1;
+	}
+
+	//calculate price for new combination
+	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
+	priceSet = priceOfX(mgraph, *setx);
+
+	#ifdef _DEBUG
+	std::cout << priceSet << ":" << setx << "\n";
+	#endif
+
+	//compare price and keep the smaller one
+	if (priceSet < minPriceSet){
+		delete minSetx;
+		minSetx = setx;
+		minPriceSet = priceSet;
+	}else{
+		delete setx;
+	}
+}
+
+std::pair<uint64_t, std::set<uint64_t>*> CLocalWorker::getResults()
+{
+	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
 }
