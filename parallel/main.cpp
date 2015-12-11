@@ -235,6 +235,7 @@ int main(int argc, char * argv[])
     int recv;
 	//hlavni pracovni smycka
     while (true) {
+        cout << p << " entering loop" << endl;
         i++;
         if ((i % CHECK_MSG_AMOUNT)==0 || done) {
             MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
@@ -268,7 +269,8 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                     } else {
                                                         //zadnou praci nemam
-                                                        MPI_Send(0, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD);
+                                                        recv = 0;
+                                                        MPI_Send(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD);
                                                     }
                                                     break;
                             case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
@@ -288,7 +290,8 @@ int main(int argc, char * argv[])
                                                     if (askForWorkFrom == my_rank) {
                                                         done = true;
                                                     } else {
-                                                        MPI_Send(0, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                                                        recv = 0;
+                                                        MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                                                     }
                                                     break;
                             case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
@@ -335,8 +338,9 @@ int main(int argc, char * argv[])
                 }
             }
 
-            if (!localWorkExists()) {
-                MPI_Send(0, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+            if (!localWorkExists() && !done) {
+                recv = 0;
+                MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                 done = true;
 
                 //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
