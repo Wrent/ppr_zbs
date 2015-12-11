@@ -126,12 +126,12 @@ pair<uint64_t, uint64_t*> getMiddlePrefix(uint64_t* start, uint64_t startSize, u
 void printPrefixes(uint64_t p, uint64_t *prefix, uint64_t prefixSize, uint64_t *prefixEnd, uint64_t prefixEndSize) {
     cout << "process " << p << " has:" << endl;
     cout << "prefix ";
-    for (int i = 0; i < prefixSize; i ++) {
+    for (uint64_t i = 0; i < prefixSize; i ++) {
         cout << prefix[i] << " ";
     }
     cout << "of size " << prefixSize << endl;
     cout << "prefixEnd ";
-    for (int i = 0; i < prefixEndSize; i ++) {
+    for (uint64_t i = 0; i < prefixEndSize; i ++) {
             cout << prefixEnd[i] << " ";
         }
         cout << "of size " << prefixEndSize << endl;
@@ -144,7 +144,7 @@ int main(int argc, char * argv[])
 	vector<vector<char> > *mgraph = NULL;
 
     uint64_t *prefix, *prefixEnd;
-    uint64_t parA. parN;
+    uint64_t parA, parN;
     uint64_t prefixSize, prefixEndSize;
     bool done = true;
 
