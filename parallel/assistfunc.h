@@ -22,6 +22,7 @@ template <class Type>
 class Array2D
 {
 public:
+	Array2D();
 	~Array2D();
 	uint64_t rowSize();
 	uint64_t size();
@@ -32,10 +33,9 @@ public:
 	friend std::ostream & operator<< <Type> (std::ostream& os, Array2D<Type> & obj);
 	friend std::ifstream & operator>> <Type> (std::ifstream& infile, Array2D<Type> & obj);
 private:
-	Type *_mdata;
+	Type * mdata;
 	uint64_t mrowSize;
 	uint64_t msize;
-	Type * mdata();
 };
 
 

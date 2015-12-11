@@ -27,15 +27,12 @@ uint64_t comb(uint64_t n, uint64_t k)
     return r;
 }
 
-
 template <class Type>
-Type * Array2D<Type>::mdata()
+Array2D<Type>::Array2D()
 {
-	if (_mdata == NULL)
-	{
-		_mdata = new Type[msize];
-	}
-	return _mdata;
+	mdata = NULL;
+	msize = 0;
+	mrowSize = 0;
 }
 
 template <class Type>
@@ -59,7 +56,7 @@ uint64_t Array2D<Type>::size()
 template <class Type>
 void Array2D<Type>::setData(Type * data, uint64_t rowSize)
 {
-	delete [] mdata;
+	if (mdata != NULL) delete [] mdata;
 	mdata = data;
 }
 
@@ -79,15 +76,19 @@ Type * Array2D<Type>::getData()
 template <class Type>
 Type * Array2D<Type>::operator[](uint64_t x)
 {
-	return (mdata + (x * msize));
+	if (mdata == NULL)
+	{
+		mdata = new Type[msize];
+	}
+	return (mdata + (x * mrowSize));
 }
 
 template <class Type>
 std::ostream& operator<<(std::ostream& os, Array2D<Type> & obj)
 {
 	for (uint64_t i = 0; i < obj.msize; ++i){
-		os << obj.mdata[i] << "|";
-		if (i == obj.mrowSize) os << "\n";
+		if ((i % obj.mrowSize) == 0 && i != 0) os << "\n";\
+		os << (unsigned int)obj.mdata[i] << "|";
 	}
 	return os;
 }
@@ -95,12 +96,12 @@ std::ostream& operator<<(std::ostream& os, Array2D<Type> & obj)
 template <class Type>
 std::ifstream& operator>>(std::ifstream& infile, Array2D<Type> & obj)
 {
-	uint64_t nodes;
-	infile >> std::dec >> nodes; //Read num of graph nodes
+	infile >> std::dec >> obj.mrowSize; //Read num of graph nodes
+	obj.msize = obj.mrowSize * obj.mrowSize; //save size
 	while (infile.get() != '\n'); //Eat Whitespaces
 
-	for (uint64_t i = 0; i < nodes; ++i){	
-		for (uint64_t j = 0; j < nodes; ++j){
+	for (uint64_t i = 0; i < obj.mrowSize; ++i){	
+		for (uint64_t j = 0; j < obj.mrowSize; ++j){
 			if (infile.get() == '0'){
 				obj[i][j] = 0;
 			}else{
@@ -112,6 +113,7 @@ std::ifstream& operator>>(std::ifstream& infile, Array2D<Type> & obj)
 	return infile;
 }
 
+//---------------------------------------------------------------------
 
 std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph)
 {
@@ -157,3 +159,7 @@ std::ostream& operator<<(std::ostream& os, const std::set<uint64_t> *mset)
 	}
 	return os;
 }
+
+template class Array2D<char>;
+template std::ifstream& operator>> <char>(std::ifstream& infile, Array2D<char> & obj);
+template std::ostream& operator<< <char>(std::ostream& os, Array2D<char> & obj);
