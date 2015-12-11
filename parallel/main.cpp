@@ -42,10 +42,10 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-Array2D<char> prepareGraph(int argc, char * argv[]) {
+uint64_t prepareGraph(int argc, char * argv[]) {
 	if (argc < 5){
 		printUsage(argv[0]);
-		return NULL;
+		return 1;
 	}
 
 	//read args
@@ -55,7 +55,7 @@ Array2D<char> prepareGraph(int argc, char * argv[]) {
 
 	if (parN < 5 || parM < parN || parK > parN || parK < 3){
 		printUsage(argv[0]);
-		return NULL;
+		return 1;
 	}
 
 	ifstream graphfile;
@@ -80,13 +80,14 @@ Array2D<char> prepareGraph(int argc, char * argv[]) {
 		graphfile.close();
 	}else{
 		throw ifstream::failure("unable to open file");
+		return 1;
 	}
 
 	#ifdef _DEBUG
 	cout << mgraph << "\n";
 	#endif
 
-	return mgraph;
+	return 0;
 }
 
 bool localWorkExists(uint64_t rank) {
@@ -145,7 +146,6 @@ void printPrefixes(uint64_t p, uint64_t *prefix, uint64_t prefixSize, uint64_t *
 int main(int argc, char * argv[])
 {
 	int p, my_rank, i = 0, flag, askForWorkFrom;
-	Array2D<char> mgraph;
 
     uint64_t *prefix, *prefixEnd;
     uint64_t parA, parN;
@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
         prefixEndSize = 1;
         done = false;
 
-		mgraph = prepareGraph(argc, argv);
+		prepareGraph(argc, argv);
 
         //pokud nastala nejaka chyba
 		if (mgraph.size() == 0) {
