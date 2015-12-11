@@ -234,7 +234,7 @@ int main(int argc, char * argv[])
 
     int recv;
 
-    cout << p << " entering loop" << endl;
+    cout << my_rank << " entering loop" << endl;
 	//hlavni pracovni smycka
     while (true) {
         i++;
