@@ -232,7 +232,7 @@ int main(int argc, char * argv[])
         MPI_Recv ( &graphSize, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
         cout << my_rank << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
-	    char *buffer;
+	    char *buffer = new char[graphSize];
 	    MPI_Recv ( buffer, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
 	    cout << my_rank << " received graph." << endl;
 	    mgraph.setData(buffer);
