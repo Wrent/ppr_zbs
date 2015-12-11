@@ -234,8 +234,9 @@ int main(int argc, char * argv[])
 	    //prijmout graf
 	    char *buffer;
 	    MPI_Recv ( buffer, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
-	    mgraph.setData(buffer, parN);
 	    cout << my_rank << " received graph." << endl;
+	    mgraph.setData(buffer, parN);
+
 	    cout << "graph " << mgraph << endl;
 	}
 	MPI_Finalize();
