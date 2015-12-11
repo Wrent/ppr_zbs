@@ -258,10 +258,12 @@ int main(int argc, char * argv[])
 
                                                         uint64_t *newPrefix, *newPrefixEnd;
                                                         uint64_t newPrefixSize, newPrefixEndSize;
+
                                                         newPrefixEnd = prefixEnd;
                                                         newPrefixEndSize = prefixEndSize;
                                                         newPrefix = divided.second;
                                                         newPrefixSize = divided.first;
+
                                                         prefixEnd = newPrefix;
                                                         prefixEndSize = newPrefixSize;
 
