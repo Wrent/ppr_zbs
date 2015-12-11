@@ -27,7 +27,6 @@ uint64_t comb(uint64_t n, uint64_t k)
     return r;
 }
 
-
 template <class Type>
 Type * Array2D<Type>::mdata()
 {
@@ -114,12 +113,14 @@ std::ifstream& operator>>(std::ifstream& infile, Array2D<Type> & obj)
 
 
 std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph)
+
 {
 	uint64_t nodes;
 	infile >> std::dec >> nodes; //Read num of graph nodes
 	while (infile.get() != '\n'); //Eat ws
 
 	std::vector<bool> vec;
+
 
 	for (uint64_t i = 0; i < nodes; ++i){	
 		for (uint64_t j = 0; j < nodes; ++j){
@@ -139,9 +140,10 @@ std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >
 
 
 std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgraph)
+
 {
 	for (auto row : mgraph){
-		for (auto elm : row){
+		for (int elm : row){
 			os << elm << "|";
 		}
 		os << "\n";

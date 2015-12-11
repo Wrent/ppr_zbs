@@ -42,6 +42,7 @@ private:
 //functions
 uint64_t gcd(uint64_t x, uint64_t y);
 uint64_t comb(uint64_t n, uint64_t k);
+
 //vector bool
 std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph);
 std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgraph);

@@ -8,6 +8,7 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 }
 
 uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
+
 {
 	uint64_t price = 0;
 	
@@ -27,6 +28,7 @@ uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
 
 std::pair<uint64_t, std::set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
 										uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char> &mgraph)
+
 {
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice; 
@@ -69,7 +71,9 @@ std::pair<uint64_t, std::set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64
 		//check if prefix price is not more or equal then current minimum
 		//and if prefix is
 		if (m > 0 && m < k) {
+
 			setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
+
 
 			if (m != lastM) {
 				prefixPrice = priceOfX(mgraph, *setx);
@@ -117,7 +121,9 @@ std::pair<uint64_t, std::set<uint64_t>*> workUnit(uint64_t k, uint64_t n, uint64
 	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
 }
 
+
 std::pair<uint64_t, std::set<uint64_t>*> divideWork(uint64_t k, uint64_t n, Array2D<char> &mgraph)
+
 {
 	//array containing prefix
 	uint64_t *prefix = new uint64_t[k];
@@ -125,7 +131,7 @@ std::pair<uint64_t, std::set<uint64_t>*> divideWork(uint64_t k, uint64_t n, Arra
 
 	for (int i = 0; i < 1; ++i){
 		prefix[i] = i;
-	}	
+	}
 	for (int i = 0; i < 3; ++i){
 		prefixEnd[i] = i;
 	}
