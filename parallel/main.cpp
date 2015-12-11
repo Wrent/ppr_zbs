@@ -238,6 +238,8 @@ int main(int argc, char * argv[])
 	    cout << my_rank << " received graph." << endl;
 	    cout << "graph " << mgraph << endl;
 	}
+	MPI_Finalize();
+	return 0;
 
     int recv;
     bool requestSent = false;
