@@ -28,6 +28,8 @@ using namespace std;
 #define MSG_PAR_A        1007
 #define MSG_PAR_N        1008
 
+Array2D<char> mgraph; //variable to store graph
+
 void printUsage(const char* name)
 {
 	const char* helptext = "a n m k infile\n\n"
@@ -40,7 +42,7 @@ void printUsage(const char* name)
 	printf("Usage: %s %s", name, helptext);
 }
 
-vector<vector<char> >* prepareGraph(int argc, char * argv[]) {
+Array2D<char> prepareGraph(int argc, char * argv[]) {
 	if (argc < 5){
 		printUsage(argv[0]);
 		return NULL;
@@ -70,19 +72,18 @@ vector<vector<char> >* prepareGraph(int argc, char * argv[]) {
 		graphfile.open(argv[5]);
 	}
 	
-	Array2D<char> mgraph; //variable to store graph
+
 
 
 	if (graphfile.is_open()){
-		graphfile >> *mgraph;
+		graphfile >> mgraph;
 		graphfile.close();
 	}else{
 		throw ifstream::failure("unable to open file");
-		return NULL;
 	}
 
 	#ifdef _DEBUG
-	cout << *mgraph << "\n";
+	cout << mgraph << "\n";
 	#endif
 
 	return mgraph;
@@ -144,7 +145,7 @@ void printPrefixes(uint64_t p, uint64_t *prefix, uint64_t prefixSize, uint64_t *
 int main(int argc, char * argv[])
 {
 	int p, my_rank, i = 0, flag, askForWorkFrom;
-	vector<vector<char> > *mgraph = NULL;
+	Array2D<char> mgraph;
 
     uint64_t *prefix, *prefixEnd;
     uint64_t parA, parN;
@@ -184,7 +185,7 @@ int main(int argc, char * argv[])
 		mgraph = prepareGraph(argc, argv);
 
         //pokud nastala nejaka chyba
-		if (mgraph == NULL) {
+		if (mgraph.size() == 0) {
 		    cout << "error while reading graph";
 			return 1;
 		}
@@ -200,14 +201,14 @@ int main(int argc, char * argv[])
     		MPI_Send(&parN, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_PAR_N, MPI_COMM_WORLD);
 
 			//posleme velikost grafu
-			uint64_t graphSize = mgraph->size() * mgraph[0].size() * sizeof(char);
+			uint64_t graphSize = mgraph.size();
 			MPI_Send(&graphSize, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_GRAPH_SIZE, MPI_COMM_WORLD);
 			//posleme samotny graf
-			MPI_Send(&mgraph->front(), graphSize, MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
+			MPI_Send(mgraph.getData(), graphSize, MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
 
         //vypocet se bude startovat jinak nez tadytim
-		auto&& result = divideWork(parA, parN, *mgraph);
+		auto&& result = divideWork(parA, parN, mgraph);
         cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 		delete result.second;
@@ -231,9 +232,11 @@ int main(int argc, char * argv[])
         MPI_Recv ( &graphSize, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
         cout << my_rank << " is receiving graph of size " << graphSize << endl;
 	    //prijmout graf
-	    MPI_Recv ( &mgraph, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
+	    char *buffer;
+	    MPI_Recv ( buffer, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
+	    mgraph.setData(buffer, parN);
 	    cout << my_rank << " received graph." << endl;
-	    //cout << "graph " << *mgraph << endl;
+	    cout << "graph " << mgraph << endl;
 	}
 
     int recv;
