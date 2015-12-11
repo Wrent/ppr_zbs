@@ -13,9 +13,9 @@ template <class Type> class Array2D;
 
 //declare tempates
 template <class Type>
-std::ostream & operator<< (std::ostream & os, Array2D<Type> & obj);
+std::ostream& operator<< (std::ostream& os, Array2D<Type>& obj);
 template <class Type>
-std::ifstream & operator>> (std::ifstream & infile, Array2D<Type> & obj);
+std::ifstream& operator>> (std::ifstream& infile, Array2D<Type>& obj);
 
 //define class Array2D
 template <class Type>
@@ -26,14 +26,14 @@ public:
 	~Array2D();
 	uint64_t rowSize();
 	uint64_t size();
-	void setData(Type * data);
+	void setData(Type *data);
 	void setSize(uint64_t rowSize);
-	Type * getData();
-	Type * operator[](uint64_t x);
-	friend std::ostream & operator<< <Type> (std::ostream& os, Array2D<Type> & obj);
-	friend std::ifstream & operator>> <Type> (std::ifstream& infile, Array2D<Type> & obj);
+	Type *getData();
+	Type *operator[](uint64_t x);
+	friend std::ostream& operator<< <Type> (std::ostream& os, Array2D<Type>& obj);
+	friend std::ifstream& operator>> <Type> (std::ifstream& infile, Array2D<Type>& obj);
 private:
-	Type * mdata;
+	Type *mdata;
 	uint64_t mrowSize;
 	uint64_t msize;
 };

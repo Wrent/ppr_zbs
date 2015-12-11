@@ -54,7 +54,7 @@ uint64_t Array2D<Type>::size()
 }
 
 template <class Type>
-void Array2D<Type>::setData(Type * data)
+void Array2D<Type>::setData(Type *data)
 {
 	if (mdata != NULL) delete [] mdata;
 	mdata = data;
@@ -84,7 +84,7 @@ Type * Array2D<Type>::operator[](uint64_t x)
 }
 
 template <class Type>
-std::ostream& operator<<(std::ostream& os, Array2D<Type> & obj)
+std::ostream& operator<<(std::ostream& os, Array2D<Type>& obj)
 {
 	for (uint64_t i = 0; i < obj.msize; ++i){
 		if ((i % obj.mrowSize) == 0 && i != 0) os << "\n";\
@@ -94,7 +94,7 @@ std::ostream& operator<<(std::ostream& os, Array2D<Type> & obj)
 }
 
 template <class Type>
-std::ifstream& operator>>(std::ifstream& infile, Array2D<Type> & obj)
+std::ifstream& operator>>(std::ifstream& infile, Array2D<Type>& obj)
 {
 	infile >> std::dec >> obj.mrowSize; //Read num of graph nodes
 	obj.msize = obj.mrowSize * obj.mrowSize; //save size

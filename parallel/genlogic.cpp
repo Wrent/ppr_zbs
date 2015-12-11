@@ -8,7 +8,7 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 }
 
 
-uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
+uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
 {
 	uint64_t price = 0;
 	
@@ -27,7 +27,7 @@ uint64_t priceOfX(Array2D<char> &mgraph, std::set<uint64_t> &xnodes)
 }
 
 CLocalWorker::Genlogic(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
-			 		   uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char> & mgraph) 
+			 		   uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char>& mgraph) 
 						: k(k), n(n), startPrefix(startPrefix), startPrefixSize(startPrefixSize), 
 						endPrefix(endPrefix), endPrefixSize(endPrefixSize), mgraph(mgraph)
 {
@@ -68,7 +68,7 @@ void CLocalWorker::prepareForLocalWorkStep()
 	while (startPrefix[m] == maxValAtPos){
 		//check prefix bound
 		if (startPrefix[m] > maxValAtPos) {
-			std:cout << "prefix overflow" << '\n';
+			std:cout << "error prefix overflow" << '\n';
 			return;
 		}
 		m = m - 1; 
@@ -85,7 +85,6 @@ void CLocalWorker::doLocalWorkStep()
 	if (m > 0 && m < k) {
 
 		setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
-
 
 		if (m != lastM) {
 			prefixPrice = priceOfX(mgraph, *setx);
