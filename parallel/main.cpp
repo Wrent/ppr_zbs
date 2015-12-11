@@ -269,8 +269,8 @@ int main(int argc, char * argv[])
 
                                                         MPI_Send(&newPrefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(&newPrefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
-                                                        MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
-                                                        MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
+                                                        MPI_Send(&newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
+                                                        MPI_Send(&newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                     } else {
                                                         //zadnou praci nemam
                                                         recv = 0;
@@ -280,13 +280,13 @@ int main(int argc, char * argv[])
                             case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
                                                     // deserializovat a spustit vypocet
                                                     MPI_Recv(&prefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << "received prefixSize " << prefixSize << endl;
+                                                    cout << my_rank << " received prefixSize " << prefixSize << endl;
                                                     MPI_Recv(&prefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << "received prefixEndSize " << prefixEndSize << endl;
+                                                    cout << my_rank << " received prefixEndSize " << prefixEndSize << endl;
                                                     MPI_Recv(prefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << "received prefix" << endl;
+                                                    cout << my_rank << " received prefix" << endl;
                                                     MPI_Recv(prefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << "received prefixEnd" << endl;
+                                                    cout << my_rank << " received prefixEnd" << endl;
 
                                                     printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
                                                     done = false;
