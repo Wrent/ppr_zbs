@@ -26,7 +26,7 @@ public:
 	~Array2D();
 	uint64_t rowSize();
 	uint64_t size();
-	void setData(Type * data, uint64_t rowSize);
+	void setData(Type * data);
 	void setSize(uint64_t rowSize);
 	Type * getData();
 	Type * operator[](uint64_t x);

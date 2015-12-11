@@ -54,7 +54,7 @@ uint64_t Array2D<Type>::size()
 }
 
 template <class Type>
-void Array2D<Type>::setData(Type * data, uint64_t rowSize)
+void Array2D<Type>::setData(Type * data)
 {
 	if (mdata != NULL) delete [] mdata;
 	mdata = data;
