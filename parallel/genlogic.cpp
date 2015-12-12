@@ -74,7 +74,7 @@ bool CLocalWorker::localWorkExists()
 		#ifdef _DEBUG
 		std::cout << "error: prefixy nejsou nastaveny!" << '\n';
 		#endif
-		return;
+		return false;
 	}
 
 	//break if done everything to endPrefix
