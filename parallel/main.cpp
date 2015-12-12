@@ -173,7 +173,7 @@ int main(int argc, char * argv[])
 		auto retcode = prepareGraph(argc, argv);
 
         //pokud nastala nejaka chyba
-		if (redcode) {
+		if (retcode) {
 		    cout << "error while reading graph";
 			return 1;
 		}
@@ -196,10 +196,8 @@ int main(int argc, char * argv[])
 
         //vypocet se bude startovat jinak nez tadytim
 		//auto&& result = divideWork(parA, parN, mgraph);
-		auto result = 
-        cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
+        //cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
-		delete result.second;
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
