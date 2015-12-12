@@ -1,9 +1,10 @@
 #pragma once
 
 #include <cstdlib>
+#include <cstdint>
 #include <fstream>
 #include <set>
-#include <cstdint>
+#include <vector>
 #include <limits>
 #include <stdexcept>
 
