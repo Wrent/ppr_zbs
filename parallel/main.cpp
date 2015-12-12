@@ -135,6 +135,8 @@ int main(int argc, char * argv[])
 {
 	int p, my_rank, i = 0, flag, askForWorkFrom;
 
+	CLocalWorker *localWorker;
+
     uint64_t *prefix, *prefixEnd;
     uint64_t parA, parN;
     uint64_t prefixSize, prefixEndSize;
@@ -194,9 +196,10 @@ int main(int argc, char * argv[])
 			MPI_Send(mgraph.getData(), graphSize, MPI_CHAR, i, MSG_GRAPH, MPI_COMM_WORLD);
 		}
 
-        //vypocet se bude startovat jinak nez tadytim
-		//auto&& result = divideWork(parA, parN, mgraph);
-        //cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
+        //TODO:rozdelit prefixy a poslat nebo si je ostatni vytvori na zacatku sami?
+
+        //vytvoreni instance lokalniho pracovnika pro hlavni process, teda pokud bude pocitat taky
+	    localWorker = new CLocalWorker(parA, parN, mgraph);
 
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
@@ -225,12 +228,20 @@ int main(int argc, char * argv[])
 	    mgraph.setSize(parN);
 
 	    cout << "graph " << mgraph << endl;
+
+	    //vytvoreni instance lokalniho pracovnika
+	    localWorker = new CLocalWorker(parA, parN, mgraph);
+
+	    //TODO:vytvorit nebo prijmout pocatectni prefixy
+
+	    //nastavit pocatectni prefixy
+	    //localWorker->setPrefixes(ptr,size,ptr,size);
+
 	}
 	MPI_Finalize();
 	return 0;
 
-
-	CLocalWorker localWorker(parA, parN, mgraph);
+	
     int recv;
     bool requestSent = false;
     cout << my_rank << " entering loop" << endl;
