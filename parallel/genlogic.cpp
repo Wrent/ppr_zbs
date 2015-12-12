@@ -68,7 +68,7 @@ void CLocalWorker::prepareForLocalWorkStep()
 	while (startPrefix[m] == maxValAtPos){
 		//check prefix bound
 		if (startPrefix[m] > maxValAtPos) {
-			std:cout << "error prefix overflow" << '\n';
+			std::cout << "error prefix overflow" << '\n';
 			return;
 		}
 		m = m - 1; 
