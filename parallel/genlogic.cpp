@@ -26,7 +26,7 @@ uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
 	return price;
 }
 
-CLocalWorker::Genlogic(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
+CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
 			 		   uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char>& mgraph) 
 						: k(k), n(n), startPrefix(startPrefix), startPrefixSize(startPrefixSize), 
 						endPrefix(endPrefix), endPrefixSize(endPrefixSize), mgraph(mgraph)
