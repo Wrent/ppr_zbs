@@ -43,7 +43,7 @@ void CLocalWorker::setPrefixes(uint64_t *startPrefix, uint64_t&& startPrefixSize
 	if (startPrefix == NULL || endPrefix == NULL)
 	{
 		#ifdef _DEBUG
-		cout << "setPrefixes: prefix/-y je NULL" << '\n';
+		std::cout << "setPrefixes: prefix/-y je NULL" << '\n';
 		#endif
 		return;
 	}
@@ -72,7 +72,7 @@ bool CLocalWorker::localWorkExists()
 	if (startPrefix == NULL || endPrefix == NULL)
 	{
 		#ifdef _DEBUG
-		cout << "error: prefixy nejsou nastaveny!" << '\n';
+		std::cout << "error: prefixy nejsou nastaveny!" << '\n';
 		#endif
 		return;
 	}
@@ -110,7 +110,7 @@ void CLocalWorker::doLocalWorkStep()
 	if (startPrefix == NULL || endPrefix == NULL)
 	{
 		#ifdef _DEBUG
-		cout << "error: prefixy nejsou nastaveny!" << '\n';
+		std::cout << "error: prefixy nejsou nastaveny!" << '\n';
 		#endif
 		return;
 	}
