@@ -139,7 +139,6 @@ int main(int argc, char * argv[])
     uint64_t parA, parN;
     uint64_t prefixSize, prefixEndSize;
     bool done = true;
-    CLocalWorker localWorker;
 
 	MPI_Status status;
 	MPI_Status recv_status;
@@ -171,18 +170,17 @@ int main(int argc, char * argv[])
         prefixEndSize = 1;
         done = false;
 
-		prepareGraph(argc, argv);
+		auto retcode = prepareGraph(argc, argv);
 
         //pokud nastala nejaka chyba
-		if (mgraph.size() == 0) {
+		if (redcode) {
 		    cout << "error while reading graph";
 			return 1;
 		}
 
 		//tady by mel proces nagenerovat praci pro ostatni procesory a rozeslat je
-		//rozeslat take samotny nacteny graf vsem procesorum
 
-		//odeslat graf
+		//odeslat graf vsem procesum
 		for (int i = 1; i < p; i++) {
 		    //posleme parA
 		    MPI_Send(&parA, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_PAR_A, MPI_COMM_WORLD);
@@ -197,7 +195,8 @@ int main(int argc, char * argv[])
 		}
 
         //vypocet se bude startovat jinak nez tadytim
-		auto&& result = divideWork(parA, parN, mgraph);
+		//auto&& result = divideWork(parA, parN, mgraph);
+		auto result = 
         cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
 		delete result.second;
@@ -232,6 +231,8 @@ int main(int argc, char * argv[])
 	MPI_Finalize();
 	return 0;
 
+
+	CLocalWorker localWorker(parA, parN, mgraph);
     int recv;
     bool requestSent = false;
     cout << my_rank << " entering loop" << endl;

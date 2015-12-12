@@ -26,17 +26,35 @@ uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
 	return price;
 }
 
-CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64_t startPrefixSize,
-			 		   uint64_t *endPrefix, uint64_t endPrefixSize, Array2D<char>& mgraph) 
-						: k(k), n(n), startPrefix(startPrefix), startPrefixSize(startPrefixSize), 
-						endPrefix(endPrefix), endPrefixSize(endPrefixSize), mgraph(mgraph)
+CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph) 
+						: k(k), n(n), mgraph(mgraph)
 {
+	setPrefixes(NULL, 0, NULL, 0);	
+}
+
+void CLocalWorker::setPrefixes(uint64_t *startPrefix, uint64_t&& startPrefixSize,
+			 					uint64_t *endPrefix, uint64_t&& endPrefixSize)
+{
+	startPrefix = startPrefix;
+	startPrefixSize = startPrefixSize;
+	endPrefix = endPrefix;
+	endPrefixSize = endPrefixSize;
+
+	if (startPrefix == NULL || endPrefix == NULL)
+	{
+		#ifdef _DEBUG
+		cout << "setPrefixes: prefix/-y je NULL" << '\n';
+		#endif
+		return;
+	}
+
 	//expand startPrefix to combination of length k
 	for (uint64_t i = startPrefixSize; i < k; ++i){
 		startPrefix[i] = startPrefix[i-1] + 1;
 	}
 
 	//init first set
+	if (setx != NULL) delete setx;
 	minSetx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 	setx = minSetx;
 	//init minimal price of set
@@ -51,6 +69,14 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, uint64_t *startPrefix, uint64
 
 bool CLocalWorker::localWorkExists()
 {
+	if (startPrefix == NULL || endPrefix == NULL)
+	{
+		#ifdef _DEBUG
+		cout << "error: prefixy nejsou nastaveny!" << '\n';
+		#endif
+		return;
+	}
+
 	//break if done everything to endPrefix
 	if (!prefixLessEqual(startPrefix, endPrefix, endPrefixSize)) return false;
 
@@ -67,6 +93,7 @@ void CLocalWorker::prepareForLocalWorkStep()
 	//search for first element from right which is not already maxed
 	while (startPrefix[m] == maxValAtPos){
 		//check prefix bound
+		if (m <= 0) return;
 		if (startPrefix[m] > maxValAtPos) {
 			std::cout << "error prefix overflow" << '\n';
 			return;
@@ -80,6 +107,14 @@ void CLocalWorker::prepareForLocalWorkStep()
 
 void CLocalWorker::doLocalWorkStep()
 {
+	if (startPrefix == NULL || endPrefix == NULL)
+	{
+		#ifdef _DEBUG
+		cout << "error: prefixy nejsou nastaveny!" << '\n';
+		#endif
+		return;
+	}
+
 	//check if prefix price is not more or equal then current minimum
 	//and if prefix is
 	if (m > 0 && m < k) {
@@ -124,6 +159,8 @@ void CLocalWorker::doLocalWorkStep()
 	}else{
 		delete setx;
 	}
+
+	prepareForLocalWorkStep();
 }
 
 std::pair<uint64_t, std::set<uint64_t>*> CLocalWorker::getResults()

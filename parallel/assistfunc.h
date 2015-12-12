@@ -27,9 +27,9 @@ public:
 	uint64_t rowSize();
 	uint64_t size();
 	void setData(Type *data);
-	void setSize(uint64_t rowSize);
+	void setSize(uint64_t&& rowSize);
 	Type *getData();
-	Type *operator[](uint64_t x);
+	Type *operator[](uint64_t&& x);
 	friend std::ostream& operator<< <Type> (std::ostream& os, Array2D<Type>& obj);
 	friend std::ifstream& operator>> <Type> (std::ifstream& infile, Array2D<Type>& obj);
 private:
