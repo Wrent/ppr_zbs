@@ -2,7 +2,6 @@
 
 #include <cstdlib>
 #include <fstream>
-#include <vector>
 #include <set>
 #include <cstdint>
 #include <limits>
