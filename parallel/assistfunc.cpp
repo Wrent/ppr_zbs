@@ -61,7 +61,7 @@ void Array2D<Type>::setData(Type *data)
 }
 
 template <class Type>
-void Array2D<Type>::setSize(uint64_t&& rowSize)
+void Array2D<Type>::setSize(uint64_t rowSize)
 {
 	mrowSize = rowSize;
 	msize = rowSize * rowSize;
@@ -74,7 +74,7 @@ Type * Array2D<Type>::getData()
 }
 
 template <class Type>
-Type * Array2D<Type>::operator[](uint64_t&& x)
+Type * Array2D<Type>::operator[](uint64_t x)
 {
 	if (mdata == NULL)
 	{
