@@ -258,7 +258,7 @@ int main(int argc, char * argv[])
                             case MSG_WORK_REQUEST :
                                                     //prijmeme zpravu
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
-                                                    if (localWorker.localWorkExists()) {
+                                                    if (localWorker->localWorkExists()) {
                                                         //rozdelime si svou praci a pulku posleme procesoru
                                                         //TODO sem se musi posilat jako start Prefix current Prefix
                                                         pair<uint64_t, uint64_t*> divided = getMiddlePrefix(prefix, prefixSize, prefixEnd, prefixEndSize, parA, parN);
@@ -357,7 +357,7 @@ int main(int argc, char * argv[])
                 }
             }
 
-            if ((!localWorker.localWorkExists() || done) && !requestSent) {
+            if ((!localWorker->localWorkExists() || done) && !requestSent) {
                 recv = 0;
                 cout << my_rank << " sending work request to " << askForWorkFrom << endl;
                 MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
@@ -374,7 +374,7 @@ int main(int argc, char * argv[])
             }
         }
         //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-       	localWorker.doLocalWorkStep();
+       	localWorker->doLocalWorkStep();
     }
 
 	/* shut down MPI */
