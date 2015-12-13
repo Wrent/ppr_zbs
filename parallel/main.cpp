@@ -320,7 +320,6 @@ int main(int argc, char * argv[])
                 }
             }
         }
-        cout << my_rank << " done " << done << " localWorker->localWorkExists() " << localWorker->localWorkExists() << endl;
         if ((!localWorker->localWorkExists() || done)) {
                 done = true;
                 if (!requestSent) {
