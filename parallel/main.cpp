@@ -14,7 +14,7 @@
 
 using namespace std;
 
-#define _DEBUG
+//#define _DEBUG
 #define CHECK_MSG_AMOUNT  100
 
 #define MSG_WORK_REQUEST 1000
@@ -243,6 +243,7 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                     } else {
                                                         //zadnou praci nemam
+                                                        cout << my_rank << " has no work, sending notice to " << status.MPI_SOURCE << endl;
                                                         recv = 0;
                                                         MPI_Send(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD);
                                                     }
@@ -265,6 +266,7 @@ int main(int argc, char * argv[])
                                                     requestSent = false;
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
+                                                    cout << my_rank << " received refusal for work from " << status.MPI_SOURCE << endl;
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
                                                     // zkusit jiny proces
                                                     askForWorkFrom = (askForWorkFrom) % p;
@@ -273,16 +275,20 @@ int main(int argc, char * argv[])
                                                     } else {
                                                         recv = 0;
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                                                        cout << my_rank << " requests work from " << askForWorkFrom << endl;
                                                     }
                                                     requestSent = false;
                                                     break;
                             case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_TOKEN, MPI_COMM_WORLD, &recv_status);
+                                                    cout << my_rank << " received end token" << endl;
+
                                                     recv = recv && done;
                                                     if (my_rank == 0) {
                                                         if (recv == 1) {
                                                             //vsichni jsou hotovy
                                                             //odesli finish token
+                                                            cout << my_rank << " sending finish tokens" << endl;
                                                             for (int i = 1; i < p; i++) {
                                                                 MPI_Send(0, 1, MPI_INT, i, MSG_FINISH, MPI_COMM_WORLD);
                                                             }
@@ -301,13 +307,16 @@ int main(int argc, char * argv[])
                                                             exit (0);
                                                         }
                                                     } else {
+                                                        cout << my_rank << " sends end token to " << (my_rank + 1) % p << endl;
                                                         MPI_Send(&recv, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                                                     }
                                                     break;
                             case MSG_FINISH :
                                                     if (my_rank != 0) {
+
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                         std::pair<uint64_t, std::set<uint64_t>*> result = localWorker->getResults();
+                                                        cout << my_rank << " is sending result " << result.first << endl;
                                                         MPI_Send(&result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
