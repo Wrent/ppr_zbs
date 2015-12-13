@@ -139,7 +139,7 @@ int main(int argc, char * argv[])
 
     uint64_t *prefix, *prefixEnd;
     uint64_t parA, parN;
-    uint64_t&& prefixSize, prefixEndSize;
+    uint64_t prefixSize, prefixEndSize;
     bool done = true;
 
 	MPI_Status status;
