@@ -291,7 +291,7 @@ int main(int argc, char * argv[])
                                                             //a prijmi vysledek
                                                             uint64_t recvMin, min = ULONG_MAX;
                                                             for (int i = 1; i < p; i++) {
-                                                                MPI_Recv(recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 if (recvMin < min) {
                                                                       min = recvMin;
                                                                 }
@@ -308,7 +308,7 @@ int main(int argc, char * argv[])
                                                     if (my_rank != 0) {
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                         std::pair<uint64_t, std::set<uint64_t>*> result = localWorker->getResults();
-                                                        MPI_Send(result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        MPI_Send(&result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     MPI_Finalize();
