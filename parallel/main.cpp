@@ -211,8 +211,10 @@ int main(int argc, char * argv[])
 
         prefix = new uint64_t[parA];
         prefixEnd = new uint64_t[parA];
-        prefixSize = 0;
-        prefixEndSize = 0;
+        prefix[0] = 0;
+        prefixEnd[0] = 0;
+        prefixSize = 1;
+        prefixEndSize = 1;
 
         cout << my_rank << " received parA " << parA << endl;
         cout << my_rank << " received parN " << parN << endl;
