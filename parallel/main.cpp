@@ -254,9 +254,12 @@ int main(int argc, char * argv[])
                 //a pripadne cislo chyby (status.MPI_ERROR)
                 switch (status.MPI_TAG) {
                             case MSG_WORK_REQUEST :
+                                                    cout << my_rank << " received request from " << status.MPI_SOURCE << endl;
                                                     //prijmeme zpravu
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
                                                     if (localWorker->localWorkExists()) {
+                                                        cout << my_rank << " dividing prefixes " << endl;
+
                                                         //rozdelime si svou praci a pulku posleme procesoru
                                                         //TODO sem se musi posilat jako start Prefix current Prefix
                                                         pair<uint64_t, uint64_t*> divided = getMiddlePrefix(prefix, prefixSize, prefixEnd, prefixEndSize, parA, parN);
@@ -373,7 +376,7 @@ int main(int argc, char * argv[])
             } else {
             cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-            localWorker->doLocalWorkStep();
+            //localWorker->doLocalWorkStep();
        	}
     }
 
