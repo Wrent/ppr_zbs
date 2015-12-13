@@ -320,14 +320,15 @@ int main(int argc, char * argv[])
                 }
             }
         }
-
+        cout << my_rank << " done " << done " localWorker->localWorkExists() " << localWorker->localWorkExists() << endl;
         if ((!localWorker->localWorkExists() || done)) {
+                done = true;
                 if (!requestSent) {
                         recv = 0;
                         cout << my_rank << " sending work request to " << askForWorkFrom << endl;
                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                         requestSent = true;
-                        done = true;
+
 
                         //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
                         //rozesle to jen pokud sam nic nema
