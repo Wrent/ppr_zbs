@@ -238,8 +238,6 @@ int main(int argc, char * argv[])
 	    //localWorker->setPrefixes(ptr,size,ptr,size);
 
 	}
-	MPI_Finalize();
-	return 0;
 
 	
     int recv;
