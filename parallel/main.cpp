@@ -200,6 +200,8 @@ int main(int argc, char * argv[])
 
         //vytvoreni instance lokalniho pracovnika pro hlavni process, teda pokud bude pocitat taky
 	    localWorker = new CLocalWorker(parA, parN, mgraph);
+
+	    cout << my_rank << " setting prefix" << endl;
         localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
@@ -235,6 +237,7 @@ int main(int argc, char * argv[])
 	    //TODO:vytvorit nebo prijmout pocatectni prefixy
 
 	    //nastavit pocatectni prefixy
+	    cout << my_rank << " setting prefix" << endl;
 	    localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 
 	}
