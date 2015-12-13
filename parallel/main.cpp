@@ -369,8 +369,7 @@ int main(int argc, char * argv[])
                             int val = 1;
                             MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                         }
-                    }
-           else {
+            } else {
             cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
             localWorker->doLocalWorkStep();
