@@ -216,7 +216,7 @@ std::pair<uint64_t, uint64_t*> CLocalWorker::getMiddlePrefix() {
 
     	uint64_t * middle = new uint64_t[k];
     	for (uint64_t i = 0; i < diffPos; i++) {
-    		middle[i] = end[i];
+    		middle[i] = endPrefix[i];
     	}
     	middle[diffPos] = val;
 
