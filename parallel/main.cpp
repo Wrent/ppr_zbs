@@ -301,7 +301,7 @@ int main(int argc, char * argv[])
                                                     cout << my_rank << " received prefixEnd" << endl;
 
                                                     printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
-                                                    done = false;
+                                                    //done = false;
                                                     //requestSent = false;
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
@@ -376,9 +376,9 @@ int main(int argc, char * argv[])
                             MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                         }
             } else {
-            cout << my_rank << " doing work step" << endl;
+            //cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-            localWorker->doLocalWorkStep();
+            //localWorker->doLocalWorkStep();
        	}
     }
 
