@@ -200,7 +200,7 @@ int main(int argc, char * argv[])
 
         //vytvoreni instance lokalniho pracovnika pro hlavni process, teda pokud bude pocitat taky
 	    localWorker = new CLocalWorker(parA, parN, mgraph);
-
+        localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
 	    //take by to slo tuhle cast vynechat, ze prvni procesor proste zacne pracovat, dostane zadosti o praci a ty vyridi
@@ -371,6 +371,7 @@ int main(int argc, char * argv[])
                         }
                     }
            else {
+            cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
             localWorker->doLocalWorkStep();
        	}
