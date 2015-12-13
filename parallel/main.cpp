@@ -199,7 +199,7 @@ int main(int argc, char * argv[])
         //TODO:rozdelit prefixy a poslat nebo si je ostatni vytvori na zacatku sami?
 
         //vytvoreni instance lokalniho pracovnika pro hlavni process, teda pokud bude pocitat taky
-	    localWorker = new CLocalWorker(parA, parN, mgraph);
+	    localWorker = new CLocalWorker(parA, parN, mgraph, my_rank);
         localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 	} else {
 	    //tady si ostatni procesory prijmou praci rozeslanou prvnim procesorem
@@ -230,7 +230,7 @@ int main(int argc, char * argv[])
 	    //cout << "graph " << mgraph << endl;
 
 	    //vytvoreni instance lokalniho pracovnika
-	    localWorker = new CLocalWorker(parA, parN, mgraph);
+	    localWorker = new CLocalWorker(parA, parN, mgraph, my_rank);
 
 	    //TODO:vytvorit nebo prijmout pocatectni prefixy
 
