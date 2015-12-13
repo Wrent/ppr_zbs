@@ -234,7 +234,7 @@ int main(int argc, char * argv[])
 
                                                         localWorker->setPrefixes(localWorker->getStartPrefix, localWorker->getStartPrefixSize, newPrefix, newPrefixSize);
 
-                                                        localWorker->printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
+                                                        localWorker->printPrefixes();
 
                                                         MPI_Send(&newPrefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(&newPrefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
