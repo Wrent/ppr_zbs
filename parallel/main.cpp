@@ -235,7 +235,7 @@ int main(int argc, char * argv[])
 	    //TODO:vytvorit nebo prijmout pocatectni prefixy
 
 	    //nastavit pocatectni prefixy
-	    //localWorker->setPrefixes(ptr,size,ptr,size);
+	    localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 
 	}
 
@@ -376,7 +376,7 @@ int main(int argc, char * argv[])
             } else {
             cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-            //localWorker->doLocalWorkStep();
+            localWorker->doLocalWorkStep();
        	}
     }
 
