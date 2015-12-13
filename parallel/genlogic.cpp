@@ -168,23 +168,23 @@ std::pair<uint64_t, std::set<uint64_t>*> CLocalWorker::getResults()
 	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
 }
 
-uint64_t *getStartPrefix() {
+uint64_t *CLocalWorker::getStartPrefix() {
 	return startPrefix;
 }
 
-uint64_t *getEndPrefix() {
+uint64_t *CLocalWorker::getEndPrefix() {
 	return endPrefix;
 }
 
-uint64_t getStartPrefixSize() {
+uint64_t CLocalWorker::getStartPrefixSize() {
 	return startPrefixSize;
 }
 
-uint64_t getEndPrefixSize() {
+uint64_t CLocalWorker::getEndPrefixSize() {
 	return endPrefixSize;
 }
 
-void printPrefixes() {
+void CLocalWorker::printPrefixes() {
     std::cout << "process " << processRank << " has:" << std::endl;
     std::cout << "prefix ";
     for (uint64_t i = 0; i < startPrefixSize; i ++) {
@@ -198,7 +198,7 @@ void printPrefixes() {
         std::cout << "of size " << endPrefixSize << std::endl;
 }
 
-std::pair<uint64_t, uint64_t*> getMiddlePrefix() {
+std::pair<uint64_t, uint64_t*> CLocalWorker::getMiddlePrefix() {
     	uint64_t diffPos = 0;
     	uint64_t val;
     	while (startPrefix[diffPos] == endPrefix[diffPos]) {
