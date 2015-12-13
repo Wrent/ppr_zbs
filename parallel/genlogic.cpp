@@ -198,7 +198,7 @@ void printPrefixes() {
         std::cout << "of size " << endPrefixSize << std::endl;
 }
 
-pair<uint64_t, uint64_t*> getMiddlePrefix() {
+std::pair<uint64_t, uint64_t*> getMiddlePrefix() {
     	uint64_t diffPos = 0;
     	uint64_t val;
     	while (startPrefix[diffPos] == endPrefix[diffPos]) {
@@ -221,5 +221,5 @@ pair<uint64_t, uint64_t*> getMiddlePrefix() {
     	middle[diffPos] = val;
 
 
-    	return pair<uint64_t, uint64_t*>(diffPos + 1, middle);
+    	return std::pair<uint64_t, uint64_t*>(diffPos + 1, middle);
 }
