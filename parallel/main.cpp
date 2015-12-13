@@ -321,7 +321,7 @@ int main(int argc, char * argv[])
             }
         }
 
-        if ((!localWorker->localWorkExists() || done) {
+        if ((!localWorker->localWorkExists() || done)) {
                 if (!requestSent) {
                         recv = 0;
                         cout << my_rank << " sending work request to " << askForWorkFrom << endl;
