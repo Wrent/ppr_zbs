@@ -26,8 +26,8 @@ uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
 	return price;
 }
 
-CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph) 
-						: k(k), n(n), mgraph(mgraph)
+CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, processRank)
+						: k(k), n(n), mgraph(mgraph), processRank(processRank)
 {
 	setPrefixes(NULL, 0, NULL, 0);	
 }
