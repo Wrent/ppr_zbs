@@ -89,48 +89,6 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 	return 0;
 }
 
-pair<uint64_t, uint64_t*> getMiddlePrefix(uint64_t* start, uint64_t startSize, uint64_t* end, uint64_t endSize, uint64_t k, uint64_t n) {
-	uint64_t diffPos = 0;
-	uint64_t val;
-	while (start[diffPos] == end[diffPos]) {
-		diffPos++;
-	}
-
-	if (diffPos >= startSize || end[diffPos] - start[diffPos] == 1) {
-		//prodlouzime endVektor a dame polovicni hodnotu
-		diffPos = endSize;
-		val = (n + diffPos + 1 + end[diffPos - 1] - k) / 2;
-	} else {
-		//vratime polovicni hodnotu na diff pozici
-		val = (start[diffPos] + end[diffPos]) / 2;
-	}
-
-	uint64_t * middle = new uint64_t[k];
-	for (uint64_t i = 0; i < diffPos; i++) {
-		middle[i] = end[i];
-	}
-	middle[diffPos] = val;
-
-
-	return pair<uint64_t, uint64_t*>(diffPos + 1, middle);
-}
-
-
-void printPrefixes(uint64_t p, uint64_t *prefix, uint64_t prefixSize, uint64_t *prefixEnd, uint64_t prefixEndSize) {
-    cout << "process " << p << " has:" << endl;
-    cout << "prefix ";
-    for (uint64_t i = 0; i < prefixSize; i ++) {
-        cout << prefix[i] << " ";
-    }
-    cout << "of size " << prefixSize << endl;
-    cout << "prefixEnd ";
-    for (uint64_t i = 0; i < prefixEndSize; i ++) {
-            cout << prefixEnd[i] << " ";
-        }
-        cout << "of size " << prefixEndSize << endl;
-}
-
-
 int main(int argc, char * argv[])
 {
 	int p, my_rank, i = 0, flag, askForWorkFrom;
@@ -262,21 +220,19 @@ int main(int argc, char * argv[])
                                                     if (localWorker->localWorkExists()) {
                                                         cout << my_rank << " dividing prefixes " << endl;
 
-                                                        printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
+                                                        localWorker->printPrefixes();
                                                         //rozdelime si svou praci a pulku posleme procesoru
-                                                        //TODO sem se musi posilat jako start Prefix current Prefix
-                                                        pair<uint64_t, uint64_t*> divided = getMiddlePrefix(prefix, prefixSize, prefixEnd, prefixEndSize, parA, parN);
+                                                        pair<uint64_t, uint64_t*> divided = localWorker->getMiddlePrefix();
 
                                                         uint64_t *newPrefix, *newPrefixEnd;
                                                         uint64_t newPrefixSize, newPrefixEndSize;
 
-                                                        newPrefixEnd = prefixEnd;
-                                                        newPrefixEndSize = prefixEndSize;
+                                                        newPrefixEnd = localWorker->getEndPrefix();
+                                                        newPrefixEndSize = localWorker->getEndPrefixSize();
                                                         newPrefix = divided.second;
                                                         newPrefixSize = divided.first;
 
-                                                        prefixEnd = newPrefix;
-                                                        prefixEndSize = newPrefixSize;
+                                                        localWorker->setPrefixes(localWorker->getStartPrefix, localWorker->getStartPrefixSize, divided.second, divided.first);
 
                                                         printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
 
@@ -301,7 +257,9 @@ int main(int argc, char * argv[])
                                                     MPI_Recv(prefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
                                                     cout << my_rank << " received prefixEnd" << endl;
 
-                                                    printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
+
+                                                    localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
+                                                    localWorker->printPrefixes();
                                                     //done = false;
                                                     //requestSent = false;
                                                     break;

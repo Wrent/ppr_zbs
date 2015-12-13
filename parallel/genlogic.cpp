@@ -167,3 +167,59 @@ std::pair<uint64_t, std::set<uint64_t>*> CLocalWorker::getResults()
 {
 	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
 }
+
+uint64_t *getStartPrefix() {
+	return startPrefix;
+}
+
+uint64_t *getEndPrefix() {
+	return endPrefix;
+}
+
+uint64_t getStartPrefixSize() {
+	return startPrefixSize;
+}
+
+uint64_t getEndPrefixSize() {
+	return endPrefixSize;
+}
+
+void printPrefixes() {
+    std::cout << "process " << processRank << " has:" << std::endl;
+    std::cout << "prefix ";
+    for (uint64_t i = 0; i < startPrefixSize; i ++) {
+        std::cout << startPrefix[i] << " ";
+    }
+    std::cout << "of size " << startPrefixSize << std::endl;
+    std::cout << "prefixEnd ";
+    for (uint64_t i = 0; i < endPrefixSize; i ++) {
+            std::cout << endPrefix[i] << " ";
+        }
+        std::cout << "of size " << endPrefixSize << std::endl;
+}
+
+pair<uint64_t, uint64_t*> getMiddlePrefix() {
+    	uint64_t diffPos = 0;
+    	uint64_t val;
+    	while (startPrefix[diffPos] == endPrefix[diffPos]) {
+    		diffPos++;
+    	}
+
+    	if (diffPos >= startPrefixSize || endPrefix[diffPos] - startPrefix[diffPos] == 1) {
+    		//prodlouzime endVektor a dame polovicni hodnotu
+    		diffPos = endPrefixSize;
+    		val = (n + diffPos + 1 + endPrefix[diffPos - 1] - k) / 2;
+    	} else {
+    		//vratime polovicni hodnotu na diff pozici
+    		val = (startPrefix[diffPos] + endPrefix[diffPos]) / 2;
+    	}
+
+    	uint64_t * middle = new uint64_t[k];
+    	for (uint64_t i = 0; i < diffPos; i++) {
+    		middle[i] = end[i];
+    	}
+    	middle[diffPos] = val;
+
+
+    	return pair<uint64_t, uint64_t*>(diffPos + 1, middle);
+}
