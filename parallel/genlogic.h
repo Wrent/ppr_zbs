@@ -16,8 +16,8 @@ class CLocalWorker
 {
 public:
 	CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph);
-	void setPrefixes(uint64_t *startPrefix, uint64_t&& startPrefixSize,
-			 		uint64_t *endPrefix, uint64_t&& endPrefixSize);
+	void setPrefixes(uint64_t *startPrefix, uint64_t startPrefixSize,
+			 		uint64_t *endPrefix, uint64_t endPrefixSize);
 	bool localWorkExists();
 	void doLocalWorkStep();
 	std::pair<uint64_t, std::set<uint64_t>*> getResults();

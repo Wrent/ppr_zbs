@@ -32,8 +32,8 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph)
 	setPrefixes(NULL, 0, NULL, 0);	
 }
 
-void CLocalWorker::setPrefixes(uint64_t *startPrefix, uint64_t&& startPrefixSize,
-			 					uint64_t *endPrefix, uint64_t&& endPrefixSize)
+void CLocalWorker::setPrefixes(uint64_t *startPrefix, uint64_t startPrefixSize,
+			 					uint64_t *endPrefix, uint64_t endPrefixSize)
 {
 	startPrefix = startPrefix;
 	startPrefixSize = startPrefixSize;
