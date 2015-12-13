@@ -262,6 +262,7 @@ int main(int argc, char * argv[])
                                                     if (localWorker->localWorkExists()) {
                                                         cout << my_rank << " dividing prefixes " << endl;
 
+                                                        printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
                                                         //rozdelime si svou praci a pulku posleme procesoru
                                                         //TODO sem se musi posilat jako start Prefix current Prefix
                                                         pair<uint64_t, uint64_t*> divided = getMiddlePrefix(prefix, prefixSize, prefixEnd, prefixEndSize, parA, parN);
