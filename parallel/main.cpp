@@ -297,7 +297,7 @@ int main(int argc, char * argv[])
 
                                                     printPrefixes(my_rank, prefix, prefixSize, prefixEnd, prefixEndSize);
                                                     done = false;
-                                                    requestSent = false;
+                                                    //requestSent = false;
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
