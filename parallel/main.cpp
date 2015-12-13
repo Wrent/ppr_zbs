@@ -232,7 +232,8 @@ int main(int argc, char * argv[])
                                                         newPrefix = divided.second;
                                                         newPrefixSize = divided.first;
 
-                                                        localWorker->setPrefixes(localWorker->getStartPrefix, localWorker->getStartPrefixSize, newPrefix, newPrefixSize);
+
+                                                        localWorker->setPrefixes(localWorker->getStartPrefix(), localWorker->getStartPrefixSize(), newPrefix, newPrefixSize);
 
                                                         localWorker->printPrefixes();
 
