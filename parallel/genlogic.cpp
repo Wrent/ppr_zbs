@@ -61,7 +61,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	minPriceSet = priceOfX(mgraph, *minSetx);
 
 	#ifdef _DEBUG
-	std::cout << minPriceSet << ":" << minSetx << "\n";
+	std::cout << processRank << " " << minPriceSet << ":" << minSetx << "\n";
 	#endif
 
 	prepareForLocalWorkStep();
