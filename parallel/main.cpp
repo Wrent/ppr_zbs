@@ -354,25 +354,26 @@ int main(int argc, char * argv[])
                                                     break;
                 }
             }
-
-            if ((!localWorker->localWorkExists() || done) && !requestSent) {
-                recv = 0;
-                cout << my_rank << " sending work request to " << askForWorkFrom << endl;
-                MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
-                requestSent = true;
-                done = true;
-
-                //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
-                //rozesle to jen pokud sam nic nema
-                if (my_rank == 0) {
-                //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
-                    int val = 1;
-                    MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
-                }
-            }
         }
-        //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-       	localWorker->doLocalWorkStep();
+        if ((!localWorker->localWorkExists() || done) && !requestSent) {
+                        recv = 0;
+                        cout << my_rank << " sending work request to " << askForWorkFrom << endl;
+                        MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                        requestSent = true;
+                        done = true;
+
+                        //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
+                        //rozesle to jen pokud sam nic nema
+                        if (my_rank == 0) {
+                        //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
+                            int val = 1;
+                            MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                        }
+                    }
+           else {
+            //zde se vola funkce, ktera provede jeden vypocetni krok procesu
+            localWorker->doLocalWorkStep();
+       	}
     }
 
 	/* shut down MPI */
