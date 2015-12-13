@@ -123,8 +123,10 @@ void CLocalWorker::doLocalWorkStep()
 
 		if (m != lastM) {
 			prefixPrice = priceOfX(mgraph, *setx);
-		}	
+		}
+		#ifdef _DEBUG
 		std::cout << processRank << " prefix " << prefixPrice << ":" << setx << '\n';
+		#endif
 
 		//delete tmp set
 		delete setx;
