@@ -43,7 +43,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	if (startPrefix == NULL || endPrefix == NULL)
 	{
 		#ifdef _DEBUG
-		std::cout << my_rank << " setPrefixes: prefix/-y je NULL" << '\n';
+		std::cout << processRank << " setPrefixes: prefix/-y je NULL" << '\n';
 		#endif
 		return;
 	}
@@ -72,7 +72,7 @@ bool CLocalWorker::localWorkExists()
 	if (startPrefix == NULL || endPrefix == NULL)
 	{
 		#ifdef _DEBUG
-		std::cout << my_rank << " error: prefixy nejsou nastaveny!" << '\n';
+		std::cout << processRank << " error: prefixy nejsou nastaveny!" << '\n';
 		#endif
 		return false;
 	}
@@ -95,7 +95,7 @@ void CLocalWorker::prepareForLocalWorkStep()
 		//check prefix bound
 		if (m <= 0) return;
 		if (startPrefix[m] > maxValAtPos) {
-			std::cout << my_rank << " error prefix overflow" << '\n';
+			std::cout << processRank << " error prefix overflow" << '\n';
 			return;
 		}
 		m = m - 1; 
@@ -110,7 +110,7 @@ void CLocalWorker::doLocalWorkStep()
 	if (startPrefix == NULL || endPrefix == NULL)
 	{
 		#ifdef _DEBUG
-		std::cout << my_rank << " error: prefixy nejsou nastaveny!" << '\n';
+		std::cout << processRank << " error: prefixy nejsou nastaveny!" << '\n';
 		#endif
 		return;
 	}
@@ -124,7 +124,7 @@ void CLocalWorker::doLocalWorkStep()
 		if (m != lastM) {
 			prefixPrice = priceOfX(mgraph, *setx);
 		}	
-		std::cout << my_rank << " prefix " << prefixPrice << ":" << setx << '\n';
+		std::cout << processRank << " prefix " << prefixPrice << ":" << setx << '\n';
 
 		//delete tmp set
 		delete setx;
