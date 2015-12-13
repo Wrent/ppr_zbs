@@ -321,7 +321,8 @@ int main(int argc, char * argv[])
             }
         }
 
-        if ((!localWorker->localWorkExists() || done) && !requestSent) {
+        if ((!localWorker->localWorkExists() || done) {
+                if (!requestSent) {
                         recv = 0;
                         cout << my_rank << " sending work request to " << askForWorkFrom << endl;
                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
@@ -335,6 +336,7 @@ int main(int argc, char * argv[])
                             int val = 1;
                             MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                         }
+                   }
             } else {
             //cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
