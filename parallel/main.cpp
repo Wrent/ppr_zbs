@@ -261,8 +261,8 @@ int main(int argc, char * argv[])
 
                                                     localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
                                                     localWorker->printPrefixes();
-                                                    //done = false;
-                                                    //requestSent = false;
+                                                    done = false;
+                                                    requestSent = false;
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
@@ -289,15 +289,14 @@ int main(int argc, char * argv[])
                                                             //min = reseni nalezene procesem 0;
 
                                                             //a prijmi vysledek
+                                                            uint64_t recvMin, min = ULONG_MAX;
                                                             for (int i = 1; i < p; i++) {
-                                                                //MPI_Recv(recvMin, velikost reseni, MPI_CHAR, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
-                                                                // if (recvMin < min) {
-                                                                //      min = recvMin;
-                                                                // }
-
+                                                                MPI_Recv(recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                if (recvMin < min) {
+                                                                      min = recvMin;
+                                                                }
                                                             }
-                                                            //vypis vysledek a ukonci se
-                                                            // vypis()
+                                                            cout << "Result: " << min << endl;
                                                             MPI_Finalize();
                                                             exit (0);
                                                         }
@@ -308,7 +307,8 @@ int main(int argc, char * argv[])
                             case MSG_FINISH :
                                                     if (my_rank != 0) {
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
-                                                        //MPI_Send(mojeReseni, velikost reseni, MPI_CHAR, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        std::pair<uint64_t, std::set<uint64_t>*> result = localWorker->getResults();
+                                                        MPI_Send(result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     MPI_Finalize();
@@ -338,7 +338,7 @@ int main(int argc, char * argv[])
             } else {
             //cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-            //localWorker->doLocalWorkStep();
+            localWorker->doLocalWorkStep();
        	}
     }
 
