@@ -6,8 +6,7 @@
 #include <cstdint>
 #include <set>
 
-#define _DEBUG
-
+//#define _DEBUG
 
 uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes);
 
