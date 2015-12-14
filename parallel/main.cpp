@@ -325,7 +325,7 @@ int main(int argc, char * argv[])
 
                                                             //a prijmi vysledek
                                                             uint64_t recvMin, min;
-                                                            uint64_t *setRcv = new uint64_t[parA];
+                                                            uint64_t *minSet, *setRcv = new uint64_t[parA];
                                                             min = localWorker->getResults().first;
                                                             cout << "0 my result is "<< min << endl;
                                                             minSet = localWorker->getResults().second;
