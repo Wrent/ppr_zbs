@@ -227,7 +227,7 @@ int main(int argc, char * argv[])
                                                         uint64_t *newPrefix, *newPrefixEnd;
                                                         uint64_t newPrefixSize, newPrefixEndSize;
 
-                                                        uint64_t newPrefixSize = localWorker->getMiddlePrefix(middlePrefix);
+                                                        newPrefixSize = localWorker->getMiddlePrefix(middlePrefix);
 
                                                         newPrefixEnd = localWorker->getEndPrefix();
                                                         newPrefixEndSize = localWorker->getEndPrefixSize();
