@@ -36,16 +36,16 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 			 					uint64_t *end, uint64_t endSize)
 {
-	if ((startPrefix != NULL) && start){
-		delete[] startPrefix;	
-		startPrefix = start;
-		startPrefixSize = startSize;
+	if (start != NULL){
+		if (startPrefix != NULL) delete[] startPrefix;	
+		this.startPrefix = start;
+		this.startPrefixSize = startSize;
 	}
 	
-	if ((endPrefix != NULL) && end){
-		delete[] endPrefix;
-		endPrefix = end;
-		endPrefixSize = endSize;
+	if (end != NULL){
+		if (endPrefix != NULL) delete[] endPrefix;
+		this.endPrefix = end;
+		this.endPrefixSize = endSize;
 	}
 
 	if (start == NULL || end == NULL){
