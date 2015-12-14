@@ -232,14 +232,14 @@ int main(int argc, char * argv[])
                                                         newPrefix = divided.second;
                                                         newPrefixSize = divided.first;
 
-                                                        localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
-
-                                                        localWorker->printPrefixes();
 
                                                         MPI_Send(&newPrefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(&newPrefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
+
+                                                        localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
+                                                        localWorker->printPrefixes();
                                                     } else {
                                                         //zadnou praci nemam
                                                         cout << my_rank << " has no work, sending notice to " << status.MPI_SOURCE << endl;
