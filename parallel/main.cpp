@@ -267,7 +267,7 @@ int main(int argc, char * argv[])
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
                                                     cout << my_rank << " received refusal for work from " << status.MPI_SOURCE << endl;
-                                                    MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_NO_WORK, MPI_COMM_WORLD, &recv_status);
+                                                    MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD, &recv_status);
                                                     // zkusit jiny proces
                                                     askForWorkFrom = (askForWorkFrom + 1) % p;
                                                     if (askForWorkFrom == my_rank) {
