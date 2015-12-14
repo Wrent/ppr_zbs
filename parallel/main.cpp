@@ -232,7 +232,7 @@ int main(int argc, char * argv[])
                                                         newPrefix = divided.second;
                                                         newPrefixSize = divided.first;
 
-                                                        std::cout << processRank << " sending:" << std::endl;
+                                                        std::cout << my_rank << " sending:" << std::endl;
                                                             std::cout << "prefix ";
                                                             for (uint64_t i = 0; i < newPrefixSize; i ++) {
                                                                 std::cout << newPrefix[i] << " ";
