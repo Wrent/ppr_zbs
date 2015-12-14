@@ -173,7 +173,7 @@ void CLocalWorker::doLocalWorkStep()
 }
 
 std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
-{	std::cout << "getting result;";
+{
 	uint64_t *resultArray = new uint64_t[minSetx->size()];
 	uint64_t j = 0;
 	for (auto it = minSetx->begin(); it != minSetx->end(); ++it){

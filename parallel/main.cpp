@@ -326,12 +326,12 @@ int main(int argc, char * argv[])
                                                             //a prijmi vysledek
                                                             uint64_t recvMin, min;
                                                             uint64_t *minSet, *setRcv = new uint64_t[parA];
-                                                            min = localWorker->getResults().first;
+                                                            pair<uint64_t, uint64_t*> result = localWorker->getResults();
+                                                            min = result.first;
                                                             cout << "0 my result is "<< min << endl;
-                                                            minSet = localWorker->getResults().second;
+                                                            minSet = result.second;
                                                             for (int i = 1; i < p; i++) {
-                                                            cout << "aaa";
-                                                                //MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 cout << "0 received " << recvMin << " from " << i << endl;
                                                                 MPI_Recv(setRcv, parA, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 cout << "0 received set from " << i << endl;
