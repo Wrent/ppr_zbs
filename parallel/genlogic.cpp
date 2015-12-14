@@ -148,7 +148,7 @@ void CLocalWorker::doLocalWorkStep()
 	priceSet = priceOfX(mgraph, *setx);
 
 	#ifdef _DEBUG
-	std::cout << priceSet << ":" << setx << "\n";
+	std::cout << processRank << " " << priceSet << ":" << setx << "\n";
 	#endif
 
 	//compare price and keep the smaller one
