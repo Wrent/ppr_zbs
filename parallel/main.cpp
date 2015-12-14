@@ -262,6 +262,7 @@ int main(int argc, char * argv[])
                                                     break;
                             case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
                                                     // deserializovat a spustit vypocet
+                                                    localWorker->printPrefixes();
                                                     MPI_Recv(&prefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
                                                     //cout << my_rank << " received prefixSize " << prefixSize << endl;
                                                     MPI_Recv(&prefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
