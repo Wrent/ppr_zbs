@@ -51,7 +51,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 
 	if (start == NULL || end == NULL){
 		#ifdef _DEBUG
-		std::cout << processRank << " setPrefixes: prefix(-y) nezmenen(-y)!" << '\n';
+		std::cout << processRank << "Info: setPrefixes: prefix(-y) nezmenen(-y)" << '\n';
 		#endif
 		return;
 	}
@@ -140,6 +140,7 @@ void CLocalWorker::doLocalWorkStep()
 		//save m
 		lastM = (m < lastM ? m : lastM);
 		
+		//skip prefix with worse solution then current
 		if (prefixPrice >= minPriceSet) {
 			lastM = (m < lastM ? m : lastM);
 			startPrefixSize = lastM;
@@ -158,7 +159,7 @@ void CLocalWorker::doLocalWorkStep()
 	priceSet = priceOfX(mgraph, *setx);
 
 	#ifdef _DEBUG
-	std::cout << processRank << " " << priceSet << ":" << setx << "\n";
+	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << setx << "\n";
 	#endif
 
 	//compare price and keep the smaller one
