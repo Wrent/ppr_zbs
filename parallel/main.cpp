@@ -169,8 +169,8 @@ int main(int argc, char * argv[])
 
         prefix = new uint64_t[parA];
         prefixEnd = new uint64_t[parA];
-        prefix[0] = 0;
-        prefixEnd[0] = 0;
+        prefix[0] = 5;
+        prefixEnd[0] = 2;
         prefixSize = 1;
         prefixEndSize = 1;
 
