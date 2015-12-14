@@ -325,15 +325,23 @@ int main(int argc, char * argv[])
 
                                                             //a prijmi vysledek
                                                             uint64_t recvMin, min;
+                                                            uint64_t *minSet = NULL;
+                                                            uint64_t *setRcv = new uint64_t[parA];
                                                             min = localWorker->getResults().first;
                                                             cout << "0 my result is "<< min << endl;
                                                             for (int i = 1; i < p; i++) {
                                                                 MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                MPI_Recv(&setRcv, parA, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 if (recvMin < min) {
                                                                       min = recvMin;
+                                                                      if (minSet != NULL) delete[] minSet;
+                                                                      minSet = setRcv;
+                                                                } else {
+                                                                    delete[] setRcv;
                                                                 }
                                                             }
                                                             cout << "Result: " << min << endl;
+                                                            delete[] minSet;
                                                             goto END;
                                                             MPI_Finalize();
                                                             exit (0);
@@ -350,6 +358,7 @@ int main(int argc, char * argv[])
                                                         std::pair<uint64_t, uint64_t*> result = localWorker->getResults();
                                                         cout << my_rank << " is sending result " << result.first << endl;
                                                         MPI_Send(&result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        MPI_Send(result.second, parA, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     goto END;
