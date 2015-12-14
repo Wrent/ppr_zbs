@@ -361,8 +361,10 @@ int main(int argc, char * argv[])
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                         std::pair<uint64_t, uint64_t*> result = localWorker->getResults();
                                                         cout << my_rank << " is sending result " << result.first << endl;
-                                                        MPI_Send(&result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
-                                                        MPI_Send(result.second, parA, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        uint64_t min = result.first;
+                                                        uint64_t *minSet = result.second;
+                                                        MPI_Send(&min, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        MPI_Send(minSet, parA, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     goto END;
