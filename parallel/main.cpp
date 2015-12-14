@@ -249,6 +249,18 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
 
+                                                        std::cout << my_rank << " received:" << std::endl;
+                                                        std::cout << "prefix ";
+                                                        for (uint64_t i = 0; i < newPrefixSize; i ++) {
+                                                            std::cout << newPrefix[i] << " ";
+                                                        }
+                                                        std::cout << "of size " << newPrefixSize << std::endl;
+                                                        std::cout << "prefixEnd ";
+                                                        for (uint64_t i = 0; i < newPrefixEndSize; i ++) {
+                                                                std::cout << newPrefixEnd[i] << " ";
+                                                            }
+                                                            std::cout << "of size " << newPrefixEndSize << std::endl;
+
                                                         localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
                                                         localWorker->printPrefixes();
                                                     } else {
