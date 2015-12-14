@@ -300,7 +300,8 @@ int main(int argc, char * argv[])
                                                             //min = reseni nalezene procesem 0;
 
                                                             //a prijmi vysledek
-                                                            uint64_t recvMin, min = ULONG_MAX;
+                                                            uint64_t recvMin, min;
+                                                            min = localWorker->getResults().first;
                                                             for (int i = 1; i < p; i++) {
                                                                 MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 if (recvMin < min) {
