@@ -174,17 +174,22 @@ int main(int argc, char * argv[])
         prefixEnd[0] = 0;
         prefixSize = 1;
         prefixEndSize = 1;
-
+        #ifdef _DEBUG
         cout << my_rank << " received parA " << parA << endl;
         cout << my_rank << " received parN " << parN << endl;
+        #endif
         uint64_t graphSize = 0;
         //prijmout velikost grafu
         MPI_Recv ( &graphSize, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_GRAPH_SIZE, MPI_COMM_WORLD, &status);
+        #ifdef _DEBUG
         cout << my_rank << " is receiving graph of size " << graphSize << endl;
+        #endif
 	    //prijmout graf
 	    char *buffer = new char[graphSize];
 	    MPI_Recv ( buffer, graphSize, MPI_CHAR, 0, MSG_GRAPH, MPI_COMM_WORLD, &status);
+	    #ifdef _DEBUG
 	    cout << my_rank << " received graph." << endl;
+	    #endif
 	    mgraph.setData(buffer);
 	    mgraph.setSize(parN);
 
@@ -196,14 +201,18 @@ int main(int argc, char * argv[])
 	    //TODO:vytvorit nebo prijmout pocatectni prefixy
 
 	    //nastavit pocatectni prefixy
+	    #ifdef _DEBUG
 	    cout << my_rank << " setting prefix" << endl;
+	    #endif
 	    localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 	}
 
 	
     int recv;
     bool requestSent = false;
+    #ifdef _DEBUG
     cout << my_rank << " entering loop" << endl;
+    #endif
 	//hlavni pracovni smycka
     while (true) {
         i++;
@@ -215,13 +224,17 @@ int main(int argc, char * argv[])
                 //a pripadne cislo chyby (status.MPI_ERROR)
                 switch (status.MPI_TAG) {
                             case MSG_WORK_REQUEST :
+                                                    #ifdef _DEBUG
                                                     cout << my_rank << " received request from " << status.MPI_SOURCE << endl;
+                                                    #endif
                                                     //prijmeme zpravu
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
                                                     if (localWorker->localWorkExists()) {
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " dividing prefixes " << endl;
 
                                                         localWorker->printPrefixes();
+                                                        #endif
                                                         //rozdelime si svou praci a pulku posleme procesoru
 
                                                         uint64_t *newPrefix, *newPrefixEnd;
@@ -233,6 +246,7 @@ int main(int argc, char * argv[])
                                                         newPrefixEndSize = localWorker->getEndPrefixSize();
                                                         newPrefix = middlePrefix;
 
+                                                        #ifdef _DEBUG
                                                         std::cout << my_rank << " sending:" << std::endl;
                                                             std::cout << "prefix ";
                                                             for (uint64_t i = 0; i < newPrefixSize; i ++) {
@@ -244,24 +258,28 @@ int main(int argc, char * argv[])
                                                                     std::cout << newPrefixEnd[i] << " ";
                                                                 }
                                                                 std::cout << "of size " << newPrefixEndSize << std::endl;
-
+                                                        #endif
                                                         MPI_Send(&newPrefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(&newPrefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
 
                                                       	localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
+                                                        #ifdef _DEBUG
                                                         localWorker->printPrefixes();
+                                                        #endif
                                                     } else {
-                                                        //zadnou praci nemam
+                                                        //zadnou praci nema
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " has no work, sending notice to " << status.MPI_SOURCE << endl;
+                                                        #endif
                                                         recv = 0;
                                                         MPI_Send(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD);
                                                     }
                                                     break;
                             case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
                                                     // deserializovat a spustit vypocet
-                                                    localWorker->printPrefixes();
+                                                    //localWorker->printPrefixes();
                                                     MPI_Recv(&prefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
                                                     //cout << my_rank << " received prefixSize " << prefixSize << endl;
                                                     MPI_Recv(&prefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
@@ -271,6 +289,7 @@ int main(int argc, char * argv[])
                                                     MPI_Recv(prefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
                                                     //cout << my_rank << " received prefixEnd" << endl;
 
+                                                    #ifdef _DEBUG
                                                     std::cout << my_rank << " received:" << std::endl;
                                                     std::cout << "prefix ";
                                                     for (uint64_t i = 0; i < prefixSize; i ++) {
@@ -282,14 +301,18 @@ int main(int argc, char * argv[])
                                                             std::cout << prefixEnd[i] << " ";
                                                         }
                                                         std::cout << "of size " << prefixEndSize << std::endl;
-
+                                                    #endif
                                                     localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
+                                                    #ifdef _DEBUG
                                                     localWorker->printPrefixes();
+                                                    #endif
                                                     done = false;
                                                     requestSent = false;
                                                     break;
                             case MSG_WORK_NOWORK :  // odmitnuti zadosti o praci
+                                                    #ifdef _DEBUG
                                                     cout << my_rank << " received refusal for work from " << status.MPI_SOURCE << endl;
+                                                    #endif
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD, &recv_status);
                                                     // zkusit jiny proces
 
@@ -297,11 +320,15 @@ int main(int argc, char * argv[])
                                                     askForWorkFrom = (askForWorkFrom + 1) % p;
                                                     if (askForWorkFrom == my_rank) {
                                                         done = true;
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " didnt find any work" << endl;
+                                                        #endif
                                                         requestSent = true;
                                                     } else {
                                                         recv = 0;
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " requests work from " << askForWorkFrom << endl;
+                                                        #endif
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                                                         requestSent = false;
                                                     }
@@ -309,14 +336,17 @@ int main(int argc, char * argv[])
                                                     break;
                             case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_TOKEN, MPI_COMM_WORLD, &recv_status);
+                                                    #ifdef _DEBUG
                                                     cout << my_rank << " received end token" << endl;
-
+                                                    #endif
                                                     recv = recv && done;
                                                     if (my_rank == 0) {
                                                         if (recv == 1) {
                                                             //vsichni jsou hotovy
                                                             //odesli finish token
+                                                            #ifdef _DEBUG
                                                             cout << my_rank << " sending finish tokens" << endl;
+                                                            #endif
                                                             for (int i = 1; i < p; i++) {
                                                                 int val = 0;
                                                                 MPI_Send(&val, 1, MPI_INT, i, MSG_FINISH, MPI_COMM_WORLD);
@@ -328,13 +358,19 @@ int main(int argc, char * argv[])
                                                             uint64_t *minSet, *setRcv = new uint64_t[parA];
                                                             pair<uint64_t, uint64_t*> result = localWorker->getResults();
                                                             min = result.first;
+                                                            #ifdef _DEBUG
                                                             cout << "0 my result is "<< min << endl;
+                                                            #endif
                                                             minSet = result.second;
                                                             for (int i = 1; i < p; i++) {
                                                                 MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                #ifdef _DEBUG
                                                                 cout << "0 received " << recvMin << " from " << i << endl;
+                                                                #endif
                                                                 MPI_Recv(setRcv, parA, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                #ifdef _DEBUG
                                                                 cout << "0 received set from " << i << endl;
+                                                                #endif
                                                                 if (recvMin < min) {
                                                                       min = recvMin;
                                                                       memcpy(minSet, setRcv, parA*sizeof(uint64_t));
@@ -352,7 +388,9 @@ int main(int argc, char * argv[])
                                                             exit (0);
                                                         }
                                                     } else {
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " sends end token to " << (my_rank + 1) % p << endl;
+                                                        #endif
                                                         MPI_Send(&recv, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                                                     }
                                                     break;
@@ -361,13 +399,19 @@ int main(int argc, char * argv[])
 
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                         std::pair<uint64_t, uint64_t*> result = localWorker->getResults();
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " is sending result " << result.first << endl;
+                                                        #endif
                                                         uint64_t min = result.first;
                                                         uint64_t *minSet = result.second;
                                                         MPI_Send(&min, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
-                                                         cout << my_rank << " result sent " << endl;
+                                                        #ifdef _DEBUG
+                                                        cout << my_rank << " result sent " << endl;
+                                                        #endif
                                                         MPI_Send(minSet, parA, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        #ifdef _DEBUG
                                                         cout << my_rank << " result set sent " << endl;
+                                                        #endif
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     goto END;
@@ -384,7 +428,9 @@ int main(int argc, char * argv[])
                 done = true;
                 if (!requestSent) {
                         recv = 0;
+                        #ifdef _DEBUG
                         cout << my_rank << " sending work request to " << askForWorkFrom << endl;
+                        #endif
                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                         requestSent = true;
 
