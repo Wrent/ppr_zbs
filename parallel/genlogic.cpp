@@ -143,7 +143,7 @@ void CLocalWorker::doLocalWorkStep()
 		//skip prefix with worse solution then current
 		if (prefixPrice >= minPriceSet) {
 			lastM = (m < lastM ? m : lastM);
-			startPrefixSize = lastM;
+			//startPrefixSize = lastM;
 			prepareForLocalWorkStep();
 			return;
 		}

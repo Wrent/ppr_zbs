@@ -219,7 +219,7 @@ int main(int argc, char * argv[])
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_REQUEST, MPI_COMM_WORLD, &recv_status);
                                                     if (localWorker->localWorkExists()) {
                                                         cout << my_rank << " dividing prefixes " << endl;
-                                                        //TODO tady se to nekde zasekne
+
                                                         localWorker->printPrefixes();
                                                         //rozdelime si svou praci a pulku posleme procesoru
                                                         pair<uint64_t, uint64_t*> divided = localWorker->getMiddlePrefix();
