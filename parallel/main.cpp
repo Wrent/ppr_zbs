@@ -325,10 +325,10 @@ int main(int argc, char * argv[])
 
                                                             //a prijmi vysledek
                                                             uint64_t recvMin, min;
-                                                            uint64_t *minSet = new uint64_t[parA];
                                                             uint64_t *setRcv = new uint64_t[parA];
                                                             min = localWorker->getResults().first;
                                                             cout << "0 my result is "<< min << endl;
+                                                            minSet = localWorker->getResults().second;
                                                             for (int i = 1; i < p; i++) {
                                                                 MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 cout << "0 received " << recvMin << " from " << i << endl;
