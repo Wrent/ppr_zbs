@@ -59,7 +59,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	}
 
 	//init first set
-	if (setx != NULL) delete setx;
+	//if (setx != NULL) delete setx;
 	minSetx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 	setx = minSetx;
 	//init minimal price of set
