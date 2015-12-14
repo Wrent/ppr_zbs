@@ -15,7 +15,7 @@
 using namespace std;
 
 //#define _DEBUG
-#define CHECK_MSG_AMOUNT  5
+#define CHECK_MSG_AMOUNT  100
 
 #define MSG_WORK_REQUEST 1000
 #define MSG_WORK_SENT    1001
@@ -342,7 +342,7 @@ int main(int argc, char * argv[])
                                                             }
                                                             std::cout << "Final Result\n#edges: " << min << "\n{";
                                                             for (uint64_t k = 0; k < parA; ++k){
-                                                            	std::cout << minSet[k] << (k==(parA-1)? ",":"");
+                                                            	std::cout << minSet[k] << (k!=(parA-1)? ",":"");
                                                             }
                                                             std::cout << "}\n";
                                                             delete[] minSet;
