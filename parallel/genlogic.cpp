@@ -178,7 +178,7 @@ std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 {
 	uint64_t *resultArray = new uint64_t[minSetx->size()];
 	uint64_t i = 0;
-	for_each(auto elm : minSetx){
+	std::for_each(auto elm : minSetx){
 		resultArray[i++] = elm;
 	}
 	delete minSetx;
