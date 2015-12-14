@@ -38,13 +38,13 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 			 					uint64_t *end, uint64_t endSize)
 {
 	if (start != NULL){
-		//if (startPrefix != NULL) delete[] startPrefix;
+		if (startPrefix != NULL) delete[] startPrefix;
 		startPrefix = start;
 		startPrefixSize = startSize;
 	}
 	
 	if (end != NULL){
-		//if (endPrefix != NULL) delete[] endPrefix;
+		if (endPrefix != NULL) delete[] endPrefix;
 		endPrefix = end;
 		endPrefixSize = endSize;
 	}
@@ -179,7 +179,7 @@ std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 	uint64_t *resultArray = new uint64_t[minSetx->size()];
 	uint64_t j = 0;
 	for (auto it = minSetx->begin(); it != minSetx->end(); ++it){
-		resultArray[j] = *itů
+		resultArray[j] = *it;
 		j++;
 	}
 	delete minSetx;

@@ -249,17 +249,7 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
 
-                                                        std::cout << my_rank << " received:" << std::endl;
-                                                        std::cout << "prefix ";
-                                                        for (uint64_t i = 0; i < newPrefixSize; i ++) {
-                                                            std::cout << newPrefix[i] << " ";
-                                                        }
-                                                        std::cout << "of size " << newPrefixSize << std::endl;
-                                                        std::cout << "prefixEnd ";
-                                                        for (uint64_t i = 0; i < newPrefixEndSize; i ++) {
-                                                                std::cout << newPrefixEnd[i] << " ";
-                                                            }
-                                                            std::cout << "of size " << newPrefixEndSize << std::endl;
+
 
                                                         localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
                                                         localWorker->printPrefixes();
@@ -273,14 +263,25 @@ int main(int argc, char * argv[])
                             case MSG_WORK_SENT :    // prisel rozdeleny zasobnik, prijmout
                                                     // deserializovat a spustit vypocet
                                                     MPI_Recv(&prefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << " received prefixSize " << prefixSize << endl;
+                                                    //cout << my_rank << " received prefixSize " << prefixSize << endl;
                                                     MPI_Recv(&prefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << " received prefixEndSize " << prefixEndSize << endl;
+                                                   // cout << my_rank << " received prefixEndSize " << prefixEndSize << endl;
                                                     MPI_Recv(prefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << " received prefix" << endl;
+                                                    //cout << my_rank << " received prefix" << endl;
                                                     MPI_Recv(prefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD, &recv_status);
-                                                    cout << my_rank << " received prefixEnd" << endl;
+                                                    //cout << my_rank << " received prefixEnd" << endl;
 
+                                                    std::cout << my_rank << " received:" << std::endl;
+                                                    std::cout << "prefix ";
+                                                    for (uint64_t i = 0; i < prefixSize; i ++) {
+                                                        std::cout << prefix[i] << " ";
+                                                    }
+                                                    std::cout << "of size " << prefixSize << std::endl;
+                                                    std::cout << "prefixEnd ";
+                                                    for (uint64_t i = 0; i < prefixSize; i ++) {
+                                                            std::cout << prefixEnd[i] << " ";
+                                                        }
+                                                        std::cout << "of size " << prefixEndSize << std::endl;
 
                                                     localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
                                                     localWorker->printPrefixes();
@@ -344,7 +345,7 @@ int main(int argc, char * argv[])
                                                     if (my_rank != 0) {
 
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
-                                                        std::pair<uint64_t, std::set<uint64_t>*> result = localWorker->getResults();
+                                                        std::pair<uint64_t, uint64_t*> result = localWorker->getResults();
                                                         cout << my_rank << " is sending result " << result.first << endl;
                                                         MPI_Send(&result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
