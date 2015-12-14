@@ -36,28 +36,25 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 			 					uint64_t *end, uint64_t endSize)
 {
-	if (startPrefix != NULL){
+	if ((startPrefix != NULL) && start){
 		delete[] startPrefix;	
-		startPrefix = NULL;
+		startPrefix = start;
+		startPrefixSize = startSize;
 	}
 	
-	if (endPrefix != NULL){
+	if ((endPrefix != NULL) && end){
 		delete[] endPrefix;
-		endPrefix = NULL;
+		endPrefix = end;
+		endPrefixSize = endSize;
 	}
 
-	if (start == NULL || end == NULL)
-	{
+	if (start == NULL || end == NULL){
 		#ifdef _DEBUG
-		std::cout << processRank << " setPrefixes: prefix(-y) nastaveny na NULL!" << '\n';
+		std::cout << processRank << " setPrefixes: prefix(-y) nezmenen(-y)!" << '\n';
 		#endif
 		return;
 	}
 
-	startPrefix = start;
-	startPrefixSize = startSize;
-	endPrefix = end;
-	endPrefixSize = endSize;
 
 	//expand startPrefix to combination of length k
 	for (uint64_t i = startPrefixSize; i < k; ++i){
