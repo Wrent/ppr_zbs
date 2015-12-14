@@ -364,7 +364,9 @@ int main(int argc, char * argv[])
                                                         uint64_t min = result.first;
                                                         uint64_t *minSet = result.second;
                                                         MPI_Send(&min, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                         cout << my_rank << " result sent " << endl;
                                                         MPI_Send(minSet, parA, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
+                                                        cout << my_rank << " result set sent " << endl;
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     goto END;
