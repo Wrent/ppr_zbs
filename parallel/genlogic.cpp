@@ -2,8 +2,8 @@
 
 int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	for (uint64_t i = 0; i < size; ++i){
-		std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
-		if (a[i] > b[i]) return 0;
+		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
+		if (a[i] >= b[i]) return 0;
 	}
 	return 1;
 }
@@ -102,7 +102,7 @@ void CLocalWorker::prepareForLocalWorkStep()
 	//search for first element from right which is not already maxed
 	while (startPrefix[m] == maxValAtPos){
 		//check prefix bound
-		if (m <= 0) return;
+		if (m < 0) return;
 		if (startPrefix[m] > maxValAtPos) {
 			std::cout << processRank << " error prefix overflow" << '\n';
 			return;
