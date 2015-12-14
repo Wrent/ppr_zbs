@@ -126,7 +126,7 @@ void CLocalWorker::doLocalWorkStep()
 	//and if prefix is
 	if (m > 0 && m < k) {
 
-		setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
+		setx = new std::set<uint64_t>(startPrefix, startPrefix+m);
 
 		if (m != lastM) {
 			prefixPrice = priceOfX(mgraph, *setx);
