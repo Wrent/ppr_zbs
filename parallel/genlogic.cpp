@@ -27,7 +27,7 @@ uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
 }
 
 CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64_t processRank)
-						: k(k), n(n), processRank(processRank),  mgraph(mgraph),
+						: k(k), n(n), processRank(processRank), mgraph(mgraph)
 {
 	minSetx = setx = NULL;
 }
