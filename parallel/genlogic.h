@@ -25,7 +25,7 @@ public:
 	bool localWorkExists();
 	void doLocalWorkStep();
 	void printPrefixes();
-	std::pair<uint64_t, uint64_t*> getMiddlePrefix();
+	uint64_t getMiddlePrefix(uint64_t *);
 	std::pair<uint64_t, uint64_t*> getResults();
 private:
 	void prepareForLocalWorkStep();
