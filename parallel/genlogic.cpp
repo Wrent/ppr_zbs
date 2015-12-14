@@ -51,7 +51,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 
 	if (start == NULL || end == NULL){
 		#ifdef _DEBUG
-		std::cout << processRank << "Info: setPrefixes: prefix(-y) nezmenen(-y)" << '\n';
+		std::cout << processRank << " Info: setPrefixes: prefix(-y) nezmenen(-y)" << '\n';
 		#endif
 		return;
 	}
