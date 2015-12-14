@@ -349,7 +349,7 @@ int main(int argc, char * argv[])
             } else {
             //cout << my_rank << " doing work step" << endl;
             //zde se vola funkce, ktera provede jeden vypocetni krok procesu
-            localWorker->doLocalWorkStep();
+            //localWorker->doLocalWorkStep();
        	}
     }
 
