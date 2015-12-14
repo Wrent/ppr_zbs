@@ -1,7 +1,7 @@
 TARGET = main
 LIBS = -lm
 CC = mpiCC
-CFLAGS = -g -Wall -pedantic -std=c++11
+CFLAGS = -g3 -Wall -pedantic -std=c++11
 
 .PHONY: default all clean
 

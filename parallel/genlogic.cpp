@@ -30,6 +30,7 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 						: k(k), n(n), processRank(processRank), mgraph(mgraph)
 {
 	minSetx = setx = NULL;
+	startPrefix = endPrefix = NULL;
 }
 
 void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
