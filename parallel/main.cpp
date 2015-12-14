@@ -122,6 +122,7 @@ int main(int argc, char * argv[])
 		parN = strtoull(argv[2], NULL, 10);
 
         //pripravime prefix
+        middlePrefix = new uint64_t[parA];
         prefix = new uint64_t[parA];
         prefixEnd = new uint64_t[parA];
         prefix[0] = 0;
@@ -222,15 +223,15 @@ int main(int argc, char * argv[])
 
                                                         localWorker->printPrefixes();
                                                         //rozdelime si svou praci a pulku posleme procesoru
-                                                        pair<uint64_t, uint64_t*> divided = localWorker->getMiddlePrefix();
 
                                                         uint64_t *newPrefix, *newPrefixEnd;
                                                         uint64_t newPrefixSize, newPrefixEndSize;
 
+                                                        uint64_t newPrefixSize = localWorker->getMiddlePrefix(middlePrefix);
+
                                                         newPrefixEnd = localWorker->getEndPrefix();
                                                         newPrefixEndSize = localWorker->getEndPrefixSize();
-                                                        newPrefix = divided.second;
-                                                        newPrefixSize = divided.first;
+                                                        newPrefix = middlePrefix;
 
                                                         std::cout << my_rank << " sending:" << std::endl;
                                                             std::cout << "prefix ";
@@ -333,6 +334,7 @@ int main(int argc, char * argv[])
                                                                 }
                                                             }
                                                             cout << "Result: " << min << endl;
+                                                            goto END;
                                                             MPI_Finalize();
                                                             exit (0);
                                                         }
@@ -350,6 +352,7 @@ int main(int argc, char * argv[])
                                                         MPI_Send(&result.first, 1, MPI_UNSIGNED_LONG_LONG, 0, MSG_FINISH, MPI_COMM_WORLD);
                                                         //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
+                                                    goto END;
                                                     MPI_Finalize();
                                                     exit (0);
                                                     break;
@@ -383,7 +386,11 @@ int main(int argc, char * argv[])
        	}
     }
 
+END: delete[] prefix;
+	delete[] prefixEnd;
+	delete[] middlePrefix;
 	/* shut down MPI */
   	MPI_Finalize();
 	return 0;
 }
+

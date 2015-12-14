@@ -124,7 +124,7 @@ void CLocalWorker::doLocalWorkStep()
 	//and if prefix is
 	if (m > 0 && m < k) {
 
-		setx = new std::set<uint64_t>(startPrefix, startPrefix+m+1);
+		setx = new std::set<uint64_t>(startPrefix, startPrefix+m);
 
 		if (m != lastM) {
 			prefixPrice = priceOfX(mgraph, *setx);
@@ -212,7 +212,7 @@ void CLocalWorker::printPrefixes() {
         std::cout << "of size " << endPrefixSize << std::endl;
 }
 
-std::pair<uint64_t, uint64_t*> CLocalWorker::getMiddlePrefix() {
+uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     	uint64_t diffPos = 0;
     	uint64_t val;
     	while (startPrefix[diffPos] == endPrefix[diffPos]) {
@@ -227,13 +227,11 @@ std::pair<uint64_t, uint64_t*> CLocalWorker::getMiddlePrefix() {
     		//vratime polovicni hodnotu na diff pozici
     		val = (startPrefix[diffPos] + endPrefix[diffPos]) / 2;
     	}
-
-    	uint64_t * middle = new uint64_t[k];
     	for (uint64_t i = 0; i < diffPos; i++) {
     		middle[i] = endPrefix[i];
     	}
     	middle[diffPos] = val;
 
 
-    	return std::pair<uint64_t, uint64_t*>(diffPos + 1, middle);
+    	return diffPos + 1;
 }
