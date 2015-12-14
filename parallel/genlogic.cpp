@@ -144,6 +144,7 @@ void CLocalWorker::doLocalWorkStep()
 		if (prefixPrice >= minPriceSet) {
 			lastM = (m < lastM ? m : lastM);
 			startPrefixSize = lastM;
+			prepareForLocalWorkStep();
 			return;
 		}
 	}
