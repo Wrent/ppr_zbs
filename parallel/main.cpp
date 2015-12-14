@@ -275,8 +275,9 @@ int main(int argc, char * argv[])
                                                         cout << my_rank << " didnt find any work" << endl;
                                                     } else {
                                                         recv = 0;
-                                                        MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                                                         cout << my_rank << " requests work from " << askForWorkFrom << endl;
+                                                        MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+
                                                     }
                                                     requestSent = false;
                                                     break;
