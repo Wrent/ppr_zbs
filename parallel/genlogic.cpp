@@ -2,7 +2,7 @@
 
 int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 	for (uint64_t i = 0; i < size; ++i){
-		cout << "checking " << a[i] << " < " << b[i] << endl;
+		std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
 		if (a[i] > b[i]) return 0;
 	}
 	return 1;
