@@ -38,14 +38,14 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 {
 	if (start != NULL){
 		if (startPrefix != NULL) delete[] startPrefix;	
-		this.startPrefix = start;
-		this.startPrefixSize = startSize;
+		startPrefix = start;
+		startPrefixSize = startSize;
 	}
 	
 	if (end != NULL){
 		if (endPrefix != NULL) delete[] endPrefix;
-		this.endPrefix = end;
-		this.endPrefixSize = endSize;
+		endPrefix = end;
+		endPrefixSize = endSize;
 	}
 
 	if (start == NULL || end == NULL){
