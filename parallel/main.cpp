@@ -338,7 +338,7 @@ int main(int argc, char * argv[])
                                                                 }
                                                             }
                                                             std::cout << "Final Result\n#edges: " << min << "\n{";
-                                                            for (int k = 0; k < parA; ++k){
+                                                            for (uint64_t k = 0; k < parA; ++k){
                                                             	std::cout << minSet[k] << (k==(parA-1)? ",":"");
                                                             }
                                                             std::cout << "}\n";
