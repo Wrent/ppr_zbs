@@ -272,6 +272,7 @@ int main(int argc, char * argv[])
                                                     askForWorkFrom = (askForWorkFrom + 1) % p;
                                                     if (askForWorkFrom == my_rank) {
                                                         done = true;
+                                                        cout << my_rank << " didnt find any work" << endl;
                                                     } else {
                                                         recv = 0;
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
