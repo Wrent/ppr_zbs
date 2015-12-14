@@ -331,7 +331,9 @@ int main(int argc, char * argv[])
                                                             cout << "0 my result is "<< min << endl;
                                                             for (int i = 1; i < p; i++) {
                                                                 MPI_Recv(&recvMin, 1, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                cout << "0 received " << recvMin << " from " << i << endl;
                                                                 MPI_Recv(&setRcv, parA, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
+                                                                cout << "0 received set from " << i << endl;
                                                                 if (recvMin < min) {
                                                                       min = recvMin;
                                                                       if (minSet != NULL) delete[] minSet;
