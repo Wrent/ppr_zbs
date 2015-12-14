@@ -325,7 +325,7 @@ int main(int argc, char * argv[])
 
                                                             //a prijmi vysledek
                                                             uint64_t recvMin, min;
-                                                            uint64_t *minSet = NULL;
+                                                            uint64_t *minSet = new uint64_t[parA];
                                                             uint64_t *setRcv = new uint64_t[parA];
                                                             min = localWorker->getResults().first;
                                                             cout << "0 my result is "<< min << endl;
@@ -334,14 +334,16 @@ int main(int argc, char * argv[])
                                                                 MPI_Recv(&setRcv, parA, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 if (recvMin < min) {
                                                                       min = recvMin;
-                                                                      if (minSet != NULL) delete[] minSet;
-                                                                      minSet = setRcv;
-                                                                } else {
-                                                                    delete[] setRcv;
+                                                                      memcpy(minSet, setRcv, parA*sizeof(uint64_t));
                                                                 }
                                                             }
-                                                            cout << "Result: " << min << endl;
+                                                            std::cout << "Final Result\n#edges: " << min << "\n{";
+                                                            for (int k = 0; k < parA; ++k){
+                                                            	std::cout << minSet[k] << (k==(parA-1)? ",":"");
+                                                            }
+                                                            std::cout << "}\n";
                                                             delete[] minSet;
+                                                            delete[] setRcv;
                                                             goto END;
                                                             MPI_Finalize();
                                                             exit (0);
