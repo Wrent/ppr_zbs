@@ -174,9 +174,15 @@ void CLocalWorker::doLocalWorkStep()
 	prepareForLocalWorkStep();
 }
 
-std::pair<uint64_t, std::set<uint64_t>*> CLocalWorker::getResults()
+std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 {
-	return std::pair<uint64_t, std::set<uint64_t>*>(minPriceSet, minSetx);
+	uint64_t *resultArray = new uint64_t[minSetx.size()];
+	uint64_t i = 0;
+	for_each(auto elm : minSetx){
+		resultArray[i++] = elm;
+	}
+	delete minSetx;
+	return std::pair<uint64_t, uint64_t*>(minPriceSet, resultArray);
 }
 
 uint64_t *CLocalWorker::getStartPrefix() {
