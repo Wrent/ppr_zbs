@@ -176,10 +176,11 @@ void CLocalWorker::doLocalWorkStep()
 
 std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 {
-	uint64_t *resultArray = new uint64_t[minSetx.size()];
-	uint64_t i = 0;
-	for_each(auto elm : minSetx){
-		resultArray[i++] = elm;
+	uint64_t *resultArray = new uint64_t[minSetx->size()];
+	uint64_t j = 0;
+	for (auto it = minSetx->begin(); it != minSetx->end(); ++it){
+		resultArray[j] = *itů
+		j++;
 	}
 	delete minSetx;
 	return std::pair<uint64_t, uint64_t*>(minPriceSet, resultArray);
