@@ -294,7 +294,8 @@ int main(int argc, char * argv[])
                                                             //odesli finish token
                                                             cout << my_rank << " sending finish tokens" << endl;
                                                             for (int i = 1; i < p; i++) {
-                                                                MPI_Send(0, 1, MPI_INT, i, MSG_FINISH, MPI_COMM_WORLD);
+                                                                int val = 0;
+                                                                MPI_Send(&val, 1, MPI_INT, i, MSG_FINISH, MPI_COMM_WORLD);
                                                             }
                                                             //min = reseni nalezene procesem 0;
 
