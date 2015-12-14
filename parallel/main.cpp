@@ -250,8 +250,7 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
 
 
-
-                                                        localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
+                                                      	localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
                                                         localWorker->printPrefixes();
                                                     } else {
                                                         //zadnou praci nemam

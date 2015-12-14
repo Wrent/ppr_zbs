@@ -38,23 +38,14 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 			 					uint64_t *end, uint64_t endSize)
 {
 	if (start != NULL){
-		if (startPrefix != NULL) delete[] startPrefix;
 		startPrefix = start;
 		startPrefixSize = startSize;
 	}
 	
 	if (end != NULL){
-		if (endPrefix != NULL) delete[] endPrefix;
 		endPrefix = end;
 		endPrefixSize = endSize;
 	}
-
-	if (start == NULL || end == NULL){
-		#ifdef _DEBUG
-		std::cout << processRank << " Info: setPrefixes: prefix(-y) nezmenen(-y)" << '\n';
-		#endif
-	}
-
 
 	//expand startPrefix to combination of length k
 	for (uint64_t i = startPrefixSize; i < k; ++i){
