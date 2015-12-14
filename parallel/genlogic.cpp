@@ -32,6 +32,7 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 {
 	minSetx = setx = NULL;
 	startPrefix = endPrefix = NULL;
+	minPriceSet = -1;
 }
 
 void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
@@ -62,8 +63,9 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	//if (setx != NULL) delete setx;
 	minSetx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 	setx = minSetx;
+
 	//init minimal price of set
-	minPriceSet = priceOfX(mgraph, *minSetx);
+	if (minPriceSet == -1) minPriceSet = priceOfX(mgraph, *minSetx);
 
 	#ifdef _DEBUG
 	std::cout << processRank << " " << minPriceSet << ":" << minSetx << "\n";

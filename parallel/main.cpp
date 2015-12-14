@@ -397,7 +397,6 @@ int main(int argc, char * argv[])
 
 END: delete[] prefix;
 	delete[] prefixEnd;
-	delete[] middlePrefix;
 	/* shut down MPI */
   	MPI_Finalize();
 	return 0;
