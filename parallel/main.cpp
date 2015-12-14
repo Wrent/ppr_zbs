@@ -61,10 +61,10 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 
 	if (argc < 6){ //generate graph when none is given
 		string cmd;
-		cmd = cmd + "generator" + " -t AD -n " + argv[2] + " -k " + argv[4] + " -o _graph";
+		cmd = cmd + "~/ppr/ppr_zbs/generator" + " -t AD -n " + argv[2] + " -k " + argv[4] + " -o _graph";
 		system(cmd.c_str());
 		cmd.clear();
-		cmd = cmd + "souvislost" + " -s -i _graph -o _graph";
+		cmd = cmd + "~/ppr/ppr_zbs/souvislost" + " -s -i _graph -o _graph";
 		system(cmd.c_str());
 		graphfile.open("_graph");
 	}else{
