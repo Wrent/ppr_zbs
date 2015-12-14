@@ -232,8 +232,7 @@ int main(int argc, char * argv[])
                                                         newPrefix = divided.second;
                                                         newPrefixSize = divided.first;
 
-
-                                                        localWorker->setPrefixes(localWorker->getStartPrefix(), localWorker->getStartPrefixSize(), newPrefix, newPrefixSize);
+                                                        localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
 
                                                         localWorker->printPrefixes();
 
@@ -270,18 +269,19 @@ int main(int argc, char * argv[])
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_WORK_NOWORK, MPI_COMM_WORLD, &recv_status);
                                                     // zkusit jiny proces
 
-                                                    //todo tady kdyz se stane didnt find any work tak to pak se pta samo sebe
+
                                                     askForWorkFrom = (askForWorkFrom + 1) % p;
                                                     if (askForWorkFrom == my_rank) {
                                                         done = true;
                                                         cout << my_rank << " didnt find any work" << endl;
+                                                        requestSent = true;
                                                     } else {
                                                         recv = 0;
                                                         cout << my_rank << " requests work from " << askForWorkFrom << endl;
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
-
+                                                        requestSent = false;
                                                     }
-                                                    requestSent = false;
+
                                                     break;
                             case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_TOKEN, MPI_COMM_WORLD, &recv_status);
