@@ -370,11 +370,10 @@ int main(int argc, char * argv[])
                                                                 #endif
                                                                 MPI_Recv(setRcv, parA, MPI_UNSIGNED_LONG_LONG, i, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                                 #ifdef _DEBUG
-                                                                cout << "0 received set from " << i << endl;
+                                                                cout << "0 received set from " << i << endl << "\n";
                                                                 for (uint64_t k = 0; k < parA; ++k){
-                                                                    std::cout << setRcv[k] << (k!=(parA-1)? ",":"");
+                                                                    std::cout << setRcv[k] << (k!=(parA-1)? ",":"}\n");
                                                                 }
-                                                                std::cout << "}\n";
                                                                 #endif
                                                                 if (recvMin < min) {
                                                                       min = recvMin;

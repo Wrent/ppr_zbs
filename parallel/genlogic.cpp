@@ -35,7 +35,7 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 	startPrefix = endPrefix = NULL;
 	minPriceSet = -1;
 	minSetArray = new uint64_t[k];
-	for (int i = 0; i < k; ++i)
+	for (uint64_t i = 0; i < k; ++i)
 	{
 		minSetArray[i] = 0;
 	}
