@@ -373,6 +373,7 @@ int main(int argc, char * argv[])
                                                                 for (uint64_t k = 0; k < parA; ++k){
                                                                     std::cout << setRcv[k] << (k!=(parA-1)? ",":"");
                                                                 }
+                                                                std::cout << "}\n";
                                                                 #endif
                                                                 if (recvMin < min) {
                                                                       min = recvMin;
