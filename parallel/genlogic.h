@@ -5,11 +5,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
-#include <set>
+#include <algorithm>
 
 //#define _DEBUG
 
-uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes);
 
 
 class CLocalWorker
@@ -28,6 +27,7 @@ public:
 	void printPrefixes();
 	uint64_t getMiddlePrefix(uint64_t *);
 	std::pair<uint64_t, uint64_t*> getResults();
+	uint64_t priceOfX();
 private:
 	void prepareForLocalWorkStep();
 
@@ -43,8 +43,6 @@ private:
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice;
 
-	//temp set of nodes belonging to combination
-	std::set<uint64_t> *setx;
 	//set of nodes belonging to current best combination
 	uint64_t *minSetArray;
 };

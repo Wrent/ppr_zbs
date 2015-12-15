@@ -9,15 +9,17 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 }
 
 
-uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
+uint64_t CLocalWorker::priceOfX()
 {
 	uint64_t price = 0;
+	uint64_t *xbegin = startPrefix;
+	uint64_t *xend = xbegin + k;
 	
 	//Go trough nodes above diagonal
 	for (uint64_t mrow = 0; mrow < mgraph.rowSize(); ++mrow){
 		for (uint64_t i = mrow + 1; i < mgraph.rowSize(); ++i){
 			if (mgraph[mrow][i] && 
-				(xnodes.count(mrow) != xnodes.count(i))){
+				((std::find(xbegin,xend,mrow) != xend) != (std::find(xbegin,xend,i) != xend))){
 				//When node mrow neighbours with node i and both nodes 
 				//are not in the same set increase the price
 				price++;
@@ -60,11 +62,8 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 		startPrefix[i] = startPrefix[i-1] + 1;
 	}
 
-	//init first set
-	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
-
 	//init minimal price of set
-	if (minPriceSet == -1) minPriceSet = priceOfX(mgraph, *setx);
+	if (minPriceSet == -1) minPriceSet = priceOfX();
 
 	#ifdef _DEBUG
 	std::cout << processRank << " " << minPriceSet << ":" << setx << "\n";
@@ -130,7 +129,7 @@ void CLocalWorker::doLocalWorkStep()
 		setx = new std::set<uint64_t>(startPrefix, startPrefix+m);
 
 		if (m != lastM) {
-			prefixPrice = priceOfX(mgraph, *setx);
+			prefixPrice = priceOfX();
 		}
 
 		#ifdef _DEBUG
@@ -159,8 +158,7 @@ void CLocalWorker::doLocalWorkStep()
 	
 
 	//calculate price for new combination
-	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
-	priceSet = priceOfX(mgraph, *setx);
+	priceSet = priceOfX();
 
 	#ifdef _DEBUG
 	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << setx << "\n";
