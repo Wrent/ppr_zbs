@@ -50,10 +50,10 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 
 	//read args
 	uint64_t parN = strtoull(argv[2], NULL, 10);
-	//uint64_t parM = strtoull(argv[3], NULL, 10);
+	uint64_t parM = strtoull(argv[3], NULL, 10);
 	uint64_t parK = strtoull(argv[4], NULL, 10);
 
-	if (parN < 5 || parM < parN || parK > parN || parK < 3){
+	if (parN < 5 ||  parK > parN || parK < 3){
 		printUsage(argv[0]);
 		return 1;
 	}
