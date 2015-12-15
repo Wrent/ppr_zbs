@@ -219,20 +219,25 @@ void CLocalWorker::printPrefixes() {
 
 uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     	uint64_t diffPos = 0;
-    	uint64_t val;
+    	uint64_t val, prev;
     	while (startPrefix[diffPos] == endPrefix[diffPos]) {
     		diffPos++;
     	}
-		std::cout << processRank << " aa " << std::endl;
+		//std::cout << processRank << " aa " << std::endl;
     	if (diffPos >= startPrefixSize || endPrefix[diffPos] - startPrefix[diffPos] == 1) {
     		//prodlouzime endVektor a dame polovicni hodnotu
+    		if (diffPos == 0) {
+				prev = endPrefix[0];
+    		} else {
+    			prev = endPrefix[diffPos - 1];
+    		}
     		diffPos = endPrefixSize;
-    		val = (n + diffPos + 1 + endPrefix[diffPos - 1] - k) / 2;
+    		val = (n + diffPos + 1 + prev - k) / 2;
     	} else {
     		//vratime polovicni hodnotu na diff pozici
     		val = (startPrefix[diffPos] + endPrefix[diffPos]) / 2;
     	}
-    	std::cout << processRank << " bb " << std::endl;
+    	//std::cout << processRank << " bb " << std::endl;
     	for (uint64_t i = 0; i < diffPos; i++) {
     		middle[i] = endPrefix[i];
     	}
