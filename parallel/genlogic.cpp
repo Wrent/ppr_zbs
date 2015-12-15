@@ -13,7 +13,7 @@ uint64_t CLocalWorker::priceOfX()
 {
 	uint64_t price = 0;
 	uint64_t *xbegin = startPrefix;
-	uint64_t *xend = xnodes + k;
+	uint64_t *xend = xbegin + k;
 	
 	//Go trough nodes above diagonal
 	for (uint64_t mrow = 0; mrow < mgraph.rowSize(); ++mrow){

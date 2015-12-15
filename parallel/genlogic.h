@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
-#include <set>
+#include <algorithm>
 
 //#define _DEBUG
 
@@ -43,8 +43,6 @@ private:
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice;
 
-	//temp set of nodes belonging to combination
-	std::set<uint64_t> *setx;
 	//set of nodes belonging to current best combination
 	uint64_t *minSetArray;
 };
