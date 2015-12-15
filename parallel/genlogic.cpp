@@ -131,7 +131,7 @@ void CLocalWorker::doLocalWorkStep()
 
 	//check if prefix price is not more or equal then current minimum
 	//and if prefix is
-	if (m >= 0 && m < k) {
+	if (m > 0 && m < k) {
 
 		if (m != lastM) {
 			prefixPrice = priceOfX(m);
