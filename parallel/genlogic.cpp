@@ -183,7 +183,6 @@ std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 		resultArray[j] = *it;
 		j++;
 	}
-	delete minSetx;
 	return std::pair<uint64_t, uint64_t*>(minPriceSet, resultArray);
 }
 
