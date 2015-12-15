@@ -50,7 +50,7 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 
 	//read args
 	uint64_t parN = strtoull(argv[2], NULL, 10);
-	uint64_t parM = strtoull(argv[3], NULL, 10);
+	//uint64_t parM = strtoull(argv[3], NULL, 10);
 	uint64_t parK = strtoull(argv[4], NULL, 10);
 
 	if (parN < 5 || parM < parN || parK > parN || parK < 3){
@@ -296,6 +296,7 @@ int main(int argc, char * argv[])
                                                         std::cout << prefix[i] << " ";
                                                     }
                                                     std::cout << "of size " << prefixSize << std::endl;
+
                                                     std::cout << my_rank << "prefixEnd ";
                                                     for (uint64_t i = 0; i < prefixEndSize; i ++) {
                                                             std::cout << prefixEnd[i] << " ";
