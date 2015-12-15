@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <utility>
 
-//#define _DEBUG
+#define _DEBUG
 
 typedef std::pair<const uint64_t *, uint64_t> pair_set;
 
@@ -28,7 +28,7 @@ public:
 	void printPrefixes();
 	uint64_t getMiddlePrefix(uint64_t *);
 	std::pair<uint64_t, uint64_t*> getResults();
-	uint64_t priceOfX();
+	uint64_t priceOfX(uint64_t size);
 private:
 	void prepareForLocalWorkStep();
 
