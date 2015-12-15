@@ -134,7 +134,7 @@ void CLocalWorker::doLocalWorkStep()
 	if (m > 0 && m < k) {
 
 		if (m != lastM) {
-			prefixPrice = priceOfX(m);
+			prefixPrice = priceOfX(m + 1);
 		}
 
 		#ifdef _DEBUG
