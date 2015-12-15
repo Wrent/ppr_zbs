@@ -9,7 +9,6 @@
 
 //#define _DEBUG
 
-uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes);
 
 
 class CLocalWorker
@@ -28,6 +27,7 @@ public:
 	void printPrefixes();
 	uint64_t getMiddlePrefix(uint64_t *);
 	std::pair<uint64_t, uint64_t*> getResults();
+	uint64_t priceOfX();
 private:
 	void prepareForLocalWorkStep();
 
