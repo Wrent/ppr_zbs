@@ -32,7 +32,6 @@ uint64_t CLocalWorker::priceOfX()
 CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64_t processRank)
 						: k(k), n(n), processRank(processRank), mgraph(mgraph)
 {
-	setx = NULL;
 	startPrefix = endPrefix = NULL;
 	minPriceSet = -1;
 	minSetArray = new uint64_t[k];
@@ -66,10 +65,8 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	if (minPriceSet == -1) minPriceSet = priceOfX();
 
 	#ifdef _DEBUG
-	std::cout << processRank << " " << minPriceSet << ":" << setx << "\n";
+	std::cout << processRank << " " << minPriceSet << ":" << startPrefix,k << "\n";
 	#endif
-
-	delete setx;
 
 	prepareForLocalWorkStep();
 }
@@ -126,18 +123,14 @@ void CLocalWorker::doLocalWorkStep()
 	//and if prefix is
 	if (m >= 0 && m < k) {
 
-		setx = new std::set<uint64_t>(startPrefix, startPrefix+m);
-
 		if (m != lastM) {
 			prefixPrice = priceOfX();
 		}
 
 		#ifdef _DEBUG
-		std::cout << processRank << " prefix " << prefixPrice << ":" << setx << '\n';
+		std::cout << processRank << " prefix " << prefixPrice << ":" << startPrefix,k << '\n';
 		#endif
 
-		//delete tmp set
-		delete setx;
 		//save m
 		lastM = (m < lastM ? m : lastM);
 		
@@ -161,10 +154,9 @@ void CLocalWorker::doLocalWorkStep()
 	priceSet = priceOfX();
 
 	#ifdef _DEBUG
-	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << setx << "\n";
+	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << startPrefix,k << "\n";
 	#endif
 
-	delete setx;
 
 	//compare price and keep the smaller one
 	if (priceSet < minPriceSet){

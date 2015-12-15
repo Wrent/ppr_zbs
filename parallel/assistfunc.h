@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <cstdint>
 #include <fstream>
-#include <set>
 #include <vector>
 #include <limits>
 #include <stdexcept>
@@ -47,5 +46,5 @@ uint64_t comb(uint64_t n, uint64_t k);
 std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph);
 std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgraph);
 //set
-std::ostream& operator<<(std::ostream& os, const std::set<uint64_t> *mset);
+std::ostream& operator<<(std::ostream& os, const uint64_t *mset, uint64_t size);
 
