@@ -15,10 +15,7 @@ class CLocalWorker
 {
 public:
 	CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64_t my_rank);
-	~CLocalWorker()
-	{
-		delete[] setx;
-	}
+	//~CLocalWorker()
 	void setPrefixes(uint64_t *startPrefix, uint64_t startPrefixSize,
 			 		uint64_t *endPrefix, uint64_t endPrefixSize);
 	uint64_t *getStartPrefix();
@@ -45,8 +42,10 @@ private:
 	//variables 
 	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice;
 
-	//set of nodes belonging to combination
-	std::set<uint64_t> *setx, *minSetx;
+	//temp set of nodes belonging to combination
+	std::set<uint64_t> *setx;
+	//set of nodes belonging to current best combination
+	uint64_t *minSetArray;
 };
 
 

@@ -30,9 +30,10 @@ uint64_t priceOfX(Array2D<char>& mgraph, std::set<uint64_t>& xnodes)
 CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64_t processRank)
 						: k(k), n(n), processRank(processRank), mgraph(mgraph)
 {
-	minSetx = setx = NULL;
+	setx = NULL;
 	startPrefix = endPrefix = NULL;
 	minPriceSet = -1;
+	minSetArray = new uint64_t[k];
 }
 
 void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
@@ -61,14 +62,13 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 
 	//init first set
 	//if (setx != NULL) delete setx;
-	minSetx = new std::set<uint64_t>(startPrefix, startPrefix+k);
-	setx = minSetx;
+	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 
 	//init minimal price of set
-	if (minPriceSet == -1) minPriceSet = priceOfX(mgraph, *minSetx);
+	if (minPriceSet == -1) minPriceSet = priceOfX(mgraph, *setx);
 
 	#ifdef _DEBUG
-	std::cout << processRank << " " << minPriceSet << ":" << minSetx << "\n";
+	std::cout << processRank << " " << minPriceSet << ":" << setx << "\n";
 	#endif
 
 	prepareForLocalWorkStep();
@@ -165,9 +165,9 @@ void CLocalWorker::doLocalWorkStep()
 
 	//compare price and keep the smaller one
 	if (priceSet < minPriceSet){
-		delete minSetx;
-		minSetx = setx;
 		minPriceSet = priceSet;
+		memcpy(minSetArray, startPrefix, k*sizeof(uint64_t));
+
 	}else{
 		delete setx;
 	}
@@ -177,13 +177,7 @@ void CLocalWorker::doLocalWorkStep()
 
 std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 {
-	uint64_t *resultArray = new uint64_t[minSetx->size()];
-	uint64_t j = 0;
-	for (auto it = minSetx->begin(); it != minSetx->end(); ++it){
-		resultArray[j] = *it;
-		j++;
-	}
-	return std::pair<uint64_t, uint64_t*>(minPriceSet, resultArray);
+	return std::pair<uint64_t, uint64_t*>(minPriceSet, minSetArray);
 }
 
 uint64_t *CLocalWorker::getStartPrefix() {
