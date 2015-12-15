@@ -160,7 +160,7 @@ std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t>
 	uint64_t size = mset.second;
 	os << '{';
 	for (uint64_t k = 0; k < size; ++k){
-    	std::os << set[k] << (k != (size-1) ? "," : "}");
+    	os << set[k] << (k != (size-1) ? "," : "}");
     }
 	return os;
 }
