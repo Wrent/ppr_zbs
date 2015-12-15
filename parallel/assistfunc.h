@@ -6,6 +6,7 @@
 #include <vector>
 #include <limits>
 #include <stdexcept>
+#include <utility>
 
 //declare Array2D
 template <class Type> class Array2D;
