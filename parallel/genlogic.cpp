@@ -163,13 +163,12 @@ void CLocalWorker::doLocalWorkStep()
 	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << setx << "\n";
 	#endif
 
+	delete setx;
+
 	//compare price and keep the smaller one
 	if (priceSet < minPriceSet){
 		minPriceSet = priceSet;
 		memcpy(minSetArray, startPrefix, k*sizeof(uint64_t));
-
-	}else{
-		delete setx;
 	}
 
 	prepareForLocalWorkStep();
