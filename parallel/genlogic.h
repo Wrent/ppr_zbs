@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <utility>
 
-#define _DEBUG
+//#define _DEBUG
 
 typedef std::pair<const uint64_t *, uint64_t> pair_set;
 
