@@ -137,23 +137,21 @@ void CLocalWorker::doLocalWorkStep()
 		#endif
 
 		//save m
-		lastM = (m < lastM ? m : lastM);
+		lastM = m;
 		
 		//skip prefix with worse solution then current
 		if (prefixPrice >= minPriceSet) {
-			lastM = (m < lastM ? m : lastM);
+			lastM = m;
 			//startPrefixSize = lastM;
 			prepareForLocalWorkStep();
 			return;
-		}
-
-		//expand combination from m
-		for (uint64_t j = m + 1; j < k; ++j){
-			startPrefix[j] = startPrefix[j - 1] + 1;
-		}
+		}		
 	}
 
-	
+	//expand combination from m
+	for (uint64_t j = m + 1; j < k; ++j){
+		startPrefix[j] = startPrefix[j - 1] + 1;
+	}
 
 	//calculate price for new combination
 	priceSet = priceOfX();
