@@ -200,12 +200,12 @@ uint64_t CLocalWorker::getEndPrefixSize() {
 
 void CLocalWorker::printPrefixes() {
     std::cout << "process " << processRank << " has:" << std::endl;
-    std::cout << my_rank<< "prefix ";
+    std::cout << processRank<< "prefix ";
     for (uint64_t i = 0; i < startPrefixSize; i ++) {
         std::cout << startPrefix[i] << " ";
     }
     std::cout << "of size " << startPrefixSize << std::endl;
-    std::cout << my_rank << "prefixEnd ";
+    std::cout << processRank << "prefixEnd ";
     for (uint64_t i = 0; i < endPrefixSize; i ++) {
             std::cout << endPrefix[i] << " ";
         }
