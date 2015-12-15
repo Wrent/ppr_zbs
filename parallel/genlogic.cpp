@@ -222,7 +222,7 @@ uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     	if (diffPos >= startPrefixSize || endPrefix[diffPos] - startPrefix[diffPos] == 1) {
     		//prodlouzime endVektor a dame polovicni hodnotu
     		if (diffPos == 0) {
-				prev = endPrefix[0];
+				prev = endPrefix[0] + 1;
     		} else {
     			prev = endPrefix[diffPos - 1];
     		}
