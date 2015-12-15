@@ -154,11 +154,13 @@ std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgra
 	return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const uint64_t *mset, uint64_t size)
+std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t> mset)
 {
+	const uint64_t *set = mset.first;
+	uint64_t size = mset.second;
 	os << '{';
 	for (uint64_t k = 0; k < size; ++k){
-    	std::cout << mset[k] << (k != (size-1) ? "," : "}");
+    	os << set[k] << (k != (size-1) ? "," : "}");
     }
 	return os;
 }

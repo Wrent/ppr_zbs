@@ -6,6 +6,7 @@
 #include <vector>
 #include <limits>
 #include <stdexcept>
+#include <utility>
 
 //declare Array2D
 template <class Type> class Array2D;
@@ -46,5 +47,4 @@ uint64_t comb(uint64_t n, uint64_t k);
 std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph);
 std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgraph);
 //set
-std::ostream& operator<<(std::ostream& os, const uint64_t *mset, uint64_t size);
-
+std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t> mset);

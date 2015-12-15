@@ -6,10 +6,11 @@
 #include <cstring>
 #include <cstdint>
 #include <algorithm>
+#include <utility>
 
 //#define _DEBUG
 
-
+typedef std::pair<const uint64_t *, uint64_t> pair_set;
 
 class CLocalWorker
 {
