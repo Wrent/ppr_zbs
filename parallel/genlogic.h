@@ -28,7 +28,7 @@ public:
 	void printPrefixes();
 	uint64_t getMiddlePrefix(uint64_t *);
 	std::pair<uint64_t, uint64_t*> getResults();
-	uint64_t priceOfX();
+	uint64_t priceOfX(uint64_t size);
 private:
 	void prepareForLocalWorkStep();
 

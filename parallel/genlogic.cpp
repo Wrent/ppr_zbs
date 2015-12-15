@@ -9,11 +9,11 @@ int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
 }
 
 
-uint64_t CLocalWorker::priceOfX()
+uint64_t CLocalWorker::priceOfX(uint64_t size)
 {
 	uint64_t price = 0;
 	uint64_t *xbegin = startPrefix;
-	uint64_t *xend = xbegin + k;
+	uint64_t *xend = xbegin + size;
 	
 	//Go trough nodes above diagonal
 	for (uint64_t mrow = 0; mrow < mgraph.rowSize(); ++mrow){
@@ -67,7 +67,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	}
 
 	//init minimal price of set
-	if (minPriceSet == -1) minPriceSet = priceOfX();
+	if (minPriceSet == -1) minPriceSet = priceOfX(k);
 
 	#ifdef _DEBUG
 	std::cout << processRank << " " << minPriceSet << ":" << pair_set(startPrefix,k) << "\n";
@@ -129,7 +129,7 @@ void CLocalWorker::doLocalWorkStep()
 	if (m > 0 && m < k) {
 
 		if (m != lastM) {
-			prefixPrice = priceOfX();
+			prefixPrice = priceOfX(m);
 		}
 
 		#ifdef _DEBUG
@@ -138,7 +138,7 @@ void CLocalWorker::doLocalWorkStep()
 
 		//save m
 		lastM = m;
-		
+
 		//skip prefix with worse solution then current
 		if (prefixPrice >= minPriceSet) {
 			lastM = m;
@@ -147,14 +147,14 @@ void CLocalWorker::doLocalWorkStep()
 			return;
 		}		
 	}
-
+	
 	//expand combination from m
 	for (uint64_t j = m + 1; j < k; ++j){
 		startPrefix[j] = startPrefix[j - 1] + 1;
 	}
 
 	//calculate price for new combination
-	priceSet = priceOfX();
+	priceSet = priceOfX(k);
 
 	#ifdef _DEBUG
 	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << pair_set(startPrefix,k) << "\n";
