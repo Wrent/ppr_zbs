@@ -158,6 +158,7 @@ void CLocalWorker::doLocalWorkStep()
 	//calculate price for new combination
 	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 	priceSet = priceOfX(mgraph, *setx);
+	delete setx;
 
 	#ifdef _DEBUG
 	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << setx << "\n";
@@ -168,9 +169,6 @@ void CLocalWorker::doLocalWorkStep()
 		minPriceSet = priceSet;
 		memcpy(minSetArray, startPrefix, k*sizeof(uint64_t));
 
-	}else{
-		delete setx;
-	}
 
 	prepareForLocalWorkStep();
 }
