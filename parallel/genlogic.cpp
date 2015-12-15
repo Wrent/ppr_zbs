@@ -124,7 +124,7 @@ void CLocalWorker::doLocalWorkStep()
 
 	//check if prefix price is not more or equal then current minimum
 	//and if prefix is
-	if (m > 0 && m < k) {
+	if (m >= 0 && m < k) {
 
 		setx = new std::set<uint64_t>(startPrefix, startPrefix+m);
 
@@ -183,7 +183,6 @@ std::pair<uint64_t, uint64_t*> CLocalWorker::getResults()
 		resultArray[j] = *it;
 		j++;
 	}
-	delete minSetx;
 	return std::pair<uint64_t, uint64_t*>(minPriceSet, resultArray);
 }
 

@@ -15,6 +15,10 @@ class CLocalWorker
 {
 public:
 	CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64_t my_rank);
+	~CLocalWorker()
+	{
+		delete[] setx;
+	}
 	void setPrefixes(uint64_t *startPrefix, uint64_t startPrefixSize,
 			 		uint64_t *endPrefix, uint64_t endPrefixSize);
 	uint64_t *getStartPrefix();
