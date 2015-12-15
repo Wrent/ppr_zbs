@@ -226,12 +226,12 @@ uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     		}
     		diffPos = endPrefixSize;
     		val = (n + diffPos + 1 + prev - k) / 2;
-    		std::cout << processRank << " aa" << std::endl;
+    		//std::cout << processRank << " aa" << std::endl;
     	} else {
     		//vratime polovicni hodnotu na diff pozici
     		val = (startPrefix[diffPos] + endPrefix[diffPos]) / 2;
 
-    		std::cout << processRank << " bb" << std::endl;
+    		//std::cout << processRank << " bb" << std::endl;
     	}
     	//std::cout << processRank << " bb " << std::endl;
     	for (uint64_t i = 0; i < diffPos; i++) {
