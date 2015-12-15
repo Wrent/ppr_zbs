@@ -123,7 +123,6 @@ int main(int argc, char * argv[])
 		parN = strtoull(argv[2], NULL, 10);
 
         //pripravime prefix
-        middlePrefix = new uint64_t[parA];
         prefix = new uint64_t[parA];
         prefixEnd = new uint64_t[parA];
         prefix[0] = 0;
@@ -207,7 +206,7 @@ int main(int argc, char * argv[])
 	    #endif
 	    localWorker->setPrefixes(prefix, prefixSize, prefixEnd, prefixEndSize);
 	}
-
+    middlePrefix = new uint64_t[parA];
 	
     int recv;
     bool requestSent = false;
