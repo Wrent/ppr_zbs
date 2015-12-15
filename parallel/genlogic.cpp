@@ -66,6 +66,11 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 		startPrefix[i] = startPrefix[i-1] + 1;
 	}
 
+	//expand endPrefix
+	for (uint64_t i = endPrefixSize; i < k; ++i){
+		endPrefix[i] = endPrefix[i-1] + 1;
+	}
+
 	//init minimal price of set
 	if (minPriceSet == -1) minPriceSet = priceOfX(k);
 
