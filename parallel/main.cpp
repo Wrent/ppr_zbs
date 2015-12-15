@@ -396,7 +396,9 @@ int main(int argc, char * argv[])
                                                     break;
                             case MSG_FINISH :
                                                     if (my_rank != 0) {
-
+                                                         #ifdef _DEBUG
+                                                        cout << my_rank << " received finish token " << endl;
+                                                        #endif
                                                         MPI_Recv(&recv, 1, MPI_INT, 0, MSG_FINISH, MPI_COMM_WORLD, &recv_status);
                                                         std::pair<uint64_t, uint64_t*> result = localWorker->getResults();
                                                         #ifdef _DEBUG
