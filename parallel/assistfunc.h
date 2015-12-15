@@ -46,4 +46,4 @@ uint64_t comb(uint64_t n, uint64_t k);
 std::ifstream& operator>>(std::ifstream& infile, std::vector<std::vector<bool> >& mgraph);
 std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgraph);
 //set
-std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t>& mset);
+std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t> mset);

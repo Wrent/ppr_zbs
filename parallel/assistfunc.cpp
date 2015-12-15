@@ -154,7 +154,7 @@ std::ostream& operator<<(std::ostream& os, std::vector<std::vector<bool> >& mgra
 	return os;
 }
 
-std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t>& mset)
+std::ostream& operator<<(std::ostream& os, std::pair<const uint64_t *, uint64_t> mset)
 {
 	uint64_t *set = mset.first;
 	uint64_t size = mset.second;
