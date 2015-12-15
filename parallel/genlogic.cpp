@@ -243,6 +243,6 @@ uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     	}
     	middle[diffPos] = val;
 
-
+		std::cout << processRank << " cc " << std::endl;
     	return diffPos + 1;
 }
