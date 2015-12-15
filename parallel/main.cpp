@@ -248,12 +248,12 @@ int main(int argc, char * argv[])
 
                                                         #ifdef _DEBUG
                                                         std::cout << my_rank << " sending:" << std::endl;
-                                                            std::cout << "prefix ";
+                                                            std::cout << my_rank << "prefix ";
                                                             for (uint64_t i = 0; i < newPrefixSize; i ++) {
                                                                 std::cout << newPrefix[i] << " ";
                                                             }
                                                             std::cout << "of size " << newPrefixSize << std::endl;
-                                                            std::cout << "prefixEnd ";
+                                                            std::cout << my_rank << "prefixEnd ";
                                                             for (uint64_t i = 0; i < newPrefixEndSize; i ++) {
                                                                     std::cout << newPrefixEnd[i] << " ";
                                                                 }
@@ -291,12 +291,12 @@ int main(int argc, char * argv[])
 
                                                     #ifdef _DEBUG
                                                     std::cout << my_rank << " received:" << std::endl;
-                                                    std::cout << "prefix ";
+                                                    std::cout << my_rank << "prefix ";
                                                     for (uint64_t i = 0; i < prefixSize; i ++) {
                                                         std::cout << prefix[i] << " ";
                                                     }
                                                     std::cout << "of size " << prefixSize << std::endl;
-                                                    std::cout << "prefixEnd ";
+                                                    std::cout << my_rank << "prefixEnd ";
                                                     for (uint64_t i = 0; i < prefixSize; i ++) {
                                                             std::cout << prefixEnd[i] << " ";
                                                         }
