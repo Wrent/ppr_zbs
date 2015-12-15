@@ -61,7 +61,6 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	}
 
 	//init first set
-	//if (setx != NULL) delete setx;
 	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
 
 	//init minimal price of set
@@ -70,6 +69,8 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	#ifdef _DEBUG
 	std::cout << processRank << " " << minPriceSet << ":" << setx << "\n";
 	#endif
+
+	delete setx;
 
 	prepareForLocalWorkStep();
 }
@@ -148,12 +149,14 @@ void CLocalWorker::doLocalWorkStep()
 			prepareForLocalWorkStep();
 			return;
 		}
+
+		//expand combination from m
+		for (uint64_t j = m + 1; j < k; ++j){
+			startPrefix[j] = startPrefix[j - 1] + 1;
+		}
 	}
 
-	//expand combination from m
-	for (uint64_t j = m + 1; j < k; ++j){
-		startPrefix[j] = startPrefix[j - 1] + 1;
-	}
+	
 
 	//calculate price for new combination
 	setx = new std::set<uint64_t>(startPrefix, startPrefix+k);
