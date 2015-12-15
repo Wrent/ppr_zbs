@@ -297,7 +297,7 @@ int main(int argc, char * argv[])
                                                     }
                                                     std::cout << "of size " << prefixSize << std::endl;
                                                     std::cout << my_rank << "prefixEnd ";
-                                                    for (uint64_t i = 0; i < prefixSize; i ++) {
+                                                    for (uint64_t i = 0; i < prefixEndSize; i ++) {
                                                             std::cout << prefixEnd[i] << " ";
                                                         }
                                                         std::cout << "of size " << prefixEndSize << std::endl;
