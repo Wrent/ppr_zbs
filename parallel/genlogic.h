@@ -9,7 +9,7 @@
 
 //#define _DEBUG
 
-
+#define std::pair<const uint64_t *, uint64_t> pair_set
 
 class CLocalWorker
 {

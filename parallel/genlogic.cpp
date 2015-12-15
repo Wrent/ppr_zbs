@@ -65,7 +65,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	if (minPriceSet == -1) minPriceSet = priceOfX();
 
 	#ifdef _DEBUG
-	std::cout << processRank << " " << minPriceSet << ":" << startPrefix,k << "\n";
+	std::cout << processRank << " " << minPriceSet << ":" << pair_set(startPrefix,k) << "\n";
 	#endif
 
 	prepareForLocalWorkStep();
@@ -128,7 +128,7 @@ void CLocalWorker::doLocalWorkStep()
 		}
 
 		#ifdef _DEBUG
-		std::cout << processRank << " prefix " << prefixPrice << ":" << startPrefix,k << '\n';
+		std::cout << processRank << " prefix " << prefixPrice << ":" << pair_set(startPrefix,k) << '\n';
 		#endif
 
 		//save m
@@ -154,7 +154,7 @@ void CLocalWorker::doLocalWorkStep()
 	priceSet = priceOfX();
 
 	#ifdef _DEBUG
-	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << startPrefix,k << "\n";
+	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << pair_set(startPrefix,k) << "\n";
 	#endif
 
 
