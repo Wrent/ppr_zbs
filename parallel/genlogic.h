@@ -3,6 +3,7 @@
 #include "assistfunc.h"
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 #include <cstdint>
 #include <set>
 
