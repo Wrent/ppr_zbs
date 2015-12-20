@@ -255,6 +255,6 @@ int main(int argc, char const* argv[])
 	#endif
 
 	delete result.second;
-	std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+	std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << endl;
 	return 0;
 }
