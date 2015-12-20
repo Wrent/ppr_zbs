@@ -1,0 +1,106 @@
+\documentclass[12pt]{article}
+\usepackage{epsf}
+%\documentstyle[epsf,epic,eepic,eepicemu]{article}
+\usepackage[cp1250]{inputenc} % LaTeX source encoded as UTF-8
+\usepackage[czech]{babel}
+
+\begin{document}
+%\oddsidemargin=-5mm \evensidemargin=-5mm \marginparwidth=.08in
+%\marginparsep=.01in \marginparpush=5pt \topmargin=-15mm
+%\headheight=12pt \headsep=25pt \footheight=12pt \footskip=30pt
+%\textheight=25cm \textwidth=17cm \columnsep=2mm \columnseprule=1pt
+%\parindent=15pt\parskip=2pt
+
+\begin{center}
+\bf Semestrální projekt MI-PPR 2015/2016:\\[5mm]
+    Paralelní algoritmus pro øešení problému Zobecnìné bisekèní šíøky\\[5mm]
+       Petr Elexa\\
+       Adam Kuèera\\[2mm]
+magisterské studium, FIT ÈVUT, Thákurova 9, 160 00 Praha 6\\[2mm]
+\today
+\end{center}
+
+\section{Definice problému a popis sekvenèního algoritmu}
+
+\subsection{Zobecnìná bisekèní šíøka}
+
+\subsubsection{Vstupní data}
+
+\begin{itemize}
+\item $a$ = pøirozené èíslo
+\item $n$ = pøirozené èíslo pøedstavující poèet uzlù grafu $G$, $n\ge 5$
+\item $m$ = pøirozené èíslo pøedstavující poèet hran grafu $G$, $m\ge n$
+\item $k$ = pøirozené èíslo øádu jednotek pøedstavující prùmìrný stupeò uzlu grafu $G$, $n\ge k \ge 3$
+$G(V,E)$ = jednoduchý souvislý neorientovaný neohodnocený graf o $n$ uzlech $V$ a $m$ hranách $E$ (nepovinný, pøi jeho absenci je graf s danými parametry vygenerován).
+\end{itemize}
+
+\subsubsection{Úkol}
+
+Naleznìte rozdìlení množiny $n$ uzlù grafu $G$ do dvou disjunktních podmnožin $X$ a $Y$ tak, že podmnožina $X$ obsahuje $a$ uzlù, podmnožina $Y$ obsahuje $n-a$ uzlù a poèet všech hran $\{u,v\}$ takových, že $u$ je z $X$ a $v$ je z $Y$, je minimální.
+
+\subsubsection{Výstup algoritmu}
+
+Výpis disjuktních množin uzlù $X$ a $Y$ a poèet hran tyto množiny spojující.
+
+\subsubsection{Sekvenèní algoritmus}
+
+Øešení existuje vždy. Vždy lze sestrojit zobecnìný bisekèní øez grafu. Sekvenèní algoritmus je typu BB-DFS s hloubkou prohledávaného prostoru omezenou na $|a|$. Pøípustný mezistav je definovaný rozdìlením množiny uzlù na dvì disjunktní podmnožiny $X$ a $Y$. Pøípustná koncová øešení jsou všechna zkonstruovaná rozdìlení množiny uzlù grafu $G$ do množin $X$ a $Y$. Cena, kterou minimalizujeme, je poèet hran spojující $X$ a $Y$.
+
+Tìsná dolní mez je rovna 1.
+
+Triviální horní mez je rovna $m$.
+
+\subsection{Naše implementace problému}
+
+\subsection{Formát výstupních dat}
+
+Algortitmus vypíše množinu $X$ o velikosti $a$ jako seznam identifikaèních èísel uzlù podle toho, jak byly zadány ve vstupní matici grafu. Zároveñ vypíše, kolik hran mezi množinou $X$ a zbytkem grafu (množinou $Y$) existuje.
+
+\subsection{Experimentálnì namìøená doba výpoètu}
+
+\section{Popis paralelního algoritmu a jeho implementace v MPI}
+
+Popište paralelní algoritmus, op?t vyjd?te ze zadání a p?esn?
+vymezte odchylky, zvlášt? u algoritmu pro vyvažování zát?že, hledání
+dárce, ci ukon?ení výpo?tu.  Popište a vysv?tlete strukturu
+celkového paralelního algoritmu na úrovni proces? v MPI a strukturu
+kódu jednotlivých proces?. Nap?. jak je naimplementována smy?ka pro
+?innost proces? v aktivním stavu i v stavu ne?innosti. Jaké jste
+zvolili konstanty a parametry pro škálování algoritmu. Struktura a
+sémantika p?íkazové ?ádky pro spoušt?ní programu.
+
+\section{Namìøené výsledky a vyhodnocení}
+
+\begin{enumerate}
+\item Zvolte t?i instance problému s takovou velikostí vstupních dat, pro které má
+sekven?ní algoritmus ?asovou složitost kolem 5, 10 a 15 minut. Pro
+me?ení ?as pot?ebný na ?tení dat z disku a uložení na disk
+neuvažujte a zakomentujte ladící tisky, logy, zprávy a výstupy.
+\item M??te paralelní ?as p?i použití $i=2,\cdot,32$ procesor? na sítích Ethernet a InfiniBand.
+%\item Pri mereni kazde instance problemu na dany pocet procesoru spoctete pro vas algoritmus dynamicke delby prace celkovy pocet odeslanych zadosti o praci, prumer na 1 procesor a jejich uspesnost.
+%\item Mereni pro dany pocet procesoru a instanci problemu provedte 3x a pouzijte prumerne hodnoty.
+\item Z nam??ených dat sestavte grafy zrychlení $S(n,p)$. Zjist?te, zda a za jakych podmínek
+došlo k superlineárnímu zrychlení a pokuste se je zd?vodnit.
+\item Vyhodno?te komunika?ní složitost dynamického vyvažování zát?že a posu?te
+vhodnost vámi implementovaného algoritmu pro hledání dárce a d?lení
+zásobníku pri ?ešení vašeho problému. Posu?te efektivnost a
+škálovatelnost algoritmu. Popište nedostatky vaší implementace a
+navrhn?te zlepšení.
+\item Empiricky stanovte
+granularitu vaší implementace, tj., stupe? paralelismu pro danou
+velikost ?ešeného problému. Stanovte kritéria pro stanovení mezí, za
+kterými již není u?inné rozkládat výpo?et na menší procesy, protože
+by komunika?ní náklady prevážily urychlení paralelním výpo?tem.
+
+\end{enumerate}
+
+\section{Závìr}
+
+Celkové zhodnocení semestrální práce a zkušenosti získaných b?hem
+semestru.
+
+\section{Literatura}
+
+\appendix
+
+\end{document}
