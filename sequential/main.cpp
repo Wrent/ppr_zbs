@@ -217,7 +217,7 @@ int main(int argc, char const* argv[])
 
 
 	cout << "parA " << parA << " parN " << parN << " parM " << parM << " parK " << parK << endl;
-	
+
 	if (parN < 5 || parM < parN || parK > parN || parK < 3){
 		printUsage(argv[0]);
 		return 1;
