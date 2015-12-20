@@ -60,33 +60,24 @@ Algortitmus vypíše množinu $X$ o velikosti $a$ jako seznam identifikaèních èísel
 
 \section{Popis paralelního algoritmu a jeho implementace v MPI}
 
-Popište paralelní algoritmus, op?t vyjd?te ze zadání a p?esn?
-vymezte odchylky, zvlášt? u algoritmu pro vyvažování zát?že, hledání
-dárce, ci ukon?ení výpo?tu.  Popište a vysv?tlete strukturu
-celkového paralelního algoritmu na úrovni proces? v MPI a strukturu
-kódu jednotlivých proces?. Nap?. jak je naimplementována smy?ka pro
-?innost proces? v aktivním stavu i v stavu ne?innosti. Jaké jste
-zvolili konstanty a parametry pro škálování algoritmu. Struktura a
-sémantika p?íkazové ?ádky pro spoušt?ní programu.
+\subsection{Paralelizace sekvenèního øešení}
 
+\subsubsection{Konstanty a parametry paralelního výpoètu}
 \section{Namìøené výsledky a vyhodnocení}
 
-\begin{enumerate}
-\item Zvolte t?i instance problému s takovou velikostí vstupních dat, pro které má
-sekven?ní algoritmus ?asovou složitost kolem 5, 10 a 15 minut. Pro
-me?ení ?as pot?ebný na ?tení dat z disku a uložení na disk
-neuvažujte a zakomentujte ladící tisky, logy, zprávy a výstupy.
-\item M??te paralelní ?as p?i použití $i=2,\cdot,32$ procesor? na sítích Ethernet a InfiniBand.
-%\item Pri mereni kazde instance problemu na dany pocet procesoru spoctete pro vas algoritmus dynamicke delby prace celkovy pocet odeslanych zadosti o praci, prumer na 1 procesor a jejich uspesnost.
-%\item Mereni pro dany pocet procesoru a instanci problemu provedte 3x a pouzijte prumerne hodnoty.
-\item Z nam??ených dat sestavte grafy zrychlení $S(n,p)$. Zjist?te, zda a za jakych podmínek
-došlo k superlineárnímu zrychlení a pokuste se je zd?vodnit.
-\item Vyhodno?te komunika?ní složitost dynamického vyvažování zát?že a posu?te
+seq problémy, co trvají 5, 10 a 15 minut
+
+nechat je bezet na 2 až max procesorech
+
+grafy zrychlení $S(n,p)$. superlinearni zrychleni?
+
+Vyhodno?te komunika?ní složitost dynamického vyvažování zát?že a posu?te
 vhodnost vámi implementovaného algoritmu pro hledání dárce a d?lení
 zásobníku pri ?ešení vašeho problému. Posu?te efektivnost a
 škálovatelnost algoritmu. Popište nedostatky vaší implementace a
 navrhn?te zlepšení.
-\item Empiricky stanovte
+
+Empiricky stanovte
 granularitu vaší implementace, tj., stupe? paralelismu pro danou
 velikost ?ešeného problému. Stanovte kritéria pro stanovení mezí, za
 kterými již není u?inné rozkládat výpo?et na menší procesy, protože
@@ -100,6 +91,8 @@ Celkové zhodnocení semestrální práce a zkušenosti získaných b?hem
 semestru.
 
 \section{Literatura}
+
+Zobecnìná bisekèní šíøka - implementace. Github [online]. [cit. 2015-12-20]. Dostupné z: https://github.com/Wrent/ppr_zbs
 
 \appendix
 
