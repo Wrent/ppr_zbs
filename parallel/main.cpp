@@ -213,6 +213,7 @@ int main(int argc, char * argv[])
     int recv;
     bool requestSent = false;
     bool endTokenRunning = false;
+    uint64_t requestCount = 0;
     #ifdef _DEBUG
     cout << my_rank << " entering loop" << endl;
     #endif
@@ -334,6 +335,7 @@ int main(int argc, char * argv[])
                                                         cout << my_rank << " requests work from " << askForWorkFrom << endl;
                                                         #endif
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                                                        requestCount++;
                                                         requestSent = true;
                                                     }
 
@@ -438,7 +440,14 @@ int main(int argc, char * argv[])
                         #ifdef _DEBUG
                         cout << my_rank << " sending work request to " << askForWorkFrom << endl;
                         #endif
-                        MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                        uint64_t askFrom;
+                        if (requestCount == 0 && my_rank != 0) {
+                            askFrom = 0;
+                        } else {
+                            askFrom = askForWorkFrom;
+                        }
+                        MPI_Send(&recv, 1, MPI_INT, askFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
+                        requestCount++;
                         requestSent = true;
                    }
                    //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
