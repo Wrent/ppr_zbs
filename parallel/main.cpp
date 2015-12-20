@@ -440,15 +440,13 @@ int main(int argc, char * argv[])
                         #endif
                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
                         requestSent = true;
-
-
-                        //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
-                        //rozesle to jen pokud sam nic nema
-                        if (my_rank == 0) {
-                        //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
-                            int val = 1;
-                            MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
-                        }
+                   }
+                   //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
+                   //rozesle to jen pokud sam nic nema
+                   if (my_rank == 0) {
+                   //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
+                       int val = 1;
+                       MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                    }
             } else {
             //cout << my_rank << " doing work step" << endl;
