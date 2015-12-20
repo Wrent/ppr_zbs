@@ -8,6 +8,7 @@
 #include <limits>
 #include <stdexcept>
 #include <iterator>
+#include <time.h>
 
 using namespace std;
  
@@ -199,6 +200,8 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 
 int main(int argc, char const* argv[])
 {
+	const clock_t begin_time = clock();
+
 	if (argc < 5){
 		printUsage(argv[0]);
 		return 1;
@@ -252,5 +255,6 @@ int main(int argc, char const* argv[])
 	#endif
 
 	delete result.second;
+	std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
 	return 0;
 }
