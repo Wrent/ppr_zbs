@@ -54,6 +54,7 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 	uint64_t parM = strtoull(argv[3], NULL, 10);
 	uint64_t parK = strtoull(argv[4], NULL, 10);
 
+
 	if (parN < 5 ||  parK > parN || parK < 3){
 		printUsage(argv[0]);
 		return 1;
@@ -123,6 +124,9 @@ int main(int argc, char * argv[])
 	if (my_rank == 0) {
 		parA = strtoull(argv[1], NULL, 10);
 		parN = strtoull(argv[2], NULL, 10);
+
+
+	cout << "parA " << parA << " parN " << parN << " parM " << parM << " parK " << parK << endl;
 
         //pripravime prefix
         prefix = new uint64_t[parA];

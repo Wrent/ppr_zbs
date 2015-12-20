@@ -215,6 +215,9 @@ int main(int argc, char const* argv[])
 	uint64_t parM = strtoull(argv[3], NULL, 10);
 	uint64_t parK = strtoull(argv[4], NULL, 10);
 
+
+	cout << "parA " << parA << " parN " << parN << " parM " << parM << " parK " << parK << endl;
+	
 	if (parN < 5 || parM < parN || parK > parN || parK < 3){
 		printUsage(argv[0]);
 		return 1;
