@@ -15,7 +15,7 @@
 
 using namespace std;
 
-#define _DEBUG
+//#define _DEBUG
 
 #define CHECK_MSG_AMOUNT  100
 
@@ -456,6 +456,9 @@ int main(int argc, char * argv[])
                         if (!endTokenRunning) {
                             //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
                             int val = 1;
+                            #ifdef _DEBUG
+                            cout << my_rank << " sends end token to " << (my_rank + 1) % p << " val " << val << endl;
+                            #endif
                             MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                             endTokenRunning = true;
                        }
