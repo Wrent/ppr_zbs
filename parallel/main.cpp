@@ -212,6 +212,7 @@ int main(int argc, char * argv[])
 	
     int recv;
     bool requestSent = false;
+    bool endTokenRunning = false;
     #ifdef _DEBUG
     cout << my_rank << " entering loop" << endl;
     #endif
@@ -340,7 +341,7 @@ int main(int argc, char * argv[])
                             case MSG_TOKEN :        //ukoncovaci token, prijmout a nasledne preposlat
                                                     MPI_Recv(&recv, 1, MPI_INT, status.MPI_SOURCE, MSG_TOKEN, MPI_COMM_WORLD, &recv_status);
                                                     #ifdef _DEBUG
-                                                    cout << my_rank << " received end token" << endl;
+                                                    cout << my_rank << " received end token, val " << recv << endl;
                                                     #endif
                                                     recv = recv && done;
                                                     if (my_rank == 0) {
@@ -390,12 +391,13 @@ int main(int argc, char * argv[])
                                                             delete[] minSet;
                                                             delete[] setRcv;
                                                             goto END;
-                                                            MPI_Finalize();
-                                                            exit (0);
+                                                        } else {
+                                                            //prisel zpet token a nekdo pracuje
+                                                            endTokenRunning = false;
                                                         }
                                                     } else {
                                                         #ifdef _DEBUG
-                                                        cout << my_rank << " sends end token to " << (my_rank + 1) % p << endl;
+                                                        cout << my_rank << " sends end token to " << (my_rank + 1) % p << " val " << recv << endl;
                                                         #endif
                                                         MPI_Send(&recv, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
                                                     }
@@ -422,8 +424,6 @@ int main(int argc, char * argv[])
                                                         #endif
                                                     }
                                                     goto END;
-                                                    MPI_Finalize();
-                                                    exit (0);
                                                     break;
 
                             default :               //error;
@@ -444,9 +444,12 @@ int main(int argc, char * argv[])
                    //nulovy proces take cas od casu rozesle token aby zjisil, jak na tom jsou ostatni procesory a pripadne necha ukoncit praci
                    //rozesle to jen pokud sam nic nema
                    if (my_rank == 0) {
-                   //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
-                       int val = 1;
-                       MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                        if (!endTokenRunning) {
+                            //rozesli procesu cislo 1 MSG_TOKEN a pak cekej na prijeti MSG_TOKEN od posledniho (to uz ve switchi)
+                            int val = 1;
+                            MPI_Send(&val, 1, MPI_INT, (my_rank + 1) % p, MSG_TOKEN, MPI_COMM_WORLD);
+                            endTokenRunning = true;
+                       }
                    }
             } else {
             //cout << my_rank << " doing work step" << endl;
