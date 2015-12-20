@@ -152,7 +152,9 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 
 			if (m != lastM) {
 				prefixPrice = priceOfX(mgraph, *setx);
+				#ifdef _DEBUG
 				cout << "prefix " << prefixPrice << ":" << setx << endl;
+				#endif
 			}	
 			
 			delete setx;
