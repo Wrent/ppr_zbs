@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <iterator>
 #include <climits>
+#include <time.h>
 
 using namespace std;
 
@@ -92,6 +93,9 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 
 int main(int argc, char * argv[])
 {
+    if (my_rank == 0) {
+	    const clock_t begin_time = clock();
+	}
 	int p, my_rank, i = 0, flag, askForWorkFrom;
 
 	CLocalWorker *localWorker;
@@ -418,7 +422,6 @@ int main(int argc, char * argv[])
                                                         #ifdef _DEBUG
                                                         cout << my_rank << " result set sent " << endl;
                                                         #endif
-                                                        //jestlize se meri cas, nezapomen zavolat koncovou barieru MPI_Barrier (MPI_COMM_WORLD)
                                                     }
                                                     goto END;
                                                     MPI_Finalize();
@@ -460,7 +463,11 @@ END: //delete[] prefix;
 	//delete[] prefixEnd;
 	//delete localWorker;
 	/* shut down MPI */
+	MPI_Barrier(MPI_COMM_WORLD);
   	MPI_Finalize();
+  	if (my_rank == 0) {
+  	    std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << endl;
+	}
 	return 0;
 }
 
