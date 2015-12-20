@@ -334,7 +334,7 @@ int main(int argc, char * argv[])
                                                         cout << my_rank << " requests work from " << askForWorkFrom << endl;
                                                         #endif
                                                         MPI_Send(&recv, 1, MPI_INT, askForWorkFrom, MSG_WORK_REQUEST, MPI_COMM_WORLD);
-                                                        requestSent = false;
+                                                        requestSent = true;
                                                     }
 
                                                     break;
