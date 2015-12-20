@@ -93,9 +93,7 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 
 int main(int argc, char * argv[])
 {
-    if (my_rank == 0) {
-	    const clock_t begin_time = clock();
-	}
+    const clock_t begin_time = clock();
 	int p, my_rank, i = 0, flag, askForWorkFrom;
 
 	CLocalWorker *localWorker;
