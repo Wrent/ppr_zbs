@@ -15,7 +15,7 @@
 
 using namespace std;
 
-//#define _DEBUG
+#define _DEBUG
 
 #define CHECK_MSG_AMOUNT  100
 
