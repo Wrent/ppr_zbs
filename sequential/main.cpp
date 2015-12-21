@@ -148,6 +148,7 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 
 		if (m > 0 && m < k) {
 			if (m != lastM) {
+				lastM = m;
 				setx = new set<uint64_t>(nodesx, nodesx+m);
 				prefixPrice = priceOfX(mgraph, *setx);
 				
@@ -158,12 +159,11 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 				delete setx;
 
 				if (prefixPrice >= minPrice) {
-					lastM = m;
+					nodesx[m] = n - k + m;
 					skip++;
 					continue;
 				}
 			}
-			lastM = m;
 		}
 		
 		//elements after m
