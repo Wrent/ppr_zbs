@@ -225,12 +225,14 @@ int main(int argc, char const* argv[])
 
 	if (argc < 6){ //generate graph when none is given
 		string cmd;
-		cmd = cmd + "generator" + " -t AD -n " + argv[2] + " -k " + argv[4] + " -o _graph";
+		string filename = "_graph" + rand();
+		cmd = cmd + "generator" + " -t AD -n " + argv[2] + " -k " + argv[4] + " -o " + filename;
 		system(cmd.c_str());
 		cmd.clear();
-		cmd = cmd + "souvislost" + " -s -i _graph -o _graph";
+		cmd = cmd + "souvislost" + " -s -i " + filename + " -o "+filename;
 		system(cmd.c_str());
-		graphfile.open("_graph");
+		graphfile.open(filename);
+		cout << "writing graph to " + _graph << endl;
 	}else{
 		graphfile.open(argv[5]);
 	}
