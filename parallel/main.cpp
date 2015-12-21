@@ -68,7 +68,6 @@ uint64_t prepareGraph(int argc, char * argv[]) {
 	ifstream graphfile;
 
 	if (argc < 6){ //generate graph when none is given
-        if ()
 		string cmd = "";
 		cmd = cmd + "./generator" + " -t AD -n " + argv[2] + " -k " + argv[4] + " -o _graph";
 		system(cmd.c_str());
