@@ -122,7 +122,7 @@ int main(int argc, char * argv[])
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
 	askForWorkFrom = (my_rank + 1) % p;
 
-	cout << "processes " << p << endl;
+	if (my_rank == 0) cout << "processes " << p << endl;
 	cout << "my process id " << my_rank << endl; 
 
 	//nachazime se v ridicim procesu
