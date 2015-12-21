@@ -232,7 +232,7 @@ int main(int argc, char const* argv[])
 		cmd = cmd + "souvislost" + " -s -i " + filename + " -o "+filename;
 		system(cmd.c_str());
 		graphfile.open(filename);
-		cout << "writing graph to " + _graph << endl;
+		cout << "writing graph to " << filename << endl;
 	}else{
 		graphfile.open(argv[5]);
 	}
