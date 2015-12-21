@@ -75,10 +75,11 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 		endPrefix[i] = endPrefix[i-1] + 1;
 	}
 
-	//init minimal price of set
+	priceSet = priceOfX(k);
+	//init minimal price of set if it is not
 	if (minPriceSet == (uint64_t)-1){
-		minPriceSet = priceOfX(k);
-	//first combination and its price
+		minPriceSet = priceSet;
+	//compare first combination and its price
 	}else if (priceSet < minPriceSet){
 		minPriceSet = priceSet;
 		memcpy(minSetArray, startPrefix, k*sizeof(uint64_t));
