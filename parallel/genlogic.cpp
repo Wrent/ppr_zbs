@@ -1,11 +1,14 @@
 #include "genlogic.h"
 
-int prefixLessEqual(uint64_t *a, uint64_t *b, uint64_t size){
+bool prefixLessThan(uint64_t *a, uint64_t *b, uint64_t size){
+	bool same = true;
 	for (uint64_t i = 0; i < size; ++i){
 		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
-		if (a[i] > b[i]) return 0;
+		if (a[i] > b[i]) return false;
+		if (a[i] != b[i]) same = false;
 	}
-	return 1;
+	if (same) return false;
+	return true;
 }
 
 
@@ -102,7 +105,7 @@ bool CLocalWorker::localWorkExists()
 	}
 
 	//true if done everything to endPrefix
-	if (!prefixLessEqual(startPrefix, endPrefix, k)) return false;
+	if (!prefixLessThan(startPrefix, endPrefix, k)) return false;
 	//check for error occurence
 	if (errorFlag) return false;
 
