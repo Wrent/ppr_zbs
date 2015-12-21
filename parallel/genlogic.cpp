@@ -52,27 +52,25 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	if (start != NULL){
 		startPrefix = start;
 		startPrefixSize = startSize;
+		//expand startPrefix to combination of length k
+		for (uint64_t i = startPrefixSize; i < k; ++i){
+			startPrefix[i] = startPrefix[i-1] + 1;
+		}	
 	}
 	
 	if (end != NULL){
 		endPrefix = end;
 		endPrefixSize = endSize;
+		//expand endPrefix
+		for (uint64_t i = endPrefixSize; i < k; ++i){
+			endPrefix[i] = endPrefix[i-1] + 1;
+		}
 	}
 
 	if (start == NULL || end == NULL){
 		#ifdef _DEBUG
 		std::cout << processRank << " Info: setPrefixes: prefix(-y) nezmenen(-y)" << '\n';
 		#endif
-	}
-
-	//expand startPrefix to combination of length k
-	for (uint64_t i = startPrefixSize; i < k; ++i){
-		startPrefix[i] = startPrefix[i-1] + 1;
-	}
-
-	//expand endPrefix
-	for (uint64_t i = endPrefixSize; i < k; ++i){
-		endPrefix[i] = endPrefix[i-1] + 1;
 	}
 
 	priceSet = priceOfX(k);
