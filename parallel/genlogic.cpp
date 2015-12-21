@@ -157,6 +157,7 @@ void CLocalWorker::doLocalWorkStep()
 				//#ifdef _DEBUG
 				std::cout << "[" << processRank << "]skip-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
 				//#endif
+				startPrefix[m] = n - k + m;
 				prepareForLocalWorkStep();
 				return;
 			}
