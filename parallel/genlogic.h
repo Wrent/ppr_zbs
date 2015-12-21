@@ -42,7 +42,7 @@ private:
 	Array2D<char>& mgraph;
 
 	//variables 
-	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = 0, prefixPrice;
+	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = -1, prefixPrice;
 
 	//set of nodes belonging to current best combination
 	uint64_t *minSetArray;

@@ -37,7 +37,7 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 	minSetArray = new uint64_t[k];
 	for (uint64_t i = 0; i < k; ++i)
 	{
-		minSetArray[i] = 0;
+		minSetArray[i] = i;
 	}
 	
 }
@@ -105,9 +105,9 @@ void CLocalWorker::prepareForLocalWorkStep()
 	maxValAtPos = n - 1;
 	
 	//search for first element from right which is not already maxed
-	while (startPrefix[m] == maxValAtPos){
+	while (startPrefix[m] >= maxValAtPos){
 		//check prefix bound
-		if (m <= 0) break;
+		if (m <= 0) return;
 		if (startPrefix[m] > maxValAtPos) {
 			std::cout << processRank << " error prefix overflow" << '\n';
 			return;
@@ -129,29 +129,25 @@ void CLocalWorker::doLocalWorkStep()
 		return;
 	}
 
-	//check if prefix price is not more or equal then current minimum
-	//and if prefix is
-	if (m > 0 && m < k) {
-
+	if (m > 0){
+		//check if prefix price is not more or equal then current minimum
+		//and if prefix is
 		if (m != lastM) {
 			prefixPrice = priceOfX(m);
 		}
-
-		#ifdef _DEBUG
-		std::cout << processRank << " prefix " << prefixPrice << ":" << pair_set(startPrefix,k) << '\n';
-		#endif
-
 		//save m
 		lastM = m;
 
+		#ifdef _DEBUG
+		std::cout << "[" << processRank << "]prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
+		#endif
+
 		//skip prefix with worse solution then current
 		if (prefixPrice >= minPriceSet) {
-			lastM = m;
-			//startPrefixSize = lastM;
 			prepareForLocalWorkStep();
 			return;
-		}		
-	}
+		}
+	}	
 	
 	//expand combination from m
 	for (uint64_t j = m + 1; j < k; ++j){
@@ -162,9 +158,8 @@ void CLocalWorker::doLocalWorkStep()
 	priceSet = priceOfX(k);
 
 	#ifdef _DEBUG
-	std::cout << "doLocalWorkStep: " << processRank << " " << priceSet << ":" << pair_set(startPrefix,k) << "\n";
+	std::cout << "[" << processRank << "]doLocalWorkStep " << "(" << priceSet << "):" << pair_set(startPrefix,k) << "\n";
 	#endif
-
 
 	//compare price and keep the smaller one
 	if (priceSet < minPriceSet){

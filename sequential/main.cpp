@@ -120,7 +120,7 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 {
 	uint64_t* nodesx = new uint64_t[k];
-	uint64_t maxVal, m, price, changes, lastVal, lastM = 0, prefixPrice; 
+	uint64_t maxVal, m, price, lastVal, lastM = 0, prefixPrice; 
 	set<uint64_t>* setx;
 	//create first kombination
 	for (uint64_t i = 0; i < k; ++i){
@@ -163,17 +163,15 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 				skip++;
 				continue;
 			}
-		}
-		lastM = m;
 
-		changes = 1;
+			lastM = m;
+		}
+		
+		
 		//elements after m
 		for (uint64_t j = m + 1; j < k; ++j){
 			lastVal = nodesx[j];
 			nodesx[j] = nodesx[j - 1] + 1;
-			if (lastVal != nodesx[j]) {
-				changes++;
-			}
 		}
 
 		//calculate price for new combination
