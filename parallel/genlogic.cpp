@@ -148,6 +148,8 @@ void CLocalWorker::doLocalWorkStep()
 		//check if prefix price is not more or equal then current minimum
 		//and if prefix is
 		if (m != lastM) {
+			//save last m
+			lastM = m;
 			prefixPrice = priceOfX(m);
 
 			//skip prefix with worse solution then current
@@ -158,11 +160,7 @@ void CLocalWorker::doLocalWorkStep()
 				prepareForLocalWorkStep();
 				return;
 			}
-		}
-		//save m
-		lastM = m;
-
-		
+		}		
 	}	
 	
 	//expand combination from m
