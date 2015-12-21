@@ -96,7 +96,7 @@ bool CLocalWorker::localWorkExists()
 	}
 
 	//true if done everything to endPrefix
-	if (!prefixLessEqual(startPrefix, endPrefix, endPrefixSize)) return false;
+	if (!prefixLessEqual(startPrefix, endPrefix, k)) return false;
 	//check for error occurence
 	if (errorFlag) return false;
 
@@ -146,6 +146,9 @@ void CLocalWorker::doLocalWorkStep()
 
 			//skip prefix with worse solution then current
 			if (prefixPrice >= minPriceSet) {
+				//#ifdef _DEBUG
+				std::cout << "[" << processRank << "]skip-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
+				//#endif
 				prepareForLocalWorkStep();
 				return;
 			}
@@ -153,9 +156,7 @@ void CLocalWorker::doLocalWorkStep()
 		//save m
 		lastM = m;
 
-		#ifdef _DEBUG
-		std::cout << "[" << processRank << "]prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
-		#endif
+		
 	}	
 	
 	//expand combination from m
@@ -166,9 +167,9 @@ void CLocalWorker::doLocalWorkStep()
 	//calculate price for new combination
 	priceSet = priceOfX(k);
 
-	#ifdef _DEBUG
+	//#ifdef _DEBUG
 	std::cout << "[" << processRank << "]doLocalWorkStep " << "(" << priceSet << "):" << pair_set(startPrefix,k) << "\n";
-	#endif
+	//#endif
 
 	//compare price and keep the smaller one
 	if (priceSet < minPriceSet){
