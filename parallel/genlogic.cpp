@@ -34,6 +34,8 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 {
 	startPrefix = endPrefix = NULL;
 	minPriceSet = -1;
+	lastM = -1;
+	errorFlag = false;
 	minSetArray = new uint64_t[k];
 	for (uint64_t i = 0; i < k; ++i)
 	{
@@ -72,7 +74,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 	}
 
 	//init minimal price of set
-	if (minPriceSet == -1) minPriceSet = priceOfX(k);
+	if (minPriceSet == (uint64_t)-1) minPriceSet = priceOfX(k);
 
 	#ifdef _DEBUG
 	std::cout << processRank << " " << minPriceSet << ":" << pair_set(startPrefix,k) << "\n";
@@ -91,10 +93,12 @@ bool CLocalWorker::localWorkExists()
 		return false;
 	}
 
-	//break if done everything to endPrefix
+	//true if done everything to endPrefix
 	if (!prefixLessEqual(startPrefix, endPrefix, endPrefixSize)) return false;
+	//check for error occurence
+	if (errorFlag) return false;
 
-	//yes it does
+	//yes it does and everything is in check
 	return true;
 }
 
@@ -109,7 +113,8 @@ void CLocalWorker::prepareForLocalWorkStep()
 		//check prefix bound
 		if (m <= 0) return;
 		if (startPrefix[m] > maxValAtPos) {
-			std::cout << processRank << " error prefix overflow" << '\n';
+			std::cout << "[" << processRank << "]error prefix overflow:" << pair_set(startPrefix,m) << '\n';
+			errorFlag = true;
 			return;
 		}
 		m = m - 1; 

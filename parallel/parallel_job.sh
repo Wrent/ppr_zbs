@@ -63,7 +63,7 @@ INFINIBAND="false"
 # | Parallel program with arguments.                                          |
 # |                                                                           |
 #  ===========================================================================
-MY_PARALLEL_PROGRAM="./main 9 10 11 3 graf.txt -o out -e err"
+MY_PARALLEL_PROGRAM="./main 5 10 10 3 graf.txt -o out -e err"
 
 
 

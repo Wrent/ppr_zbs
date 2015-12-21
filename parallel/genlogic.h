@@ -40,9 +40,10 @@ private:
 	uint64_t endPrefixSize;
 	uint64_t processRank;
 	Array2D<char>& mgraph;
+	bool errorFlag;
 
 	//variables 
-	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM = -1, prefixPrice;
+	uint64_t maxValAtPos, m, priceSet, minPriceSet, lastM, prefixPrice;
 
 	//set of nodes belonging to current best combination
 	uint64_t *minSetArray;
