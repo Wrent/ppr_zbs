@@ -119,21 +119,20 @@ uint64_t priceOfX(vector<vector<bool> >& mgraph, set<uint64_t>& xnodes)
 
 pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool> >& mgraph)
 {
-	uint64_t* nodesx = new uint64_t[k];
-	uint64_t maxVal, m, price, lastVal, lastM = 0, prefixPrice; 
-	set<uint64_t>* setx;
+	uint64_t *nodesx = new uint64_t[k];
+	uint64_t maxVal, m, price = -1, lastM = 0, prefixPrice = -1, minPrice = -1; 
+	set<uint64_t> *setx, *minSetx;
 	//create first kombination
 	for (uint64_t i = 0; i < k; ++i){
 		nodesx[i] = i;
 	}
-	set<uint64_t>* minSetx = new set<uint64_t>(nodesx, nodesx+k);
-	uint64_t minPrice = priceOfX(mgraph, *minSetx);
+	minSetx = new set<uint64_t>(nodesx, nodesx+k);
+	minPrice = priceOfX(mgraph, *minSetx);
+	setx = minSetx;
 
 	#ifdef _DEBUG
 	cout << minPrice << ":" << minSetx << "\n";
 	#endif
-
-	setx = minSetx;
 	
 	//go trough the rest of combinations 
 	for (uint64_t i = 1; i < comb(n, k); ++i){		
@@ -148,29 +147,27 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 		nodesx[m] += 1;
 
 		if (m > 0 && m < k) {
-			setx = new set<uint64_t>(nodesx, nodesx+m);
-
 			if (m != lastM) {
+				setx = new set<uint64_t>(nodesx, nodesx+m);
 				prefixPrice = priceOfX(mgraph, *setx);
+				
 				#ifdef _DEBUG
-				cout << "prefix " << prefixPrice << ":" << setx << endl;
+				cout << "newprefix " << prefixPrice << ":" << setx << endl;
 				#endif
-			}	
-			
-			delete setx;
-			if (prefixPrice >= minPrice) {
-				lastM = m;
-				skip++;
-				continue;
-			}
+				
+				delete setx;
 
+				if (prefixPrice >= minPrice) {
+					lastM = m;
+					skip++;
+					continue;
+				}
+			}
 			lastM = m;
 		}
 		
-		
 		//elements after m
 		for (uint64_t j = m + 1; j < k; ++j){
-			lastVal = nodesx[j];
 			nodesx[j] = nodesx[j - 1] + 1;
 		}
 
@@ -200,8 +197,6 @@ pair<uint64_t, set<uint64_t>*> BBDFS(uint64_t k, uint64_t n, vector<vector<bool>
 
 int main(int argc, char const* argv[])
 {
-	const clock_t begin_time = clock();
-
 	if (argc < 5){
 		printUsage(argv[0]);
 		return 1;
@@ -249,15 +244,17 @@ int main(int argc, char const* argv[])
 	cout << mgraph << "\n";
 	#endif
 
+	//begin of calc, snap consumed time
+	const clock_t begin_time = clock();
 
 	auto&& result = BBDFS(parA, parN, mgraph);
 	cout << "\n" << "#edges: " << result.first << "\n" << result.second << "\n";
 
-	#ifdef _DEBUG
-	cout << "skipped: " << skip << "/" << comb(parN,parA) << "\n";
-	#endif
+	//#ifdef _DEBUG
+	cout << "#prefix skip: " << skip << "/#comb: " << comb(parN,parA) << "\n";
+	//#endif
 
 	delete result.second;
-	std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << endl;
+	std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC <<"s"<< endl;
 	return 0;
 }
