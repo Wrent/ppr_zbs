@@ -478,11 +478,11 @@ int main(int argc, char * argv[])
        	}
     }
 
-END: //delete[] prefix;
+ 	//delete[] prefix;
 	//delete[] prefixEnd;
 	//delete localWorker;
 	/* shut down MPI */
-	MPI_Barrier(MPI_COMM_WORLD);
+END:MPI_Barrier(MPI_COMM_WORLD);
   	MPI_Finalize();
   	if (my_rank == 0) {
   	    std::cout << "calculation time: " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << endl;
