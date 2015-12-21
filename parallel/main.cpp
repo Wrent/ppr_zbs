@@ -258,7 +258,7 @@ int main(int argc, char * argv[])
                                                         newPrefixEndSize = localWorker->getEndPrefixSize();
                                                         newPrefix = middlePrefix;
 
-                                                        #ifdef _DEBUG
+                                                        //#ifdef _DEBUG
                                                         std::cout << my_rank << " sending:" << std::endl;
                                                             std::cout << my_rank << "prefix ";
                                                             for (uint64_t i = 0; i < newPrefixSize; i ++) {
@@ -270,7 +270,7 @@ int main(int argc, char * argv[])
                                                                     std::cout << newPrefixEnd[i] << " ";
                                                                 }
                                                                 std::cout << "of size " << newPrefixEndSize << std::endl;
-                                                        #endif
+                                                        //#endif
                                                         MPI_Send(&newPrefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(&newPrefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);

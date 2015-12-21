@@ -156,9 +156,9 @@ void CLocalWorker::doLocalWorkStep()
 
 			//skip prefix with worse solution then current
 			if (prefixPrice >= minPriceSet) {
-				//#ifdef _DEBUG
+				#ifdef _DEBUG
 				std::cout << "[" << processRank << "]skip-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
-				//#endif
+				#endif
 				startPrefix[m] = n - k + m;
 				prepareForLocalWorkStep();
 				return;
