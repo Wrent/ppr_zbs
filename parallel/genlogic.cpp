@@ -74,7 +74,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 		endPrefixSize = endSize;
 		//expand endPrefix
 		for (uint64_t i = endPrefixSize; i < k; ++i){
-			endPrefix[i] = n - k + i + 1;
+			endPrefix[i] = n - k + i;
 		}
 	}
 
