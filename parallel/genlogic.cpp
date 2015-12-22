@@ -270,7 +270,7 @@ uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     	}
     	middle[diffPos] = val;
 
-		if (diffPos > 0 && middle[diffPos] == middle[diffPos - 1]) {
+		while (diffPos > 0 && middle[diffPos] <= middle[diffPos - 1]) {
 			middle[diffPos]++;
 		}
 
