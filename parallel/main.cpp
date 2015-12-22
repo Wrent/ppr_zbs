@@ -259,17 +259,17 @@ int main(int argc, char * argv[])
                                                         newPrefix = middlePrefix;
 
                                                         //#ifdef _DEBUG
-                                                        std::cout << my_rank << " sending:" << std::endl;
-                                                            std::cout << my_rank << "prefix ";
+                                                        std::cout << "["<< my_rank << "]sending:"  << std::endl;
+                                                            std::cout <<"["<< my_rank << "]prefix {";
                                                             for (uint64_t i = 0; i < newPrefixSize; i ++) {
-                                                                std::cout << newPrefix[i] << " ";
+                                                                std::cout << newPrefix[i] << (i!=(parA-1)? ",":"}\n");
                                                             }
-                                                            std::cout << "of size " << newPrefixSize << std::endl;
-                                                            std::cout << my_rank << "prefixEnd ";
+                                                            std::cout << "of size " << newPrefixSize << "to: " << status.MPI_SOURCE<< std::endl;
+                                                            std::cout << "["<<my_rank << "]prefixEnd ";
                                                             for (uint64_t i = 0; i < newPrefixEndSize; i ++) {
-                                                                    std::cout << newPrefixEnd[i] << " ";
+                                                                    std::cout << newPrefixEnd[i] << (i!=(parA-1)? ",":"}\n");
                                                                 }
-                                                                std::cout << "of size " << newPrefixEndSize << std::endl;
+                                                                std::cout << "of size " << newPrefixEndSize << "to: " << status.MPI_SOURCE<< std::endl;
                                                         //#endif
                                                         MPI_Send(&newPrefixSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(&newPrefixEndSize, 1, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
