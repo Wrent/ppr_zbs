@@ -58,9 +58,33 @@ Algortitmus vypíše množinu $X$ o velikosti $a$ jako seznam identifikaèních èísel
 
 \subsection{Experimentálnì namìøená doba výpoètu}
 
+\begin{table}[h!]
+ \centering
+\begin{tabular}{ |l| l| l| l| l| }
+  \hline
+  $a$ & $n$ & $m$ & $k$ & Namìøený èas\\
+  \hline
+  \hline
+  10 & 30 & 120 & 10 & 153,20 s \\
+  \hline
+  14 & 30 & 120 & 10 & 359,77 s \\
+  \hline
+\end{tabular}
+\end{table}
+
 \section{Popis paralelního algoritmu a jeho implementace v MPI}
 
 \subsection{Paralelizace sekvenèního øešení}
+
+Hlavním procesem øídící celý výpoèet je proces s ID rovno 0 ($p_0$). Ten na zaèátku pøeète vstupní parametry a pøípadnì vygeneruje graf, nad kterým se bude poèítat. Tento graf i parametry poté rozešle všem ostatním procesùm. Poté jsou všechny procesy pøipraveny, všechna práce k vypoètení zatím zùstává procesu $p_0$.
+
+Kostrou parelelního algoritmu je hlavní komunikaèní smyèka, která provádí výpoèty a vždy po urèitém poètu krokù zkontroluje, zda daný proces nedostal nìjaké zprávy od jiných procesù. Tyto zprávy se používají k distribici práce k jednotlivým procesùm a ke globálnímu ukonèení výpoètu.
+
+Pokud nìjaký proces nemá práci (jako napø. všechny procesy kromì $p_0$ na zaèátku), odešle žádost o práci jinému procesu. Ten pokud práci má, rozdìlí svou práci a odešle žádajícímu procesu poèateèní a koneèný prefix kombinací, které má poèítat. V opaèném pøípadì odešle zprávu o chybì. Každý proces $p_i$ úplnì na zaèátku žádá o práci proces $p_0$, v každé další žádosti pak $p_{(i+1) \bmod p}$. Pokud žádost selže, obrátí se na další proces v poøadí.
+
+Pokud nultému procesu dojde práce, rozešle tzv. End Token, pomocí kterého zjišuje, jestli ostatní procesy ještì pracují. Pokud se mu tento token vrátí jako TRUE, ukonèí celý výpoèet. Ostatní procesy token pøijmou, nastavý na TRUE, pokud už nemají co poèítat nebo na FALSE, pokud mají a pøepošlou ho dalšímu procesu. Proces $p_{p-1}$ posílá token zpìt procesu $p_0$.
+
+Jakmile proces $p_0$ detekuje, že všechny procesory již skonèili, odešle tzv. Finish Token. Každý proces po jeho pøijetí procesu $p_0$ pošle svou nalezenou minimální zobecnìnou bisekèní šíøku a také množinu uzlù o velikosti $a$, pro kterou tuto šíøku namìøil. Proces $p_0$ pøijme všechny tyto zprávy a provede nad nimi minimální redukci, èímž se dostane ke globálnímu minimu, které poté vypíše na výstup a ukonèí bìh programu.
 
 \subsubsection{Konstanty a parametry paralelního výpoètu}
 \section{Namìøené výsledky a vyhodnocení}
