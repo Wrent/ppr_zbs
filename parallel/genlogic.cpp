@@ -52,8 +52,8 @@ void CLocalWorker::setEndPrefixes(uint64_t *end, uint64_t endSize)
 	endPrefix = end;
 	endPrefixSize = endSize;
 	//expand endPrefix
-	for (uint64_t i = endPrefixSize; i < k; ++i){
-		endPrefix[i] = endPrefix[i-1] + 1;
+	for (uint64_t i = endPrefixSize + 1; i < k; ++i){
+		endPrefix[i] = n - k + i;
 	}
 }
 
