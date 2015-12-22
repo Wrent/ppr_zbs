@@ -3,7 +3,7 @@
 bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t size){
 	bool same = true;
 	for (uint64_t i = 0; i < size; ++i){
-		std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
+		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
 		if (a[i] > b[i]) return true;
 		if (a[i] != b[i]) same = false;
 	}
