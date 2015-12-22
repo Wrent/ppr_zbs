@@ -27,4 +27,4 @@
 # Do not change.
 #$ -pe ompi 1
 
-./main 9 10 11 3 graf.txt
+./../sequential/main 15 40 150 10
