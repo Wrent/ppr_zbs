@@ -277,9 +277,9 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
 
                                                       	localWorker->setEndPrefixes(newPrefix, newPrefixSize);
-                                                        //#ifdef _DEBUG
+                                                        #ifdef _DEBUG
                                                         localWorker->printPrefixes();
-                                                        //#endif
+                                                        #endif
                                                     } else {
                                                         //zadnou praci nema
                                                         #ifdef _DEBUG
