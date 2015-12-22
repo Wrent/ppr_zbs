@@ -1,11 +1,34 @@
 #include "genlogic.h"
 
-bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t size){
+bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t asize, uint64_t bsize){
+	bool same = true;
+	if (asize > bsize) {
+		if (i > bsize) {
+			return true;
+		}
+		for (uint64_t i = 0; i < asize; ++i){
+			if (a[i] != b[i]) same = false;
+			if (a[i] < b[i]) break;
+			if (a[i] > b[i]) return true;
+       	}
+	} else {
+		if (i > asize) {
+			return false;
+		}
+ 		for (uint64_t i = 0; i < bsize; ++i){
+			if (a[i] != b[i]) same = false;
+			if (a[i] < b[i]) break;
+           	if (a[i] > b[i]) return true;
+        }
+	}
+	if (same) return true;
+	return false;
+
 	bool same = true;
 	for (uint64_t i = 0; i < size; ++i){
 		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
 		if (a[i] != b[i]) same = false;
-		if (a[i] < b[i]) break;
+		//if (a[i] < b[i]) return false;
 		if (a[i] > b[i]) return true;
 	}
 	if (same) return true;
