@@ -5,7 +5,7 @@ bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t size){
 	for (uint64_t i = 0; i < size; ++i){
 		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
 		if (a[i] != b[i]) same = false;
-		if (a[i] < b[i]) return false;
+		//if (a[i] < b[i]) return false;
 		if (a[i] > b[i]) return true;
 	}
 	if (same) return true;
@@ -172,14 +172,14 @@ void CLocalWorker::doLocalWorkStep()
 			//skip prefix with worse solution then current
 			if (prefixPrice >= minPriceSet) {
 				//#ifdef _DEBUG
-				std::cout << "[" << processRank << "]skip-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
+				//std::cout << "[" << processRank << "]skip-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
 				//#endif
 				startPrefix[m] = n - k + m;
 				//prepareForLocalWorkStep();
 				//return;
 			}else{
 				//#ifdef _DEBUG
-				std::cout << "[" << processRank << "]new-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
+				//std::cout << "[" << processRank << "]new-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
 				//#endif
 			}
 
