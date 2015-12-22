@@ -115,6 +115,8 @@ bool CLocalWorker::localWorkExists()
 
 	//true if done everything to endPrefix
 	if (prefixMoreOrEqualThan(startPrefix, endPrefix, k)){
+		cout << "ending with prefixes" << endl;
+		printPrefixes();
 		return false;	
 	} 
 	//check for error occurence
