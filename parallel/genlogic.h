@@ -19,6 +19,7 @@ public:
 	//~CLocalWorker()
 	void setPrefixes(uint64_t *startPrefix, uint64_t startPrefixSize,
 			 		uint64_t *endPrefix, uint64_t endPrefixSize);
+	void setEndPrefixes(uint64_t *end, uint64_t endSize);
 	uint64_t *getStartPrefix();
 	uint64_t *getEndPrefix();
 	uint64_t getStartPrefixSize();

@@ -276,7 +276,7 @@ int main(int argc, char * argv[])
                                                         MPI_Send(newPrefix, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
                                                         MPI_Send(newPrefixEnd, parA, MPI_UNSIGNED_LONG_LONG, status.MPI_SOURCE, MSG_WORK_SENT, MPI_COMM_WORLD);
 
-                                                      	localWorker->setPrefixes(NULL, 0, newPrefix, newPrefixSize);
+                                                      	localWorker->setEndPrefixes(newPrefix, newPrefixSize);
                                                         #ifdef _DEBUG
                                                         localWorker->printPrefixes();
                                                         #endif

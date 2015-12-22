@@ -46,6 +46,16 @@ CLocalWorker::CLocalWorker(uint64_t k, uint64_t n, Array2D<char>& mgraph, uint64
 	
 }
 
+void CLocalWorker::setEndPrefixes(uint64_t *end, uint64_t endSize)
+{
+	endPrefix = end;
+	endPrefixSize = endSize;
+	//expand endPrefix
+	for (uint64_t i = endPrefixSize; i < k; ++i){
+		endPrefix[i] = endPrefix[i-1] + 1;
+	}
+}
+
 void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 			 					uint64_t *end, uint64_t endSize)
 {
@@ -104,7 +114,9 @@ bool CLocalWorker::localWorkExists()
 	}
 
 	//true if done everything to endPrefix
-	if (prefixMoreOrEqualThan(startPrefix, endPrefix, k)) return false;
+	if (prefixMoreOrEqualThan(startPrefix, endPrefix, k)){
+		return false;	
+	} 
 	//check for error occurence
 	if (errorFlag) return false;
 
