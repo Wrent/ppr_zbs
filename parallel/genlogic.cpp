@@ -3,19 +3,21 @@
 bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t asize, uint64_t bsize){
 	bool same = true;
 	if (asize > bsize) {
-		if (i > bsize) {
-			return true;
-		}
+
 		for (uint64_t i = 0; i < asize; ++i){
+			if (i > bsize) {
+        			return true;
+        		}
 			if (a[i] != b[i]) same = false;
 			if (a[i] < b[i]) break;
 			if (a[i] > b[i]) return true;
        	}
 	} else {
-		if (i > asize) {
-			return false;
-		}
+
  		for (uint64_t i = 0; i < bsize; ++i){
+ 			if (i > asize) {
+            			return false;
+            		}
 			if (a[i] != b[i]) same = false;
 			if (a[i] < b[i]) break;
            	if (a[i] > b[i]) return true;
@@ -138,7 +140,7 @@ bool CLocalWorker::localWorkExists()
 	}
 
 	//true if done everything to endPrefix
-	if (prefixMoreOrEqualThan(startPrefix, endPrefix, k)){
+	if (prefixMoreOrEqualThan(startPrefix, endPrefix, startPrefixSize, endPrefixSize)){
 		//std::cout << "ending with prefixes" << std::endl;
 		//printPrefixes();
 		return false;	
