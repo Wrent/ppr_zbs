@@ -248,7 +248,7 @@ uint64_t CLocalWorker::getMiddlePrefix(uint64_t *middle) {
     		diffPos++;
     	}
 		//std::cout << processRank << " aa " << std::endl;
-    	if (diffPos >= startPrefixSize || (endPrefix[diffPos] - startPrefix[diffPos]) == 1) {
+    	if (/*diffPos >= startPrefixSize ||*/ (endPrefix[diffPos] - startPrefix[diffPos]) == 1) {
     		//prodlouzime endVektor a dame polovicni hodnotu
     		if (diffPos == 0) {
 				prev = endPrefix[0];
