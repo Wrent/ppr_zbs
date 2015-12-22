@@ -265,7 +265,7 @@ int main(int argc, char * argv[])
                                                                 std::cout << newPrefix[i] << (i!=(newPrefixSize-1)? ",":"}\n");
                                                             }
                                                             std::cout << "of size " << newPrefixSize << " to: " << status.MPI_SOURCE<< std::endl;
-                                                            std::cout << "["<<my_rank << "]prefixEnd ";
+                                                            std::cout << "["<<my_rank << "]prefixEnd {";
                                                             for (uint64_t i = 0; i < newPrefixEndSize; i ++) {
                                                                     std::cout << newPrefixEnd[i] << (i!=(newPrefixEndSize-1)? ",":"}\n");
                                                                 }
