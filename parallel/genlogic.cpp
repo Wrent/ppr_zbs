@@ -1,6 +1,6 @@
 #include "genlogic.h"
 
-bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t asize, uint64_t bsize){
+bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t size){
 	bool same = true;
 	for (uint64_t i = 0; i < size; ++i){
 		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
