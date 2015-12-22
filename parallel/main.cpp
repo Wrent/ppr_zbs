@@ -262,12 +262,12 @@ int main(int argc, char * argv[])
                                                         std::cout << "["<< my_rank << "]sending:"  << std::endl;
                                                             std::cout <<"["<< my_rank << "]prefix {";
                                                             for (uint64_t i = 0; i < newPrefixSize; i ++) {
-                                                                std::cout << newPrefix[i] << (i!=(parA-1)? ",":"}\n");
+                                                                std::cout << newPrefix[i] << (i!=(newPrefixSize-1)? ",":"}\n");
                                                             }
                                                             std::cout << "of size " << newPrefixSize << " to: " << status.MPI_SOURCE<< std::endl;
                                                             std::cout << "["<<my_rank << "]prefixEnd ";
                                                             for (uint64_t i = 0; i < newPrefixEndSize; i ++) {
-                                                                    std::cout << newPrefixEnd[i] << (i!=(parA-1)? ",":"}\n");
+                                                                    std::cout << newPrefixEnd[i] << (i!=(newPrefixEndSize-1)? ",":"}\n");
                                                                 }
                                                                 std::cout << "of size " << newPrefixEndSize << " to: " << status.MPI_SOURCE<< std::endl;
                                                         //#endif
