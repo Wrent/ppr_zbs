@@ -174,7 +174,12 @@ void CLocalWorker::doLocalWorkStep()
 				startPrefix[m] = n - k + m;
 				prepareForLocalWorkStep();
 				return;
+			}else{
+				//#ifdef _DEBUG
+				std::cout << "[" << processRank << "]new-prefix " << "(" << prefixPrice << "):" << pair_set(startPrefix,m) << "\n";
+				//#endif
 			}
+
 		}		
 	}	
 	
@@ -186,9 +191,9 @@ void CLocalWorker::doLocalWorkStep()
 	//calculate price for new combination
 	priceSet = priceOfX(k);
 
-	//#ifdef _DEBUG
+	#ifdef _DEBUG
 	std::cout << "[" << processRank << "]doLocalWorkStep " << "(" << priceSet << "):" << pair_set(startPrefix,k) << "\n";
-	//#endif
+	#endif
 
 	//compare price and keep the smaller one
 	if (priceSet < minPriceSet){
