@@ -5,7 +5,6 @@ bool prefixMoreOrEqualThan(uint64_t *a, uint64_t *b, uint64_t size){
 	for (uint64_t i = 0; i < size; ++i){
 		//std::cout << "checking " << a[i] << " < " << b[i] << std::endl;
 		if (a[i] != b[i]) same = false;
-		//if (a[i] < b[i]) return false;
 		if (a[i] > b[i]) return true;
 	}
 	if (same) return true;
@@ -52,7 +51,7 @@ void CLocalWorker::setEndPrefixes(uint64_t *end, uint64_t endSize)
 	endPrefix = end;
 	endPrefixSize = endSize;
 	//expand endPrefix
-	for (uint64_t i = endPrefixSize + 1; i < k; ++i){
+	for (uint64_t i = endPrefixSize; i < k; ++i){
 		endPrefix[i] = n - k + i;
 	}
 }
@@ -74,7 +73,7 @@ void CLocalWorker::setPrefixes(uint64_t *start, uint64_t startSize,
 		endPrefixSize = endSize;
 		//expand endPrefix
 		for (uint64_t i = endPrefixSize; i < k; ++i){
-			endPrefix[i] = endPrefix[i-1] + 1;
+			endPrefix[i] = n - k + i;
 		}
 	}
 
